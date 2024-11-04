@@ -9,6 +9,13 @@
 #                                               #
 #   Follow PEP8 naming conventions              #
 #################################################
+
+############# testing databse ######################
+#	cribbageconfig.py uses test_dbms for all testing
+# 	change to prot_dbms when using in production
+####################################################
+
+###################################################
 #
 #   Index of modules used
 #
@@ -43,42 +50,51 @@
 #   tourneystab.py          ttab        for add/change/del tourneys
 #   resultstab.py           rsltab
 #   reportstab.py           rtab        select/print reports
+#
+################## obsolete tabs ################
+#	Removed Nov 2024 in Qt rewrite
 #   finishtab.py            ftab        wrap up - update db as required
 #   helptab.py              htab        help tab
 #   cribbagesetup.py        sets        setting/resetting the cribbage environment
-#
+################################################
+
 ################## obsolete tabs ################
 #   scoringtab.py           sctab       capture score cards and games
 #   validatetab.py          vtab        validate/correct recorded scores
 #   tourneyplayerstab.py    tptab       add/change/del/seat tourney players
 #   seatingtab.py           stab        capture games & score cards
-##################
+##############################################################################
 #   Action modules
 #
 #   Because most actions are associated with Variable() object closely
 #   associated with the tkinter widgets, the actions will mostly be
-#   contained along with the screen defintion modules.
+#   contained along with the screen definition modules.
 #
 #   Results that need to be shared across modules will be promoted up
 #   to the cribbageconfig module with cfg. prefix
 #
-#
 ################################################################################
+
+########################## Qt Control variable equivalents #####################
+#	CtrlVars provides StringVar, IntVar, DoubleVar QtObjects properties that emulate
+#	the	tkinter control variables.
+#	They act just like Python properties and are get and set with name.property notation
+#	No longer do they use the get and set syntax used by tkinter control variables.
+#################################################################################
+
 # block of outstanding changes
-# TODO: Set-up screen for location of reports, progs, database, update peggers.py to include report location
+# TODO: Set-up screen for location of reports, progs, database
 # TODO: Allow confirmation to build blank database or copy from incoming populated database
 # TODO: Package application for installing on a clean PC or Mac
 # TODO: Checks for SQLite, SQLObjects, Python version, tkinter package
+# TODO: Replace tkinter et al with PySide6 PyQt for screen definitions
 # TODO: Player
-#       TODO:   Allow assignement/change of club affiliation for a player
-#       TODO:   Refresh in-memory player xrefs after add/change/delete of players
-#       TODO:   Create mechanism to limit players to active list
-#       TODO:   Show active/inactive status for players in list
+#       TODO:   Allow assignment/change of club affiliation for a player
 # TODO: Reports
 #       TODO:   If reports runs and no tourney selected, message user then recycle
 #       TODO:   Add configurable set of weekly reports, not just all
 # TODO: Clubs
-#       TODO:   Provoide screen to define new clubs in the data base.
+#       TODO:   Provide screen to define new clubs in the data base.
 # TODO: Set-up screen to change club paramaters and create clean database
 # TODO: Build quarter tourney allocation screen
 # TODO: Test for Python minimum install of Python 3.8.1
@@ -109,11 +125,11 @@ import cribbageconfig as cfg
 from cribbagestartup     import CribbageStartup
 from masterscreen       import MasterScreen
 from playerstab         import PlayersTab
-from tourneystab        import TourneysTab
-from resultstab         import ResultsTab
-from reportstab         import ReportsTab
-from finishtab          import FinishTab
-from helptab            import HelpTab
+# from tourneystab        import TourneysTab
+# from resultstab         import ResultsTab
+# from reportstab         import ReportsTab
+# from finishtab          import FinishTab
+# from helptab            import HelpTab
 
 from player import Player
 
@@ -152,12 +168,12 @@ class Cribbage (ttk.Frame):
 		# build out the tabs into notebook and self register themselves
 		# when done, postion in first tab
 
-		PlayersTab(cfg.screenDict['notebook'])
+		# PlayersTab(cfg.screenDict['notebook'])
 		TourneysTab(cfg.screenDict['notebook'])
-		ResultsTab(cfg.screenDict['notebook'])
-		ReportsTab(cfg.screenDict['notebook'])
-		FinishTab(cfg.screenDict['notebook'])
-		HelpTab(cfg.screenDict['notebook'])
+		# ResultsTab(cfg.screenDict['notebook'])
+		# ReportsTab(cfg.screenDict['notebook'])
+		# FinishTab(cfg.screenDict['notebook'])
+		# HelpTab(cfg.screenDict['notebook'])
 		cfg.screenDict['notebook'].select(1)    # reposition back at TourneysAtb
 
 		self.setNotebookEventCapture()

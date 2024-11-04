@@ -15,10 +15,12 @@
 #####################################################################
 
 # System imports
+from PySide6 import QtCore, QtGui, QtWidgets
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox as mbx
 from tkinter import filedialog as fdg
+
 
 from sqlobject import *
 
@@ -36,10 +38,11 @@ class MasterScreen (tk.LabelFrame):
 
     @classmethod
     def wipeActivityPanel(cls):
-        # any tab can call this to grid_remove all children that share the activity panel
-        for panel in cfg.screenDict['activity'].winfo_children():
-            panel.grid_remove()
-    
+        # any tab can call this to grid_remove all other activity panels
+        cfg.screenDict['playersactivity'].hide()
+        # cfg.screenDict['tourneysactivity'].hide()
+        # cfg.screenDict['resultsactivity'].hide()
+        # cfg.screenDict['reportsactivity'].hide()
 
     def __init__ (self, parent=None):
         super().__init__( parent)
