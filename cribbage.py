@@ -2,7 +2,7 @@
 #
 #	11/4/2024 converted to PyQt
 #
-# 7/20/2020 cloned from peggers.py
+# 	7/20/2020 cloned from peggers.py
 #
 #################################################
 #                                               #
@@ -146,6 +146,7 @@ class Ui_Master (object):
 	#   high level GUI
 	#
 	def setupUi(self, parent, title):
+		# received parent will be the Master Window called Master
 		# super().__init__(parent)
 		# self.grid(sticky='nsew')
 		# self.parent = parent
@@ -160,7 +161,7 @@ class Ui_Master (object):
 		# self.createPlayersXref()
 		# self.createClubXref()
 		# self.openAccessModules()
-		self.buildPanels(self, title)          # pass in this panel
+		self.buildPanels(parent, title)          # pass in this panel
 		
 
 	#************************************************************
@@ -168,7 +169,7 @@ class Ui_Master (object):
 	#   call all the modules that build panels for the app
 	#   Each screen will also register itself in cfg.screenDict
 	#
-	def buildPanels (self, parent=None, title):
+	def buildPanels (self, parent, title):
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
 		MasterScreen(parent, title)
@@ -245,7 +246,7 @@ if __name__ == '__main__':
 
 
 	ui = Ui_Master()		# this is the whole of the UI
-	ui.setupUi(Master,'Qt Test UI')		# assign alll ui elmeents
+	ui.setupUi(Master,'Qt Test UI')		# assign all ui elmeents
 	Master.show()			# maket it visible.
 
 	# cfg.appTitle = 'From the club table in dbms'
