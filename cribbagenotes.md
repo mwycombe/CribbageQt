@@ -28,3 +28,19 @@
 
 ## Default focus on first entry
 1,  Does not appear to want to work...
+
+## ScreenDict contents under Qt
+['window']              MainWindow for Qt application\
+['topPanel']            TopContainer where everything resides\
+['notebook']            QtTabWdiget used to hold all tab screens\
+['ptab']                playersTab screen\
+['ttab']                tourneysTab screen\
+['rsltstab']            resultsTab screen\
+['rptstab']             reportsTab screen\
+['activitytab']         blank activity panel\
+['playersactivitytab']  player activity panel
+['resultsactivitytab']  results activity panel\
+['reportsactivitytab']  reports activity panel\
+['tourneysactivitytab'] tourneys activity panel\
+['sessionpanel']        session header panel\
+['clubpane]']           club header panel\

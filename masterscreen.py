@@ -9,17 +9,17 @@
 #####################################################################
 #
 #   builds base frames in the root
-#   header frame carries all cross-tab static fiels some of which
+#   header frame carries all cross-tab static fields some of which
 #   get populated from tab actions
 #
 #####################################################################
 
 # System imports
 from PySide6 import QtCore, QtGui, QtWidgets
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox as mbx
-from tkinter import filedialog as fdg
+# import tkinter as tk
+# from tkinter import ttk
+# from tkinter import messagebox as mbx
+# from tkinter import filedialog as fdg
 
 
 from sqlobject import *
@@ -31,20 +31,22 @@ import os as os
 import cribbageconfig as cfg
 from club import Club
 from player import Player
-from columnweights import ColumnWeights
+# from columnweights import ColumnWeights
 
-class MasterScreen (tk.LabelFrame):
+class MasterScreen (object):
     # screen class is always a frame
 
     @classmethod
     def wipeActivityPanel(cls):
+        pass
+        # this will be changed to show the blank activity panel and hid all others
         # any tab can call this to grid_remove all other activity panels
-        cfg.screenDict['playersactivity'].hide()
+        # cfg.screenDict['playersactivity'].hide()
         # cfg.screenDict['tourneysactivity'].hide()
         # cfg.screenDict['resultsactivity'].hide()
         # cfg.screenDict['reportsactivity'].hide()
 
-    def __init__ (self, parent=None):
+    def __init__ (self, parent=None, title):
         super().__init__( parent)
         self['text'] = 'Master'
         self['relief'] = tk.RAISED

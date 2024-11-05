@@ -1,4 +1,7 @@
 # cribbage.py
+#
+#	11/4/2024 converted to PyQt
+#
 # 7/20/2020 cloned from peggers.py
 #
 #################################################
@@ -105,15 +108,19 @@
 # TODO: Check editing of players - throws errors on dates.
 
 # System imports
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox as mbx
-from tkinter import filedialog as fdg
+# import tkinter as tk
+# from tkinter import ttk
+# from tkinter import messagebox as mbx
+# from tkinter import filedialog as fdg
+from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtCore import QObject, Property, Signal
 import sys as sys
 import os as os
 from sqlobject import *
 
 # Personal imports
+from CtrlVariables import StringVar, IntVar, DoubleVar
+
 # dbms imports
 
 from accessPlayers      import AccessPlayers
@@ -121,11 +128,11 @@ from accessTourneys     import AccessTourneys
 from accessResults      import AccessResults
 from accessClubs        import AccessClubs
 
-import cribbageconfig as cfg
-from cribbagestartup     import CribbageStartup
-from masterscreen       import MasterScreen
-from playerstab         import PlayersTab
-# from tourneystab        import TourneysTab
+import cribbageconfig 	as cfg
+from cribbagestartup    import CribbageStartup
+# from masterscreen       import MasterScreen
+# from playerstab         import PlayersTab
+from tourneystab        import TourneysTab
 # from resultstab         import ResultsTab
 # from reportstab         import ReportsTab
 # from finishtab          import FinishTab
@@ -134,26 +141,26 @@ from playerstab         import PlayersTab
 from player import Player
 
 
-class Cribbage (ttk.Frame):
+class Ui_Master (object):
 	#************************************************************
 	#   high level GUI
 	#
-	def __init__ (self, parent, title):
-		super().__init__(parent)
-		self.grid(sticky='nsew')
-		self.parent = parent
-		self.parent.grid()
-		self.parent.title(title)
-		self.rowconfigure(0,weight=1, uniform='a')
-		self.columnconfigure(0,weight=1, uniform='a')
-		cfg.screenDict['cribbage'] = self  # register this frame
+	def setupUi(self, parent, title):
+		# super().__init__(parent)
+		# self.grid(sticky='nsew')
+		# self.parent = parent
+		# self.parent.grid()
+		# self.parent.title(title)
+		# self.rowconfigure(0,weight=1, uniform='a')
+		# self.columnconfigure(0,weight=1, uniform='a')
+		# cfg.screenDict['cribbage'] = self  # register this frame
 		print ('Start Cribbage')
 		# build global xref files
 		# moved to peggersstartup.py
 		# self.createPlayersXref()
 		# self.createClubXref()
 		# self.openAccessModules()
-		self.buildPanels(self)          # pass in this panel
+		self.buildPanels(self, title)          # pass in this panel
 		
 
 	#************************************************************
@@ -161,10 +168,10 @@ class Cribbage (ttk.Frame):
 	#   call all the modules that build panels for the app
 	#   Each screen will also register itself in cfg.screenDict
 	#
-	def buildPanels (self, parent=None):
+	def buildPanels (self, parent=None, title):
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
-		MasterScreen(parent)
+		MasterScreen(parent, title)
 		# build out the tabs into notebook and self register themselves
 		# when done, postion in first tab
 
@@ -216,11 +223,6 @@ class Cribbage (ttk.Frame):
 
 if __name__ == '__main__':
 
-	if 'root' not in cfg.screenDict:
-		root = tk.Tk()
-		root.resizable(True, True)
-		cfg.screenDict['root'] = root
-
 	# call class level init methods
 	print ('Starting cribbage...')
 	CribbageStartup.initDbms()
@@ -229,23 +231,31 @@ if __name__ == '__main__':
 	CribbageStartup.createTourneyXref()
 
 	# put root frame object into config module dictionary
-
-
+	app = QtWidgets.QApplication(sys.argv)
+	if 'window' not in cfg.screenDict:
+		print(cfg.screenDict)
+		Master = QtWidgets.QMainWindow()
+		cfg.screenDict['window'] = Master
 	print ('In peggers ... screenDict:= ', cfg.screenDict)
 	# make resizeable
-	cfg.screenDict['root'].rowconfigure(0, weight=1)
-	cfg.screenDict['root'].columnconfigure(0, weight=1)
-	cfg.screenDict['root'].resizable(True, True)
+	# cfg.screenDict['root'].rowconfigure(0, weight=1)
+	# cfg.screenDict['root'].columnconfigure(0, weight=1)
+	# cfg.screenDict['root'].resizable(True, True)
 
+
+
+	ui = Ui_Master()		# this is the whole of the UI
+	ui.setupUi(Master,'Qt Test UI')		# assign alll ui elmeents
+	Master.show()			# maket it visible.
 
 	# cfg.appTitle = 'From the club table in dbms'
-	app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
+	# app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
 
 	print ('Populated screenDict at end of cribbage startup...')
 	for k in cfg.screenDict:
 		print (k)
 
-	app.mainloop()
+	sys.exit(app.exec())
 
     
 
