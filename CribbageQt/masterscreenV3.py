@@ -28,46 +28,48 @@ import os as os
 
 # Personal imports
 import cribbageconfig as cfg
-from CribbageQt.UI import CribbageQtUi
+from CribbageQt.UI.CribbageQt import Ui_Master
 from club import Club
 from player import Player
 from CtrlVariables import StringVar, IntVar, DoubleVar
 
-@classmethod
-def wipeActivityPanel(cls):
-    pass
-    # this will be changed to show the blank activity panel and hid all others
-    # any tab can call this to grid_remove all other activity panels
-    # cfg.screenDict['playersactivity'].hide()
-    # cfg.screenDict['tourneysactivity'].hide()
-    # cfg.screenDict['resultsactivity'].hide()
-    # cfg.screenDict['reportsactivity'].hide()
+class MasterScreen(qtw.QWidget, Ui_Master):
+
+    @classmethod
+    def wipeActivityPanel(cls):
+        pass
+        # this will be changed to show the blank activity panel and hid all others
+        # any tab can call this to grid_remove all other activity panels
+        # cfg.screenDict['playersactivity'].hide()
+        # cfg.screenDict['tourneysactivity'].hide()
+        # cfg.screenDict['resultsactivity'].hide()
+        # cfg.screenDict['reportsactivity'].hide()
 
 
-    # print('MasterScreen started . . .')
+        # print('MasterScreen started . . .')
 
-    # register master screen
-    # cfg.screenDict['master'] = self
+        # register master screen
+        # cfg.screenDict['master'] = self
 
-        # make the columns stretchable
-    # # control variables
-    #   These are initialized in cribbagestartup.py
-    #
-    #     cfg.clubName = Club.get(1).clubName
-    #     cfg.clubNumber = Club.get(1).clubNumber
-    #     cfg.clubId = Club.get(1).id
-    #     cfg.clubCount = Player.select().count()
+            # make the columns stretchable
+        # # control variables
+        #   These are initialized in cribbagestartup.py
+        #
+        #     cfg.clubName = Club.get(1).clubName
+        #     cfg.clubNumber = Club.get(1).clubNumber
+        #     cfg.clubId = Club.get(1).id
+        #     cfg.clubCount = Player.select().count()
 
-##        self.headerPanel = ttk.Frame (self,
-##                                       height='3c',
-##                                       width ='10c',
-##                                       borderwidth='10',
-##                                       relief = 'sunken')
-##        self.headerPanel.grid(row=0, column=0, sticky='n')
-##
-##        # self register
-##        print ('Register header')
-##        cfg.screenDict['header'] = self.headerPanel
+        ##        self.headerPanel = ttk.Frame (self,
+        ##                                       height='3c',
+        ##                                       width ='10c',
+        ##                                       borderwidth='10',
+        ##                                       relief = 'sunken')
+        ##        self.headerPanel.grid(row=0, column=0, sticky='n')
+        ##
+        ##        # self register
+        ##        print ('Register header')
+        ##        cfg.screenDict['header'] = self.headerPanel
         # self.sessionHeader = tk.LabelFrame(self,
         #                                     # height = '3c',
         #                                     # width = '10c',
@@ -186,9 +188,9 @@ def wipeActivityPanel(cls):
 
 
 
-@QtCore.Slot()
-def tabchange(self, index):
-    print ('Tab changed:= ' + str(index))
+        @QtCore.Slot()
+        def tabchange(self, index):
+            print ('Tab changed:= ' + str(index))
 
 if __name__ == '__main__':
 
@@ -202,7 +204,7 @@ if __name__ == '__main__':
 
     if 'window' not in cfg.screenDict:
         print(cfg.screenDict)
-        window = MasterScreen()
+        window = Ui_Master()
         cfg.screenDict['window'] = window
 
 
