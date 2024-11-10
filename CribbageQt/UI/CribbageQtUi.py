@@ -7,7 +7,7 @@
 
 
 from PySide6 import (QtCore, QtGui, QtWidgets)
-
+import cribbageconfig as cfg
 
 class Ui_Master(object):
     def setupUi(self, Master):
@@ -895,6 +895,7 @@ class Ui_Master(object):
         self.label_36.setText(_translate("Master", "Tourneys"))
         self.label_37.setText(_translate("Master", "Reports"))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.reportsTab), _translate("Master", "Reports"))
+        cfg.screenDict['master'] = self
 
 
 if __name__ == "__main__":
