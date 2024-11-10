@@ -28,12 +28,15 @@ import os as os
 
 # Personal imports
 import cribbageconfig as cfg
-from CribbageQt.UI.CribbageQt import Ui_Master
+from CribbageQt.UI.CribbageQt import Ui_MainCribbageWindow
 from club import Club
 from player import Player
 from CtrlVariables import StringVar, IntVar, DoubleVar
 
-class MasterScreen(qtw.QWidget, Ui_Master):
+class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
     @classmethod
     def wipeActivityPanel(cls):
@@ -188,7 +191,7 @@ class MasterScreen(qtw.QWidget, Ui_Master):
 
 
 
-        @QtCore.Slot()
+        @qtc.Slot()
         def tabchange(self, index):
             print ('Tab changed:= ' + str(index))
 
@@ -201,13 +204,12 @@ if __name__ == '__main__':
     tourneyDate = '2024-25'  # tourney selection will override this
     tourneyId = 70
 
+    app = qtw.QApplication(sys.argv)
+    window = MasterScreen()
 
     if 'window' not in cfg.screenDict:
         print(cfg.screenDict)
-        window = Ui_Master()
         cfg.screenDict['window'] = window
 
-
-
-    app = qtw.QApplication(sys.argv)
+    window.show()
     sys.exit(app.exec())
