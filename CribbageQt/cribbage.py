@@ -1,6 +1,9 @@
 # cribbage.py
 #
-#	11/4/2024 converted to PyQt
+#	11/4/2024 converted to PySide6 (PyQt)
+#
+#	All of the ui definitions are now located in masterscreenV3.py
+#	which was generated from masterscreenV3.ui
 #
 # 	7/20/2020 cloned from peggers.py
 #
@@ -45,7 +48,7 @@
 #
 #   <>                      root        app root level window
 #   startup                 main        top level container
-#   masterscreen.py         master      container frame
+#   masterscreenV3.py       master      container frame
 #                           club        club header frame
 #                           activity    activity header frame
 #                           notebook    notebook frame for all tabs
@@ -61,7 +64,7 @@
 #   cribbagesetup.py        sets        setting/resetting the cribbage environment
 ################################################
 
-################## obsolete tabs ################
+################## obsolete tabs #############################################
 #   scoringtab.py           sctab       capture score cards and games
 #   validatetab.py          vtab        validate/correct recorded scores
 #   tourneyplayerstab.py    tptab       add/change/del/seat tourney players
@@ -83,6 +86,9 @@
 #	the	tkinter control variables.
 #	They act just like Python properties and are get and set with name.property notation
 #	No longer do they use the get and set syntax used by tkinter control variables.
+#	When changed variables emit a str|int|dbl changed signal
+#	When read variables emil a str|int|dbl read signal
+#	The signals from the specific instances can be connected to a target slot
 #################################################################################
 
 # block of outstanding changes
@@ -112,14 +118,21 @@
 # from tkinter import ttk
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
+
+# Qt ui imports
 from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6 import QtCore as qtc
+from PySide6 import QtWidgets as qtw
+from PySide6 import QtGui as qtg
+
 from PySide6.QtCore import QObject, Property, Signal
+
 import sys as sys
 import os as os
 from sqlobject import *
 
 # Personal imports
-from CtrlVariables import StringVar, IntVar, DoubleVar
+from ctrlVariables import StringVar, IntVar, DoubleVar
 
 # dbms imports
 
@@ -130,22 +143,22 @@ from accessClubs        import AccessClubs
 
 import cribbageconfig 	as cfg
 from cribbagestartup    import CribbageStartup
-from masterscreen       import MasterScreen
+
+from masterscreenV3      import MasterScreen
+
 # from playerstab         import PlayersTab
-from tourneystab        import TourneysTab
+from tourneystab  			import TourneysTab
 # from resultstab         import ResultsTab
 # from reportstab         import ReportsTab
-# from finishtab          import FinishTab
-# from helptab            import HelpTab
 
 from player import Player
 
 
-class Ui_Master (object):
+class Cribbage (object):
 	#************************************************************
 	#   high level GUI
 	#
-	def setupUi(self, parent, title):
+	def __init__(self):
 		# received parent will be the Master Window called Master
 		# super().__init__(parent)
 		# self.grid(sticky='nsew')
@@ -155,16 +168,14 @@ class Ui_Master (object):
 		# self.rowconfigure(0,weight=1, uniform='a')
 		# self.columnconfigure(0,weight=1, uniform='a')
 		# cfg.screenDict['cribbage'] = self  # register this frame
-		print ('Start Cribbage')
+		# print ('Starting  Cribbage')
 		# build global xref files
 		# moved to peggersstartup.py
 		# self.createPlayersXref()
 		# self.createClubXref()
 		# self.openAccessModules()
 
-		# register myself
-		cfg.screenDict['uimaster'] = self
-		self.buildPanels(parent, title)          # pass in this panel
+		self.buildPanels()          # pass in this panel
 		
 
 	#************************************************************
@@ -172,11 +183,12 @@ class Ui_Master (object):
 	#   call all the modules that build panels for the app
 	#   Each screen will also register itself in cfg.screenDict
 	#
-	def buildPanels (self, parent, title):
+	def buildPanels (self):
+		pass
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
 		# with Qt all of the tab static definitions are done inside MasterScreen
-		MasterScreen(parent, title)
+		# MasterScreen()		# this should be from masterscreenV3 import
 		# build out the tabs into notebook and self register themselves
 		# when done, position in first tab
 		#
@@ -187,14 +199,14 @@ class Ui_Master (object):
 		#	showing their appropriate activity panel
 		####################################################
 		# PlayersTab(cfg.screenDict['notebook'])
-		TourneysTab(cfg.screenDict['notebook'])
+		# TourneysTab(cfg.screenDict['notebook'])
 		# ResultsTab(cfg.screenDict['notebook'])
 		# ReportsTab(cfg.screenDict['notebook'])
 		# FinishTab(cfg.screenDict['notebook'])
 		# HelpTab(cfg.screenDict['notebook'])
-		cfg.screenDict['notebook'].select(1)    # reposition back at TourneysAtb
+		# cfg.screenDict['notebook'].select(1)    # reposition back at TourneysAtb
 
-		self.setNotebookEventCapture()
+		# self.setNotebookEventCapture()
 
 	# def openAccessModules(self):
 	# 	# create an instance of each access module in cfg
@@ -205,27 +217,27 @@ class Ui_Master (object):
 	#************************************************************
 	#   capture notebook tab events one place
 	#
-	def setNotebookEventCapture(self):
-		print ('generic notebook tab event capture')
-		cfg.screenDict['notebook'].bind('<<NotebookTabChanged>>',self.tabChange)
+	# def setNotebookEventCapture(self):
+	# 	print ('generic notebook tab event capture')
+	# 	cfg.screenDict['notebook'].bind('<<NotebookTabChanged>>',self.tabChange)
 
 
 	#************************************************************
 	#   route captured tab event
 	#
-	def tabChange (self,tabIndex):
-		tabIndex = cfg.screenDict['notebook'].currentIndex
-		print('Tab Index:=',tabIndex)
-		if tabIndex == 0:
-			# pass
-			cfg.screenDict['ptab'].tabChange(event)
-		elif tabIndex == 1:
-			# pass
-			cfg.screenDict['ttab'].tabChange(event)
-		elif tabIndex == 2:
-			cfg.screenDict['rsltstab'].tabChange(event)
-		elif tabIndex == 3:
-			cfg.screenDict['rptsab'].tabChange(event)
+def tabChange (self,tabIndex):
+	tabIndex = cfg.screenDict['notebook'].currentIndex
+	print('Tab Index:=',tabIndex)
+	if tabIndex == 0:
+		# pass
+		cfg.screenDict['ptab'].tabChange(event)
+	elif tabIndex == 1:
+		# pass
+		cfg.screenDict['ttab'].tabChange(event)
+	elif tabIndex == 2:
+		cfg.screenDict['rsltstab'].tabChange(event)
+	elif tabIndex == 3:
+		cfg.screenDict['rptsab'].tabChange(event)
 
 
 if __name__ == '__main__':
@@ -237,32 +249,50 @@ if __name__ == '__main__':
 	CribbageStartup.createClubXref()
 	CribbageStartup.createTourneyXref()
 
-	# put root frame object into config module dictionary
-	app = QtWidgets.QApplication(sys.argv)
-	if 'masterwindow' not in cfg.screenDict:
-		print(cfg.screenDict)
-		Master = QtWidgets.QMainWindow()
-		cfg.screenDict['masterwindow'] = Master
-	print ('In peggers ... screenDict:= ', cfg.screenDict)
-	# make resizeable
-	# cfg.screenDict['root'].rowconfigure(0, weight=1)
-	# cfg.screenDict['root'].columnconfigure(0, weight=1)
-	# cfg.screenDict['root'].resizable(True, True)
+	# cfg variables should now be populated
 
+	######################################################
+	#
+	#	All of the QApplications stuff will be handled inside
+	#	masterscreenV3 as that's where all the UI is located
+	######################################################
+	# # put root frame object into config module dictionary
+	# app = QtWidgets.QApplication(sys.argv)
+	# if 'masterwindow' not in cfg.screenDict:
+	# 	print(cfg.screenDict)
+	# 	Master = QtWidgets.QMainWindow()
+	# 	cfg.screenDict['masterwindow'] = Master
+	# print ('In peggers ... screenDict:= ', cfg.screenDict)
+	# # make resizeable
+	# # cfg.screenDict['root'].rowconfigure(0, weight=1)
+	# # cfg.screenDict['root'].columnconfigure(0, weight=1)
+	# # cfg.screenDict['root'].resizable(True, True)
+	#
+	#
+	#
+	# ui = Ui_Master()		# this is the whole of the UI
+	# ui.setupUi(Master,'Qt Test UI')		# assign all ui elmeents
+	# Master.show()			# maket itvisible.
+	#
+	# # cfg.appTitle = 'From the club table in dbms'
+	# # app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
 
+	# cribbageApp = Cribbage()
 
-	ui = Ui_Master()		# this is the whole of the UI
-	ui.setupUi(Master,'Qt Test UI')		# assign all ui elmeents
-	Master.show()			# maket itvisible.
+	app = qtw.QApplication(sys.argv)
+	window = MasterScreen()
+	window.show()
 
-	# cfg.appTitle = 'From the club table in dbms'
-	# app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
+	# if 'window' not in cfg.screenDict:
+	# 	print('Empty screenDict')
+	# 	cfg.screenDict['window'] = window
+	# 	print('screenDict[window]: ')
+	# 	print(cfg.screenDict['window'])
 
-	print ('Populated screenDict at end of cribbage startup...')
-	for k in cfg.screenDict:
-		print (k)
+	print('Window should show...')
 
 	sys.exit(app.exec())
+
 
     
 

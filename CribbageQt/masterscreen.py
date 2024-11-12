@@ -33,7 +33,7 @@ import os as os
 import cribbageconfig as cfg
 from club import Club
 from player import Player
-from CtrlVariables import StringVar, IntVar, DoubleVar
+from ctrlVariables import StringVar, IntVar, DoubleVar
 from seniorsconfig import screenDict
 
 

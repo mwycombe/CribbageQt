@@ -17,6 +17,11 @@ from tkinter import filedialog as fdg
 import sys as sys
 import os as os
 from tkinter.messagebox import askokcancel
+# replace tkinter with PySide6
+
+# from PySide6 import QtWidgets, QtCore, QtGui
+# from PySide6.QtWidgets import QWidget, QApplication
+# from PySide6.QtWidgets import QMessageBox
 
 from sqlobject import *
 
@@ -32,11 +37,14 @@ from accessClubs import AccessClubs
 
 
 class CribbageStartup ():
-   
+
     # define class method so initDbms can be called without
     # instantiating an instance
+
+
+
     @classmethod
-    def initDbms(cls):
+    def initDbms(cls,widget):
         
         # search baseDir for a sqlite3 file - i.e. a dbms
         # make sure we are positioned at the appropriate directory
@@ -87,6 +95,26 @@ class CribbageStartup ():
 
         if not mbx.askokcancel('Using Data Base',cfg.dbmsDirectory + cfg.dbmsName):
             sys.exit('Wrong data base in use')
+        # msgbox = QMessageBox
+        # msgbox.setText('Using Data Base'+  cfg.dbmsDirectory + cfg.dbmsName)
+        # msgbox.setWindowTitle('Check for DBMS')
+        # msgbox.setIcon(QMessageBox.question)
+        # msgbox.setStandardButtons( QMessageBox.Ok | QMessageBox.Cancel)
+        # result = msgbox.exec()
+        # if result != QMessageBox.Ok:
+
+        # msgbox.setIcon(QMessageBox.Information)
+        # msgbox.setText('Information')
+        # msgbox.exec()
+
+
+        # result = QMessageBox(widget, 'Check DBMS', 'Ok to proceed?', QMessageBox.Yes | QMessageBox.No)
+
+        # if result != QMessageBox.yes:
+        #     sys.exit('Wrong data base in use')
+        # else:
+        #     print ('QMessageBox dropped thru')
+
         # see if we can connect to the database
         try:
             # validate where we are trying to connect to the database
@@ -144,15 +172,15 @@ class CribbageStartup ():
     #************************************************************
     #   call startup for command line start
 
-    def __init__(parent, title):
-        print('In startup .... screenDict:=',cfg.screenDict)
-        if 'root' not in cfg.screenDict:
-            root = tk.Tk()
-            cfg.screenDict['root'] = root
-        CribbageStartup.initDbms()
-        root.mainloop()
+    def __init__(parent):
+        print('In startup ....')
 
 
+    # if 'window' not in cfg.screenDict:
+    # 	print('Empty screenDict')
+    # 	cfg.screenDict['window'] = window
+    # 	print('screenDict[window]: ')
+    # 	print(cfg.screenDict['window'])
 
 
 if __name__ == '__main__':

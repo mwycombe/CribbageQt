@@ -19,6 +19,7 @@
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
+from PySide6.QtCore import Slot
 
 
 from sqlobject import *
@@ -31,7 +32,7 @@ import cribbageconfig as cfg
 from CribbageQt.UI.CribbageQt import Ui_MainCribbageWindow
 from club import Club
 from player import Player
-from CtrlVariables import StringVar, IntVar, DoubleVar
+from ctrlVariables import StringVar, IntVar, DoubleVar
 
 class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
     def __init__(self):
@@ -206,10 +207,10 @@ if __name__ == '__main__':
 
     app = qtw.QApplication(sys.argv)
     window = MasterScreen()
+    window.show()
 
     if 'window' not in cfg.screenDict:
         print(cfg.screenDict)
         cfg.screenDict['window'] = window
 
-    window.show()
     sys.exit(app.exec())

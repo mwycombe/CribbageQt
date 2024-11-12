@@ -24,7 +24,7 @@
 # from tkinter import filedialog as fdg
 
 from PySide6 import QtCore, QtWidgets
-from CtrlVariables import StringVar, IntVar, DoubleVar
+from ctrlVariables import StringVar, IntVar, DoubleVar
 
 from sqlobject import *
 
