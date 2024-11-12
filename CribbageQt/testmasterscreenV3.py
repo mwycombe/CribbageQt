@@ -1,5 +1,6 @@
-from PyQt5.QtWidgets import QApplication, QWidget
+
 from PySide6 import QtCore, QtGui, QtWidgets
+from PySide6.QtWidgets import QWidget, QApplication
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
@@ -14,9 +15,9 @@ from CribbageQt.UI.CribbageQt import Ui_MainCribbageWindow
 
 # Personal imports
 from ctrlVariables import StringVar, IntVar, DoubleVar
+from cribbagestartup import CribbageStartup
 
 import cribbageconfig 	as cfg
-from cribbagestartup    import CribbageStartup
 
 from masterscreenV3      import MasterScreen
 
@@ -26,12 +27,12 @@ if __name__ == '__main__':
     # call class level init methods
     print('Starting testmasterscreenV3...')
     app = QApplication(sys.argv)
-    w = QWidget()
-    w.show()
+    window = QWidget()
+    window.show()
 
     print('Window should show...')
 
-    CribbageStartup.initDbms(w)
+    CribbageStartup.initDbms()
     CribbageStartup.createPlayersXref()
     CribbageStartup.createClubXref()
     CribbageStartup.createTourneyXref()

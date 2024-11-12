@@ -175,8 +175,16 @@ class Cribbage (object):
 		# self.createClubXref()
 		# self.openAccessModules()
 
-		self.buildPanels()          # pass in this panel
-		
+		self.buildPanels()
+
+		# on return MasterAcreen has built everything
+		# call class level init methods
+		print ('Starting cribbage...')
+
+		CribbageStartup.initDbms()
+		CribbageStartup.createPlayersXref()
+		CribbageStartup.createClubXref()
+		CribbageStartup.createTourneyXref()
 
 	#************************************************************
 	#
@@ -188,12 +196,12 @@ class Cribbage (object):
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
 		# with Qt all of the tab static definitions are done inside MasterScreen
-		# MasterScreen()		# this should be from masterscreenV3 import
+		MasterScreen()		# this should be from masterscreenV3 import
 		# build out the tabs into notebook and self register themselves
 		# when done, position in first tab
 		#
 		####################################################
-		# tabs will be resonsible for:
+		# tabs will be responsible for:
 		#	connecting up control variables
 		#	capturing events from fields
 		#	showing their appropriate activity panel
@@ -242,12 +250,7 @@ def tabChange (self,tabIndex):
 
 if __name__ == '__main__':
 
-	# call class level init methods
-	print ('Starting cribbage...')
-	CribbageStartup.initDbms()
-	CribbageStartup.createPlayersXref()
-	CribbageStartup.createClubXref()
-	CribbageStartup.createTourneyXref()
+
 
 	# cfg variables should now be populated
 
@@ -290,6 +293,9 @@ if __name__ == '__main__':
 	# 	print(cfg.screenDict['window'])
 
 	print('Window should show...')
+
+	# create a Cribbage object to initialize everything..
+	cribbage = Cribbage()
 
 	sys.exit(app.exec())
 

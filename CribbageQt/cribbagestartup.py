@@ -19,9 +19,9 @@ import os as os
 from tkinter.messagebox import askokcancel
 # replace tkinter with PySide6
 
-# from PySide6 import QtWidgets, QtCore, QtGui
-# from PySide6.QtWidgets import QWidget, QApplication
-# from PySide6.QtWidgets import QMessageBox
+from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6.QtWidgets import QWidget, QApplication
+from PySide6.QtWidgets import QMessageBox
 
 from sqlobject import *
 
@@ -44,7 +44,7 @@ class CribbageStartup ():
 
 
     @classmethod
-    def initDbms(cls,widget):
+    def initDbms(cls):
         
         # search baseDir for a sqlite3 file - i.e. a dbms
         # make sure we are positioned at the appropriate directory
@@ -93,8 +93,8 @@ class CribbageStartup ():
         print ('season:= ' + cfg.season)
         print ('clubNumber:= ' + str(cfg.clubNumber))
 
-        if not mbx.askokcancel('Using Data Base',cfg.dbmsDirectory + cfg.dbmsName):
-            sys.exit('Wrong data base in use')
+        # if not mbx.askokcancel('Using Data Base',cfg.dbmsDirectory + cfg.dbmsName):
+        #     sys.exit('Wrong data base in use')
         # msgbox = QMessageBox
         # msgbox.setText('Using Data Base'+  cfg.dbmsDirectory + cfg.dbmsName)
         # msgbox.setWindowTitle('Check for DBMS')
@@ -108,12 +108,12 @@ class CribbageStartup ():
         # msgbox.exec()
 
 
-        # result = QMessageBox(widget, 'Check DBMS', 'Ok to proceed?', QMessageBox.Yes | QMessageBox.No)
+        result = QMessageBox.question(None, 'Check DBMS', 'Ok to proceed?')
 
-        # if result != QMessageBox.yes:
-        #     sys.exit('Wrong data base in use')
-        # else:
-        #     print ('QMessageBox dropped thru')
+        if result != QMessageBox.Yes:
+            sys.exit('Wrong data base in use')
+        else:
+            print ('QMessageBox dropped thru')
 
         # see if we can connect to the database
         try:

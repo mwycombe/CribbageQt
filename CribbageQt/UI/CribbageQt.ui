@@ -367,7 +367,7 @@ background-color: rgb(255, 255, 255);</string>
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>10</y>
+        <y>0</y>
         <width>1071</width>
         <height>641</height>
        </rect>
@@ -408,8 +408,8 @@ background-color: rgb(255, 255, 255);</string>
        <widget class="QLabel" name="newPlayerLabel">
         <property name="geometry">
          <rect>
-          <x>30</x>
-          <y>20</y>
+          <x>100</x>
+          <y>10</y>
           <width>91</width>
           <height>20</height>
          </rect>
@@ -418,175 +418,111 @@ background-color: rgb(255, 255, 255);</string>
          <string>New Player</string>
         </property>
        </widget>
-       <widget class="QFrame" name="NewPlayerLabelFrame">
+       <widget class="QWidget" name="">
         <property name="geometry">
          <rect>
           <x>30</x>
-          <y>80</y>
-          <width>122</width>
-          <height>421</height>
+          <y>50</y>
+          <width>111</width>
+          <height>451</height>
          </rect>
         </property>
-        <property name="autoFillBackground">
-         <bool>true</bool>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Shape::NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-         <enum>QFrame::Shadow::Raised</enum>
-        </property>
-        <property name="lineWidth">
-         <number>2</number>
-        </property>
-        <layout class="QFormLayout" name="formLayout">
-         <item row="0" column="0">
-          <layout class="QVBoxLayout" name="verticalLayout">
-           <item>
-            <widget class="QLabel" name="firstNameLabel">
-             <property name="enabled">
-              <bool>true</bool>
-             </property>
-             <property name="autoFillBackground">
-              <bool>true</bool>
-             </property>
-             <property name="text">
-              <string>First Name</string>
-             </property>
-             <property name="scaledContents">
-              <bool>false</bool>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="lastNameLabel">
-             <property name="text">
-              <string>Last Name</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="streetLabel">
-             <property name="text">
-              <string>Street</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="cityLabel">
-             <property name="text">
-              <string>City</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="stateLabel">
-             <property name="text">
-              <string>State</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="zipLabel">
-             <property name="text">
-              <string>Zip</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="phoneLabel">
-             <property name="text">
-              <string>Phone</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="emailLabel">
-             <property name="text">
-              <string>Email</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="accNumberLabel">
-             <property name="text">
-              <string>ACC Number</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="expiresLabel">
-             <property name="text">
-              <string>Expires</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="joinedLabel">
-             <property name="text">
-              <string>Joined</string>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="QLabel" name="activeLabel">
-             <property name="text">
-              <string>Active</string>
-             </property>
-             <property name="alignment">
-              <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="layoutWidget">
-        <property name="geometry">
-         <rect>
-          <x>146</x>
-          <y>90</y>
-          <width>152</width>
-          <height>408</height>
-         </rect>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_2">
+        <layout class="QVBoxLayout" name="verticalLayout">
          <item>
-          <widget class="QLineEdit" name="firstNameEntry"/>
+          <widget class="QLabel" name="firstNameLabel">
+           <property name="enabled">
+            <bool>true</bool>
+           </property>
+           <property name="autoFillBackground">
+            <bool>true</bool>
+           </property>
+           <property name="text">
+            <string>First Name</string>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="lastNameEntry"/>
+          <widget class="QLabel" name="lastNameLabel">
+           <property name="text">
+            <string>Last Name</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="streetEntry"/>
+          <widget class="QLabel" name="streetLabel">
+           <property name="text">
+            <string>Street</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="cityEntry"/>
+          <widget class="QLabel" name="cityLabel">
+           <property name="text">
+            <string>City</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="stateEntry"/>
+          <widget class="QLabel" name="stateLabel">
+           <property name="text">
+            <string>State</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="zipEntry"/>
+          <widget class="QLabel" name="zipLabel">
+           <property name="text">
+            <string>Zip</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="phoneEntry"/>
+          <widget class="QLabel" name="phoneLabel">
+           <property name="text">
+            <string>Phone</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="emailEntry"/>
+          <widget class="QLabel" name="emailLabel">
+           <property name="text">
+            <string>Email</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="accNumberEntry"/>
+          <widget class="QLabel" name="accNumberLabel">
+           <property name="text">
+            <string>ACC Number</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="expiresEntry"/>
+          <widget class="QLabel" name="expiresLabel">
+           <property name="text">
+            <string>Expires</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="joinedEntry"/>
+          <widget class="QLabel" name="joinedLabel">
+           <property name="text">
+            <string>Joined</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="activeEntry"/>
+          <widget class="QLabel" name="activeLabel">
+           <property name="text">
+            <string>Active</string>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -679,6 +615,57 @@ background-color: rgb(255, 255, 255);</string>
          <bool>false</bool>
         </property>
        </widget>
+      </widget>
+      <widget class="QWidget" name="layoutWidget">
+       <property name="geometry">
+        <rect>
+         <x>570</x>
+         <y>130</y>
+         <width>152</width>
+         <height>461</height>
+        </rect>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_2">
+        <property name="sizeConstraint">
+         <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
+        </property>
+        <item>
+         <widget class="QLineEdit" name="firstNameEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lastNameEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="streetEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="cityEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="stateEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="zipEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="phoneEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="emailEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="accNumberEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="expiresEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="joinedEntry"/>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="activeEntry"/>
+        </item>
+       </layout>
       </widget>
      </widget>
     </widget>
