@@ -38,13 +38,15 @@
 ['ttab']                tourneysTab screen\
 ['rsltstab']            resultsTab screen\
 ['rptstab']             reportsTab screen\
-['activitypanel']         blank activity panel\
+['activitypanel']       blank activity panel\
 ['playersactivitytab']  player activity panel
 ['resultsactivitytab']  results activity panel\
 ['reportsactivitytab']  reports activity panel\
 ['tourneysactivitytab'] tourneys activity panel\
 ['sessionpanel']        session header panel\
-['clubpane]']           club header panel\
+['clubpanel]']          club header panel\
+['sessionpanel']         where all the action  panels are displayed\
+
 
 ## Setting up the UI with Qt vs. tkinter
 

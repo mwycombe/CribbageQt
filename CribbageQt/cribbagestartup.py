@@ -93,22 +93,7 @@ class CribbageStartup ():
         print ('season:= ' + cfg.season)
         print ('clubNumber:= ' + str(cfg.clubNumber))
 
-        # if not mbx.askokcancel('Using Data Base',cfg.dbmsDirectory + cfg.dbmsName):
-        #     sys.exit('Wrong data base in use')
-        # msgbox = QMessageBox
-        # msgbox.setText('Using Data Base'+  cfg.dbmsDirectory + cfg.dbmsName)
-        # msgbox.setWindowTitle('Check for DBMS')
-        # msgbox.setIcon(QMessageBox.question)
-        # msgbox.setStandardButtons( QMessageBox.Ok | QMessageBox.Cancel)
-        # result = msgbox.exec()
-        # if result != QMessageBox.Ok:
-
-        # msgbox.setIcon(QMessageBox.Information)
-        # msgbox.setText('Information')
-        # msgbox.exec()
-
-
-        result = QMessageBox.question(None, 'Check DBMS', 'Ok to proceed?')
+        result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
 
         if result != QMessageBox.Yes:
             sys.exit('Wrong data base in use')
@@ -129,7 +114,6 @@ class CribbageStartup ():
         except:
             print ('Unable to locate data base - terminating')
             sys._exit(-1)
-
 
         # global reference variables
 

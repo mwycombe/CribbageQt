@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'CribbageV1.1-Tourneys-Activity.ui'
+# Form implementation generated from reading ui file 'CribbageV1_1_Tourneys_Activity.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #
@@ -103,13 +103,13 @@ class Ui_TourneysActivity(object):
         self.clubSeason.setLineWidth(2)
         self.clubSeason.setObjectName("clubSeason")
         self.verticalLayout_4.addWidget(self.clubSeason)
-        self.tourneyActivityPanel = QtWidgets.QFrame(parent=self.sessionPanel)
-        self.tourneyActivityPanel.setGeometry(QtCore.QRect(340, 20, 741, 171))
-        self.tourneyActivityPanel.setFrameShape(QtWidgets.QFrame.Shape.Panel)
-        self.tourneyActivityPanel.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
-        self.tourneyActivityPanel.setLineWidth(2)
-        self.tourneyActivityPanel.setObjectName("tourneyActivityPanel")
-        self.layoutWidget2 = QtWidgets.QWidget(parent=self.tourneyActivityPanel)
+        self.tourneysActivityPanel = QtWidgets.QFrame(parent=self.sessionPanel)
+        self.tourneysActivityPanel.setGeometry(QtCore.QRect(340, 20, 741, 171))
+        self.tourneysActivityPanel.setFrameShape(QtWidgets.QFrame.Shape.Panel)
+        self.tourneysActivityPanel.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+        self.tourneysActivityPanel.setLineWidth(2)
+        self.tourneysActivityPanel.setObjectName("tourneysActivityPanel")
+        self.layoutWidget2 = QtWidgets.QWidget(parent=self.tourneysActivityPanel)
         self.layoutWidget2.setGeometry(QtCore.QRect(40, 20, 311, 141))
         self.layoutWidget2.setObjectName("layoutWidget2")
         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.layoutWidget2)
@@ -124,7 +124,7 @@ class Ui_TourneysActivity(object):
         self.playersF2ActivityLabel = QtWidgets.QLabel(parent=self.layoutWidget2)
         self.playersF2ActivityLabel.setObjectName("playersF2ActivityLabel")
         self.verticalLayout_5.addWidget(self.playersF2ActivityLabel)
-        self.verticalLayoutWidget = QtWidgets.QWidget(parent=self.tourneyActivityPanel)
+        self.verticalLayoutWidget = QtWidgets.QWidget(parent=self.tourneysActivityPanel)
         self.verticalLayoutWidget.setGeometry(QtCore.QRect(370, 20, 331, 141))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)

@@ -354,7 +354,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -418,7 +418,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>New Player</string>
         </property>
        </widget>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -587,7 +587,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Show All</string>
         </property>
        </widget>
-       <widget class="QListWidget" name="playerList">
+       <widget class="QListWidget" name="listOfPlayers">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -1383,7 +1383,7 @@ background-color: rgb(255, 255, 255);</string>
           <string>Player Name</string>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfPoints">
+        <widget class="QListWidget" name="listOfPlayerPoints">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1393,7 +1393,7 @@ background-color: rgb(255, 255, 255);</string>
           </rect>
          </property>
         </widget>
-        <widget class="QListWidget" name="listWidget_2">
+        <widget class="QListWidget" name="listOfResultPlayers">
          <property name="geometry">
           <rect>
            <x>60</x>
@@ -1425,7 +1425,7 @@ background-color: rgb(255, 255, 255);</string>
         <property name="lineWidth">
          <number>2</number>
         </property>
-        <widget class="QListWidget" name="listOfResulsNames">
+        <widget class="QListWidget" name="listOfResultsNames">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1623,7 +1623,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultGw">
+        <widget class="QListWidget" name="listOfResultsGw">
          <property name="geometry">
           <rect>
            <x>220</x>
@@ -2322,15 +2322,15 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>expiresEntry</tabstop>
   <tabstop>joinedEntry</tabstop>
   <tabstop>activeEntry</tabstop>
-  <tabstop>playerList</tabstop>
+  <tabstop>listOfPlayers</tabstop>
   <tabstop>showAllPlayers</tabstop>
-  <tabstop>listOfResultGw</tabstop>
+  <tabstop>listOfResultsGw</tabstop>
   <tabstop>newTourneyDateEntry</tabstop>
-  <tabstop>listOfPoints</tabstop>
+  <tabstop>listOfPlayerPoints</tabstop>
   <tabstop>listOfTourneys</tabstop>
   <tabstop>newTourneyNumberEntry</tabstop>
-  <tabstop>listWidget_2</tabstop>
-  <tabstop>listOfResulsNames</tabstop>
+  <tabstop>listOfResultPlayers</tabstop>
+  <tabstop>listOfResultsNames</tabstop>
   <tabstop>tabWidget</tabstop>
   <tabstop>listOfResultsGp</tabstop>
   <tabstop>listOfResultsSprd</tabstop>

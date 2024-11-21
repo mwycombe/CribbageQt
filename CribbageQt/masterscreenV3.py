@@ -29,7 +29,7 @@ import os as os
 
 # Personal imports
 import cribbageconfig as cfg
-from CribbageQt.UI.CribbageQt import Ui_MainCribbageWindow
+from CribbageQt import Ui_MainCribbageWindow
 from club import Club
 from player import Player
 from ctrlVariables import StringVar, IntVar, DoubleVar
@@ -38,16 +38,36 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        # populate cfg.screenDict
+        cfg.screenDict['masterwindow'] = self
+        cfg.screenDict['sessionpanel'] = self.sessionPanel      # container for activity panels
+        cfg.screenDict['notebook'] = self.tabWidget             # replaces old tk notebook construct
+
+        # call wipe to see what's there
+        MasterScreen.wipeActivityPanel()
 
     @classmethod
     def wipeActivityPanel(cls):
-        pass
+        # start by hiding all activity panel children of sessionPanel
+        listOfChildren = []
+        listOfChildren = cfg.screenDict['sessionpanel'].children()
+        for child in listOfChildren :
+            print (child.objectName())
+            if child.objectName() == 'activityPanel' or \
+                child.objectName() == 'playersActivityPanel' or \
+                child.objectName() == 'tourneysActivityPanel' or \
+                child.objectName() == 'resultsActivityPanel' or \
+                child.objectName() == 'reportsActivityPanel':
+
+                child.hide()
+
         # this will be changed to show the blank activity panel and hid all others
         # any tab can call this to grid_remove all other activity panels
         # cfg.screenDict['playersactivity'].hide()
         # cfg.screenDict['tourneysactivity'].hide()
         # cfg.screenDict['resultsactivity'].hide()
         # cfg.screenDict['reportsactivity'].hide()
+
 
 
         # print('MasterScreen started . . .')
@@ -210,7 +230,7 @@ if __name__ == '__main__':
     window.show()
 
     if 'window' not in cfg.screenDict:
-        print(cfg.screenDict)
+        # print(cfg.screenDict)
         cfg.screenDict['window'] = window
-
+    # print (cfg.screenDict)
     sys.exit(app.exec())

@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'CribbageV1.1-Results-Activity.ui'
+# Form implementation generated from reading ui file 'CribbageV1_1_Results_Activity.ui'
 #
 # Created by: PyQt6 UI code generator 6.4.2
 #

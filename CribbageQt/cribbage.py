@@ -192,7 +192,7 @@ class Cribbage (object):
 	#   Each screen will also register itself in cfg.screenDict
 	#
 	def buildPanels (self):
-		pass
+		# pass
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
 		# with Qt all of the tab static definitions are done inside MasterScreen
