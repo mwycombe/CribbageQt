@@ -30,6 +30,7 @@ import os as os
 # Personal imports
 import cribbageconfig as cfg
 from CribbageQt import Ui_MainCribbageWindow
+from tourneystab import TourneysTab
 from club import Club
 from player import Player
 from ctrlVariables import StringVar, IntVar, DoubleVar
@@ -44,24 +45,29 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         cfg.screenDict['notebook'] = self.tabWidget             # replaces old tk notebook construct
 
         # call wipe to see what's there
-        MasterScreen.wipeActivityPanel()
+        # MasterScreen.wipeActivityPanel()
+        # self.tourneyTab = TourneysTab(cfg.screenDict['sessionpanel'])
 
-    @classmethod
-    def wipeActivityPanel(cls):
-        # start by hiding all activity panel children of sessionPanel
-        listOfChildren = []
-        listOfChildren = cfg.screenDict['sessionpanel'].children()
-        for child in listOfChildren :
-            print (child.objectName())
-            if child.objectName() == 'activityPanel' or \
-                child.objectName() == 'playersActivityPanel' or \
-                child.objectName() == 'tourneysActivityPanel' or \
-                child.objectName() == 'resultsActivityPanel' or \
-                child.objectName() == 'reportsActivityPanel':
+        # set up for stackedwidgets
+        cfg.screenDict['activitystack'] = self.stackedActivityWidget
 
-                child.hide()
+    # no longer applies as we now use the stackedActivityWidget
+    # @classmethod
+    # def wipeActivityPanel(cls):
+    #     # start by hiding all activity panel children of sessionPanel
+    #     listOfChildren = []
+    #     listOfChildren = cfg.screenDict['sessionpanel'].children()
+    #     for child in listOfChildren :
+    #         print (child.objectName())
+    #         if child.objectName() == 'activityPanel' or \
+    #             child.objectName() == 'playersActivityPanel' or \
+    #             child.objectName() == 'tourneysActivityPanel' or \
+    #             child.objectName() == 'resultsActivityPanel' or \
+    #             child.objectName() == 'reportsActivityPanel':
+    #
+    #             child.hide()
 
-        # this will be changed to show the blank activity panel and hid all others
+        # this will be changed to show the blank activity panel and hide all others
         # any tab can call this to grid_remove all other activity panels
         # cfg.screenDict['playersactivity'].hide()
         # cfg.screenDict['tourneysactivity'].hide()
@@ -209,12 +215,13 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         # self.notebook.bind("<<NotebookTabChanged>>",self.tabchange)
         # set this from the module that cares to track tabchanges
         # tabs within this notebook will register themselves
+        self.tabWidget.currentChanged.connect(self.tabChange)
 
 
+    @qtc.Slot(int)
+    def tabChange(self, index):
+        print ('Tab changed:= ' + str(index))
 
-        @qtc.Slot()
-        def tabchange(self, index):
-            print ('Tab changed:= ' + str(index))
 
 if __name__ == '__main__':
 

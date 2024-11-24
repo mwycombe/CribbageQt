@@ -276,6 +276,23 @@ background-color: rgb(255, 255, 255);</string>
      <property name="lineWidth">
       <number>2</number>
      </property>
+     <widget class="QStackedWidget" name="stackedActivityWidget">
+      <property name="geometry">
+       <rect>
+        <x>11</x>
+        <y>10</y>
+        <width>731</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="currentIndex">
+       <number>2</number>
+      </property>
+      <widget class="QWidget" name="playersActivityPage"/>
+      <widget class="QWidget" name="tourneysActivityPage"/>
+      <widget class="QWidget" name="reportsActivityPage"/>
+      <widget class="QWidget" name="resultsActivityPage"/>
+     </widget>
     </widget>
     <widget class="QLabel" name="clubFrameLabel">
      <property name="geometry">
@@ -354,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">

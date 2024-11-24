@@ -45,7 +45,7 @@
 ['tourneysactivitytab'] tourneys activity panel\
 ['sessionpanel']        session header panel\
 ['clubpanel]']          club header panel\
-['sessionpanel']         where all the action  panels are displayed\
+['activitystack']       where all the action  panels are displayed\'
 
 
 ## Setting up the UI with Qt vs. tkinter

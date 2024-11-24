@@ -116,11 +116,18 @@ class CribbageStartup ():
             sys._exit(-1)
 
         # global reference variables
-
         cfg.ap = AccessPlayers()
         cfg.ar = AccessResults()
         cfg.at = AccessTourneys()
         cfg.ac = AccessClubs()
+
+        # init stackedWidgets dictionary
+        # this defines which widget page the activity is loaded
+        # into the stackedWidget layout
+        # cfg.stackedActivityDict['playersActivityPage', 0]
+        # cfg.stackedActivityDict['tourneysActivityPage', 1]
+        # cfg.stackedActivityDict['resultsActivityPage', 2]
+        # cfg.stackedActivityDict['reportsActivityPage', 3]
 
         cfg.clubRecord = cfg.ac.clubByNumber(cfg.clubNumber)[0]      # returns one club record in a list
         print (type(cfg.clubRecord))

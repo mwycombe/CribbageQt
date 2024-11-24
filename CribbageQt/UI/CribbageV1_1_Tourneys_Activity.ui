@@ -329,6 +329,17 @@ font: 700 11pt &quot;Segoe UI&quot;;</string>
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="gridLayoutWidget">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>0</y>
+        <width>731</width>
+        <height>171</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout"/>
+     </widget>
     </widget>
     <widget class="QLabel" name="clubFrameLabel">
      <property name="geometry">

@@ -146,8 +146,8 @@ from cribbagestartup    import CribbageStartup
 
 from masterscreenV3      import MasterScreen
 
-# from playerstab         import PlayersTab
-from tourneystab  			import TourneysTab
+from playerstab         import PlayersTab
+# from tourneystab  		import TourneysTab
 # from resultstab         import ResultsTab
 # from reportstab         import ReportsTab
 
@@ -192,11 +192,11 @@ class Cribbage (object):
 	#   Each screen will also register itself in cfg.screenDict
 	#
 	def buildPanels (self):
-		# pass
+		pass
 		# build master inside senior panel
 		# master sets up the notebook panel to be used by all tabs
 		# with Qt all of the tab static definitions are done inside MasterScreen
-		MasterScreen()		# this should be from masterscreenV3 import
+		# MasterScreen()		# this should be from masterscreenV3 import
 		# build out the tabs into notebook and self register themselves
 		# when done, position in first tab
 		#
@@ -236,16 +236,17 @@ class Cribbage (object):
 def tabChange (self,tabIndex):
 	tabIndex = cfg.screenDict['notebook'].currentIndex
 	print('Tab Index:=',tabIndex)
-	if tabIndex == 0:
-		# pass
-		cfg.screenDict['ptab'].tabChange(event)
-	elif tabIndex == 1:
-		# pass
-		cfg.screenDict['ttab'].tabChange(event)
-	elif tabIndex == 2:
-		cfg.screenDict['rsltstab'].tabChange(event)
-	elif tabIndex == 3:
-		cfg.screenDict['rptsab'].tabChange(event)
+	cfg.screenDict['notebook'].setIndex(tabIndex)
+	# if tabIndex == 0:
+	# 	# pass
+	# 	cfg.screenDict['ptab'].tabChange(event)
+	# elif tabIndex == 1:
+	# 	# pass
+	# 	cfg.screenDict['ttab'].tabChange(event)
+	# elif tabIndex == 2:
+	# 	cfg.screenDict['rsltstab'].tabChange(event)
+	# elif tabIndex == 3:
+	# 	cfg.screenDict['rptsab'].tabChange(event)
 
 
 if __name__ == '__main__':

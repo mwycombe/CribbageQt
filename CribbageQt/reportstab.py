@@ -1,6 +1,8 @@
 # reportsstab.py
 # 7/21/2020 update to cribbageconfig and cribbagereport
 #
+# Nov 2024 replace tkinter with PySide6
+#
 #####################################################################
 #
 #   Creates tab screen for requesting reports
@@ -26,9 +28,18 @@
 
 
 # System imports
-import tkinter as tk
-from tkinter import messagebox as mbx
+# import tkinter as tk
+# from tkinter import messagebox as mbx
 
+from PySide6 import QtCore as qtc
+from PySide6 import QtWidgets as qtw
+from PySide6 import QtGui as qtg
+from PySide6.QtCore import Slot
+from PySide6 import QtCore, QtWidgets
+
+from ctrlVariables import StringVar, IntVar, DoubleVar
+
+from CribbageV1_1_Reports_Activity import Ui_ReportsActivity
 from datetime import date
 
 # Personal imports
@@ -43,219 +54,230 @@ import qtrdropreport
 import qtrfullreport
 import skunkreport
 import tourneyreport
-from masterscreen import MasterScreen
+# from masterscreen import MasterScreen
 
-class ReportsTab (tk.Frame):
-    # screen class is always a framein
+class ReportsTab (object:
+    # screen class is always a frame
 
     #************************************************************   
     #   
     #   sets up tab for requesting reports & regiester with notebook frame
 
-    def __init__ (self, tabTarget, parent=None):
-        super().__init__( parent)
-        self.grid()
+    def __init__ (self, parent=None):
+        # super().__init__( parent)
+        # self.grid()
+        self.reportsActivity = Ui_ReportsActivity()
+        self.reportsActivity.setupUi(self.reportsActivity)
+
+        # all of the fields should already be in the widget inside the QTabWidget
+
+        self.installReportsActivity()
 
         # control variables for report selection
-        self.allReportsVar = tk.IntVar()
-        self.alphaVar = tk.IntVar()
-        self.battingAvgVar = tk.IntVar()
-        self.cashVar = tk.IntVar()
-        self.individStatsVar = tk.IntVar()
-        self.natallVar = tk.IntVar()
-        self.qtrDropVar = tk.IntVar()
-        self.qtrFullVar = tk.IntVar()
-        self.skunksVar = tk.IntVar()
-        self.tourneyVar = tk.IntVar()
+        # self.allReportsVar = tk.IntVar()
+        # self.alphaVar = tk.IntVar()
+        # self.battingAvgVar = tk.IntVar()
+        # self.cashVar = tk.IntVar()
+        # self.individStatsVar = tk.IntVar()
+        # self.natallVar = tk.IntVar()
+        # self.qtrDropVar = tk.IntVar()
+        # self.qtrFullVar = tk.IntVar()
+        # self.skunksVar = tk.IntVar()
+        # self.tourneyVar = tk.IntVar()
 
         # build stack of selections
-        rpt.reportStack = {}
-        rpt.reportStack['alphareport'] = (self.alphaVar, alphareport.AlphaReport)
-        rpt.reportStack['battingavgreport'] = (self.battingAvgVar, battingavgreport.BattingAvgReport)
-        rpt.reportStack['cashreport'] = (self.cashVar, cashreport.CashReport)
-        rpt.reportStack['individstatsreport'] = (self.individStatsVar, individualstatsReport.IndividualStatsReport)
-        rpt.reportStack['natallreport'] = (self.natallVar, natallreport.NatAllReport)
-        rpt.reportStack['qtrdropreport'] = (self.qtrDropVar, qtrdropreport.QtrDropReport)
-        rpt.reportStack['qtrfullreport'] = (self.qtrFullVar, qtrfullreport.QtrFullReport)
-        rpt.reportStack['skunkreport'] = (self.skunksVar, skunkreport.SkunkReport)
-        rpt.reportStack['tourneyreport'] = (self.tourneyVar, tourneyreport.TourneyReport)
+        # rpt.reportStack = {}
+        # rpt.reportStack['alphareport'] = (self.alphaVar, alphareport.AlphaReport)
+        # rpt.reportStack['battingavgreport'] = (self.battingAvgVar, battingavgreport.BattingAvgReport)
+        # rpt.reportStack['cashreport'] = (self.cashVar, cashreport.CashReport)
+        # rpt.reportStack['individstatsreport'] = (self.individStatsVar, individualstatsReport.IndividualStatsReport)
+        # rpt.reportStack['natallreport'] = (self.natallVar, natallreport.NatAllReport)
+        # rpt.reportStack['qtrdropreport'] = (self.qtrDropVar, qtrdropreport.QtrDropReport)
+        # rpt.reportStack['qtrfullreport'] = (self.qtrFullVar, qtrfullreport.QtrFullReport)
+        # rpt.reportStack['skunkreport'] = (self.skunksVar, skunkreport.SkunkReport)
+        # rpt.reportStack['tourneyreport'] = (self.tourneyVar, tourneyreport.TourneyReport)
 
         # build out tab and register with notebook
-        self.config(padx = '5', pady = '5')
-        tabTarget.add(self,text='Reports')
-        cfg.screenDict['rtab'] = self
-        self.reportsPanel = tk.Frame(self,
-                                      borderwidth = '1',
-                                      height = '8c',
-                                      width = '10c',
-                                      padx = '10', pady = '10',
-                                      relief = 'sunken')
-        self.trnysPanel = tk.LabelFrame(self.reportsPanel,
-                                         text = 'Tourneys',
-                                         height = '8c',
-                                         width = '5c',
-                                         padx = '5', pady = '5',
-                                         relief = 'sunken')
-        # self.instrPanel = tk.Frame(self.trnysPanel,
-        #                             relief = 'sunken',
-        #                             borderwidth = 3)
-        self.listPanel = tk.Frame(self.trnysPanel,
-                                   relief = 'sunken',
-                                   borderwidth = 0)
-        # self.instrPanel.grid(row=0, column=0)
-        self.listPanel.grid(row=0, column=0)
-        self.rptsPanel = tk.LabelFrame(self.reportsPanel,
-                                        text = 'Reports',
-                                        height = '8c',
-                                        width = '5c',
-                                        padx = '5', pady = '5',
-                                        borderwidth = 3,
-                                        relief = 'sunken')
-        self.selectPanel = tk.Frame(self.rptsPanel,
-                                     relief = 'sunken',
-                                     borderwidth = 0)
-        self.runPanel = tk.Frame(self.rptsPanel,
-                                  relief = 'sunken',
-                                  borderwidth = 3)
-        self.selectPanel.grid(row=0, column=0)
-        self.runPanel.grid(row=1, column=0)
-        self.reportsPanel.grid(row = 0, column = 0)
-        self.trnysPanel.grid(row = 0, column = 0, sticky = 'n')
-        self.rptsPanel.grid(row = 0, column = 1, sticky = 'n')
+        # self.config(padx = '5', pady = '5')
+        # tabTarget.add(self,text='Reports')
+        # cfg.screenDict['rtab'] = self
+        # self.reportsPanel = tk.Frame(self,
+        #                               borderwidth = '1',
+        #                               height = '8c',
+        #                               width = '10c',
+        #                               padx = '10', pady = '10',
+        #                               relief = 'sunken')
+        # self.trnysPanel = tk.LabelFrame(self.reportsPanel,
+        #                                  text = 'Tourneys',
+        #                                  height = '8c',
+        #                                  width = '5c',
+        #                                  padx = '5', pady = '5',
+        #                                  relief = 'sunken')
+        # # self.instrPanel = tk.Frame(self.trnysPanel,
+        # #                             relief = 'sunken',
+        # #                             borderwidth = 3)
+        # self.listPanel = tk.Frame(self.trnysPanel,
+        #                            relief = 'sunken',
+        #                            borderwidth = 0)
+        # # self.instrPanel.grid(row=0, column=0)
+        # self.listPanel.grid(row=0, column=0)
+        # self.rptsPanel = tk.LabelFrame(self.reportsPanel,
+        #                                 text = 'Reports',
+        #                                 height = '8c',
+        #                                 width = '5c',
+        #                                 padx = '5', pady = '5',
+        #                                 borderwidth = 3,
+        #                                 relief = 'sunken')
+        # self.selectPanel = tk.Frame(self.rptsPanel,
+        #                              relief = 'sunken',
+        #                              borderwidth = 0)
+        # self.runPanel = tk.Frame(self.rptsPanel,
+        #                           relief = 'sunken',
+        #                           borderwidth = 3)
+        # self.selectPanel.grid(row=0, column=0)
+        # self.runPanel.grid(row=1, column=0)
+        # self.reportsPanel.grid(row = 0, column = 0)
+        # self.trnysPanel.grid(row = 0, column = 0, sticky = 'n')
+        # self.rptsPanel.grid(row = 0, column = 1, sticky = 'n')
+        #
+        # self.runButton = tk.Button(self.runPanel,
+        #                             text='Run Reports')
+        # self.runButton.bind('<Button-1>', self.reportHandler)
+        # self.runButton.grid(column=0)
+        #
+        # # set up for reports all finished.
+        # self.finishedPanel = tk.Frame(self.reportsPanel,
+        #                    relief = 'sunken',
+        #                    borderwidth = 3)
+        # self.finishedPanel.grid(row=0, column=3, sticky = 'n')
+        # self.finishedLabel = tk.Label(self.finishedPanel,
+        #                               text = 'All Reports Have Been Run')
+        # self.finishedLabel.grid(row=0, column=0, sticky = 'n')
+        # self.hideWidget(self.finishedPanel)   # hide until needed
+        # self.tourneysWithResults = tk.Listbox(self.listPanel,
+        #                                       width = 15,
+        #                                       height = 18)
+        # self.tourneysWithResults.grid(row=0, column=0,sticky='n')
+        # self.vsb = tk.Scrollbar(self.listPanel)
+        # self.vsb.grid(row=0, column=1, sticky='ns')
+        # self.tourneysWithResults.config(yscrollcommand = self.vsb.set)
+        # self.vsb.config(command = self.tourneysWithResults.yview)
+        # self.tourneysWithResults.select_set(0)
+        # self.tourneysWithResults.activate(0)
+        # self.tourneysWithResults.focus_force()
+        # # build list of selectable reports
+        # self.allChoice = tk.Checkbutton(self.selectPanel,
+        #                                   text = 'AllReports',
+        #                                   onvalue = 1, offvalue = 0,
+        #                                   anchor = 'w',
+        #                                   height = 2,
+        #                                   width = 20,
+        #                                   command = self.selectAllReports,
+        #                                   variable = self.allReportsVar
+        #                                   )
+        # self.alphaChoice = tk.Checkbutton(self.selectPanel,
+        #                                     text = 'Alpha Report',
+        #                                     onvalue = 1, offvalue = 0,
+        #                                     anchor = 'w',
+        #                                     height = 1,
+        #                                     width = 20,
+        #                                     variable = self.alphaVar
+        #                                     )
+        # self.battingAvgChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Batting Average Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.battingAvgVar
+        #                                       )
+        # self.cashChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Cash Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.cashVar
+        #                                       )
+        # self.individStatsChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Individ. Stats Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.individStatsVar
+        #                                       )
+        # self.natAllChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'National Avges Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.natallVar
+        #                                       )
+        # self.qtrDropChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Qtr Drop Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.qtrDropVar
+        #                                       )
+        # self.qtrFullChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Qtr Full Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.qtrFullVar
+        #                                       )
+        # self.skunkChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Skunk Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.skunksVar
+        #                                       )
+        # self.tourneyChoice = tk.Checkbutton(self.selectPanel,
+        #                                       text = 'Tourney Report',
+        #                                       onvalue = 1, offvalue = 0,
+        #                                       anchor = 'w',
+        #                                       height = 1,
+        #                                       width = 20,
+        #                                       variable = self.tourneyVar
+        #                                       )
+        #
+        # self.rptsPanel.columnconfigure(0, weight=1)
+        # self.allChoice.grid(row = 0, column = 0, sticky = 'w')
+        # self.alphaChoice.grid(column = 0, sticky='w')
+        # self.battingAvgChoice.grid(column = 0, sticky='w')
+        # self.cashChoice.grid(column = 0, sticky='w')
+        # self.individStatsChoice.grid(column = 0, sticky='w')
+        # self.natAllChoice.grid(column = 0, sticky='w')
+        # self.qtrDropChoice.grid(column = 0, sticky='w')
+        # self.qtrFullChoice.grid(column = 0, sticky='w')
+        # self.skunkChoice.grid(column = 0, sticky='w')
+        # self.tourneyChoice.grid(column = 0, sticky='w')
+        # self.buildActivityPanel()
 
-        self.runButton = tk.Button(self.runPanel,
-                                    text='Run Reports')
-        self.runButton.bind('<Button-1>', self.reportHandler)
-        self.runButton.grid(column=0)
-
-        # set up for reports all finished.
-        self.finishedPanel = tk.Frame(self.reportsPanel,
-                           relief = 'sunken',
-                           borderwidth = 3)
-        self.finishedPanel.grid(row=0, column=3, sticky = 'n')
-        self.finishedLabel = tk.Label(self.finishedPanel,
-                                      text = 'All Reports Have Been Run')
-        self.finishedLabel.grid(row=0, column=0, sticky = 'n')
-        self.hideWidget(self.finishedPanel)   # hide until needed
-        self.tourneysWithResults = tk.Listbox(self.listPanel,
-                                              width = 15,
-                                              height = 18)
-        self.tourneysWithResults.grid(row=0, column=0,sticky='n')
-        self.vsb = tk.Scrollbar(self.listPanel)
-        self.vsb.grid(row=0, column=1, sticky='ns')
-        self.tourneysWithResults.config(yscrollcommand = self.vsb.set)
-        self.vsb.config(command = self.tourneysWithResults.yview)
-        self.tourneysWithResults.select_set(0)
-        self.tourneysWithResults.activate(0)
-        self.tourneysWithResults.focus_force()
-        # build list of selectable reports
-        self.allChoice = tk.Checkbutton(self.selectPanel,
-                                          text = 'AllReports',
-                                          onvalue = 1, offvalue = 0,
-                                          anchor = 'w',
-                                          height = 2,
-                                          width = 20,
-                                          command = self.selectAllReports,
-                                          variable = self.allReportsVar
-                                          )
-        self.alphaChoice = tk.Checkbutton(self.selectPanel,
-                                            text = 'Alpha Report',
-                                            onvalue = 1, offvalue = 0,
-                                            anchor = 'w',
-                                            height = 1,
-                                            width = 20,
-                                            variable = self.alphaVar
-                                            )
-        self.battingAvgChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Batting Average Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.battingAvgVar
-                                              )
-        self.cashChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Cash Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.cashVar
-                                              )
-        self.individStatsChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Individ. Stats Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.individStatsVar
-                                              )
-        self.natAllChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'National Avges Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.natallVar
-                                              )
-        self.qtrDropChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Qtr Drop Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.qtrDropVar
-                                              )
-        self.qtrFullChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Qtr Full Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.qtrFullVar
-                                              )
-        self.skunkChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Skunk Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.skunksVar
-                                              )
-        self.tourneyChoice = tk.Checkbutton(self.selectPanel,
-                                              text = 'Tourney Report',
-                                              onvalue = 1, offvalue = 0,
-                                              anchor = 'w',
-                                              height = 1,
-                                              width = 20,
-                                              variable = self.tourneyVar
-                                              )
-
-        self.rptsPanel.columnconfigure(0, weight=1)
-        self.allChoice.grid(row = 0, column = 0, sticky = 'w')
-        self.alphaChoice.grid(column = 0, sticky='w')
-        self.battingAvgChoice.grid(column = 0, sticky='w')
-        self.cashChoice.grid(column = 0, sticky='w')
-        self.individStatsChoice.grid(column = 0, sticky='w')
-        self.natAllChoice.grid(column = 0, sticky='w')
-        self.qtrDropChoice.grid(column = 0, sticky='w')
-        self.qtrFullChoice.grid(column = 0, sticky='w')
-        self.skunkChoice.grid(column = 0, sticky='w')
-        self.tourneyChoice.grid(column = 0, sticky='w')
-        self.buildActivityPanel()
     def buildActivityPanel(self):
-        MasterScreen.wipeActivityPanel()
-        self.ap = cfg.screenDict['activity']
-        print ('self.ap in reportstab: ', self.ap)
-        self.instr1 = tk.Label(self.ap,
-                                      text='First Pick a Tourney')
-        self.instr2 = tk.Label(self.ap,
-                                text='Then One or More Reports')
-        self.instr3 = tk.Label(self.ap,
-                                text='And Press Run Reports When Ready')
-        self.instr1.grid(row=0, column=0, sticky='w')
-        self.instr2.grid(row=1, column=0, sticky='w')
-        self.instr3.grid(row=2, column=0, sticky='w')
+        # make the appropriate stacked widget current
+        self.widgetIndex = cfg.stackedActivityDict['reportsActivityPage']
+        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
+
+        # MasterScreen.wipeActivityPanel()
+        # self.ap = cfg.screenDict['activity']
+        # print ('self.ap in reportstab: ', self.ap)
+        # self.instr1 = tk.Label(self.ap,
+        #                               text='First Pick a Tourney')
+        # self.instr2 = tk.Label(self.ap,
+        #                         text='Then One or More Reports')
+        # self.instr3 = tk.Label(self.ap,
+        #                         text='And Press Run Reports When Ready')
+        # self.instr1.grid(row=0, column=0, sticky='w')
+        # self.instr2.grid(row=1, column=0, sticky='w')
+        # self.instr3.grid(row=2, column=0, sticky='w')
 
     def tabChange(self,event):
         # show the menu of choices for reports
@@ -337,24 +359,33 @@ class ReportsTab (tk.Frame):
         # after all reports have been run, show msgbox and clean up.
         self.reportsFinished()
     def reportsFinished(self):
-        self.showWidget(self.finishedPanel)
-        self.showWidget(self.finishedLabel)
-        mbx.showinfo('Reports All Run', 'Press Enter to Continue')
-        self.hideWidget(self.finishedPanel)
-        self.hideWidget(self.finishedLabel)
-        self.resetSelections()
+        pass
+        # self.showWidget(self.finishedPanel)
+        # self.showWidget(self.finishedLabel)
+        # mbx.showinfo('Reports All Run', 'Press Enter to Continue')
+        # self.hideWidget(self.finishedPanel)
+        # self.hideWidget(self.finishedLabel)
+        # self.resetSelections()
     def resetSelections(self):
-        self.allReportsVar.set(0)
-        self.battingAvgVar.set(0)
-        self.cashVar.set(0)
-        self.individStatsVar.set(0)
-        self.natallVar.set(0)
-        self.qtrDropVar.set(0)
-        self.qtrFullVar.set(0)
-        self.skunksVar.set(0)
-        self.tourneyVar.set(0)
+        pass
+        # self.allReportsVar.set(0)
+        # self.battingAvgVar.set(0)
+        # self.cashVar.set(0)
+        # self.individStatsVar.set(0)
+        # self.natallVar.set(0)
+        # self.qtrDropVar.set(0)
+        # self.qtrFullVar.set(0)
+        # self.skunksVar.set(0)
+        # self.tourneyVar.set(0)
 
     def hideWidget (self,w):
         w.grid_remove()
     def showWidget (self,w):
         w.grid()
+    def installReportsActivity(self):
+        print ('show reports activity panel')
+
+        # have to add this into the master activity stacked widget
+        self.widx = cfg.screenDict['activitystack'] = self.widx
+        # remember this index
+        cfg.stackedActivityDict['reportsActivity'] = self.widx

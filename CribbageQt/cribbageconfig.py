@@ -69,8 +69,12 @@ screenDict = {}     # starts out empty - all screen creators self-register
                     # thus any module wishing to access the screen can
                     # do so using the object saved in screenDict value
 
-# playername for peggers = ('lastName' + ', ' + 'firstName')
+stackedActivityDict = {}  # used to keep track of which activity pages
+                    # have been loaded into the stackedActivityWidget
+                    # as we only want to load them once...
+                    #
 
+# dictionaries use to avoid dbms lookups all the time
 playerXref = {}     # {id : playername}
 playerRefx = {}     # {playernname : id}
 clubXref = {}       # {id : clubnumber}

@@ -56,8 +56,11 @@ class TourneysTab (object):
 
     def __init__ (self, parent=None):
         self.selectedResultsTourney = ''
-        self.tourneysActivity = Ui_TourneysActivity
-        self.tourneysActivity.setupUi()
+        self.tourneysActivity = Ui_TourneysActivity()
+        self.tourneysActivity.setupUi(self.tourneysActivity)
+
+        # all of the fields should already be in the widget inside the QTabWidget
+
         self.installTourneysActivity()
 
         # super().__init__(parent)
@@ -344,12 +347,18 @@ class TourneysTab (object):
         # self.existingTourneys.bind('<Up>', self.listBoxUpDown)
         # self.existingTourneys.bind('<Down>', self.listBoxUpDown)
 
-        self.startOver()
+        # self.startOver()
 
     def buildActivityPanel(self):
         # start by wiping any prior entries
-        MasterScreen.wipeActivityPanel()
-        self.tourneysActivityPanel.show()
+        # Don't do this with stackedWidget solution
+        # MasterScreen.wipeActivityPanel()
+        # make the appropriate stacked widget current
+        self.widgetIndex = cfg.stackedActivityDict['tourneysActivityPage']
+        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
+        # select this stacked widget
+
+
         # self.mtp = cfg.screenDict['activity']
         # self.keyF1 = tk.Label(self.mtp, text = 'F1   Get help with this activity')
         # self.keyF2 = tk.Label(self.mtp, text = 'F2   Edit currently selected tourney')
@@ -369,10 +378,10 @@ class TourneysTab (object):
         # if no tournaments, then must request at least one to be created
         #
         self.buildActivityPanel()
-        if cfg.at.countTourneysForSeason(cfg.season) < 1:
-            self.createNewTourney(event)
-        else:
-            self.populateExistingTourneys()
+        # if cfg.at.countTourneysForSeason(cfg.season) < 1:
+        #     self.createNewTourney(event)
+        # else:
+        #     self.populateExistingTourneys()
             # self.showWidget((self.newTourneyPanel))
 
     def populateExistingTourneys(self):
@@ -408,10 +417,10 @@ class TourneysTab (object):
         # self.existingTourneys.update()
         # self.existingTourneys.activate(0)
         # self.existingTourneys.update()
-        self.existingTourneys.selection_set(0)
-        self.existingTourneys.activate(0)
-        self.existingTourneys.see(0)
-        self.existingTourneys.focus_force()
+        # self.existingTourneys.selection_set(0)
+        # self.existingTourneys.activate(0)
+        # self.existingTourneys.see(0)
+        # self.existingTourneys.focus_force()
     def clearListBoxes(self):
         exit()
         self.existingTourneys.delete(0, tk.END)
@@ -818,7 +827,7 @@ class TourneysTab (object):
         except:
             self.errorHiLite(self.deleteNumberEntry)
             self.errorHiLite(self.deleteDateEntry)
-            mbx.showwarning('Delete failed', 'Check input and try again')
+            # mbx.showwarning('Delete failed', 'Check input and try again')
             self.resetErrorHiLite(self.deleteNumberEntry)
             self.resetErrorHiLite(self.deleteDateEntry)
             self.hideDeleteHelp()
@@ -995,7 +1004,14 @@ class TourneysTab (object):
         w.config(foreground='black')
 
     def installTourneysActivity(self):
-        MasterScreen.wipeActivityPanel
-        self.tourneysActivity
+        # MasterScreen.wipeActivityPanel()
+        print ('show tourneys activity panel')
+        # have to add this into the master activity stacked widget
+        self.widx = cfg.screenDict['activitystack'].addWidget(self)
+        # remember this index
+        cfg.stackedActivityDict['tourneysActivity'] = self.widx
 
+        # self.tourneysActivity.tourneysActivityPanel.show()
+        # self.tourneysActivity.tourneysActivityPanel.activateWindow()
+        # self.tourneysActivity.tourneysActivityPanel.raise_()
 
