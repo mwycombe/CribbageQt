@@ -16,7 +16,7 @@ from tourney import Tourney
 from accessResults import AccessResults
 from accessPlayers import AccessPlayers
 from accessTourneys import AccessTourneys
-from cribbagetso import *
+# from cribbagetso import *
 
 # system imports
 from fpdf import FPDF

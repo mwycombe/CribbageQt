@@ -45,7 +45,7 @@ from PySide6 import QtCore, QtWidgets
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
 
-from CribbageV1_1_Results_Activity import Ui_ResultsActivity
+from resultsActivityPanel import Ui_resultsactivitypanel
 
 from sqlobject import *
 
@@ -76,15 +76,12 @@ import dbms100tso as tso
 
 # from verticalscrolledframe import VerticalScrolledFrame
 
-class ResultsTab(object):
+class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # screen class is always a frame
 
-
-    #   sets up tab for capturing scores cards and games within
-
     def __init__(self, parent=None):
-        self.resultsActivity = Ui_ResultsActivity
-        self.resultsActivity.setupUi(self.resultsActivity)
+        super().__init__()
+        self.setupUi(self)
 
         # all of the fields should already be in the widget inside teh QTqbWidget
 
@@ -101,8 +98,8 @@ class ResultsTab(object):
         # cfg.screenDict['rsltab'] = self
         # print('register rsltab')
 
-        self.reg = parent.register(self.justNumeric)
-        self.minusInput = parent.register(self.minusNumeric)
+        # self.reg = parent.register(self.justNumeric)
+        # self.minusInput = parent.register(self.minusNumeric)
         #####################################################
         #
         #   control variables for GUI
@@ -350,7 +347,9 @@ class ResultsTab(object):
     #   gets the WindowId via parameterless .select() then converts that
     #   into the current tab index (from zero)
     #
-    def tabChange(self, event):
+    def tabChange(self):
+        # no longer event driven
+        # tabchanged signal caught in MasterScreen
         # populate the tab whenever we get selected
         ##  if cfg.screenDict['notebook'].index(cfg.screenDict['notebook'].select()) == 4:
         print('**Resultstab got the notebook changed event***')
@@ -358,7 +357,7 @@ class ResultsTab(object):
         # TODO this has to be deferred until after the tourney date has been selected
         # TODO if entered without a selection, issues message and return to tourneytab for selection
         self.buildActivityPanel()
-        self.buildScoringPanels()
+        # self.buildScoringPanels()
         # position in player panel for now
         # TODO: Provide the future ability to sort various ways.
         # TODO: Check for non-empty listOfResultLines i.e. uncommitted
@@ -374,8 +373,8 @@ class ResultsTab(object):
         #     self.showWidget(self.resultsExistingTourney)
     def buildActivityPanel(self):
         # make teh appropriate stacked widget current
-        self.widgetIndex = cfg.stackedActivityDict['resultsActivityPage']
-        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
+        self.widgetIndex = cfg.stackedActivityDict['resultsactivitypanel']
+        cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
         # MasterScreen.wipeActivityPanel()
         # mtp = cfg.screenDict['activity']
@@ -405,6 +404,7 @@ class ResultsTab(object):
         self.populateResultsHeaderPanel()
 
     def populateResultsHeaderPanel(self):
+        pass
         # self.tsp = self.resultsSummaryPanel
         #
         # self.resultsLabels = tk.Frame(self.tsp,
@@ -1235,6 +1235,7 @@ class ResultsTab(object):
         print ('maxEO. ', maxEO)
         return maxEO
     def clearEditLine(self):
+        pass
         # reset all edit line fields for a new results or editing an existing result
         # self.resultsNameVar.set('')
         # self.resultsGpVar.set('')
@@ -1536,6 +1537,7 @@ class ResultsTab(object):
         # self.populateRframe()
 
     def updateTotals(self):
+        pass
         # step through all results and refresh totals
         # use listOfResults - new Tourney has no dbms entries yet!
         # print ('self.tourneyResults ', self.tourneyResults)
@@ -1549,11 +1551,13 @@ class ResultsTab(object):
         # self.diffSkunks.set(self.givenSkunks.get() - self.takenSkunks.get())
         # self.count.set(len(self.listOfResults))
     def updatePlayerCount(self):
+        pass
         # count players for current tourney in database
         # TODO: This won't work before commit for a results edit before commit.
         #       Have to count the number of records in listOfResults.
         self.count.set(cfg.ar.countTourneyResults(cfg.tourneyRecord))
     def resetEditEntry(self):
+        pass
         # clear out the control variables
         # self.resultsNameField = None
         # self.resultsGpField = None
@@ -1608,11 +1612,12 @@ class ResultsTab(object):
         w.grid_remove()
     def showWidget(self, w):
         w.grid()
+
     def installResultsActivity(self):
-        print ('show results activity panel')
+        print ('install results activity panel')
         self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index
-        cfg.stackedActivityDict['resultsActivity'] = self.widx
+        cfg.stackedActivityDict['resultsactivitypanel'] = self.widx
 
 if __name__ == "__main__":
     #############################################

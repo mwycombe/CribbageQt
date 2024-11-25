@@ -45,6 +45,7 @@ from PySide6 import QtCore, QtWidgets
 
 # Personal imports
 import cribbageconfig as cfg
+from playersActivityPanel import Ui_playersactivitypanel
 from ctrlVariables import StringVar, IntVar, DoubleVar
 from CribbageV1_1_Players_Activity import Ui_PlayersActivity
 from club import Club
@@ -52,9 +53,7 @@ from player import Player
 
 # from masterscreen import MasterScreen
 
-class PlayersTab (object):
-    # screen class is always a frame
-
+class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #************************************************************   
     #   
@@ -62,8 +61,9 @@ class PlayersTab (object):
 
     def __init__ (self, parent=None):
         # self.selectResultsTourney = ''
-        self.playersActivity = Ui_PlayersActivity()
-        self.playersActivity.setupUi(self.playersActivity)
+        super().__init__()
+        self.setupUi(self)
+
         self.installPlayersActivity()
     #     super().__init__(parent)
     #     self.grid()
@@ -208,8 +208,8 @@ class PlayersTab (object):
     #   build out activity panel entries
     def buildActivityPanel(self):
         # MasterScreen.wipeActivityPanel()    # start with a clean slate
-        self.widgetIndex = cfg.stackedActivityDict['playersActivityPage']
-        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
+        self.widgetIndex = cfg.stackedActivityDict['playersactivitypanel']
+        cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
         # self.ap = cfg.screenDict['activity']    # get activity panel widget
         # self.keyF1 = tk.Label(self.ap, text = 'F1    Get help with this activity')
@@ -229,12 +229,14 @@ class PlayersTab (object):
 
     # ************************************************************
     #   handle tab change by refreshing players
-    def tabChange(self,event):
+    def tabChange(self):
+        # no longer event driven
+        # tabchanged signal caught in MasterScreen
         #
         # always refreshes the list of existing players
 
         self.buildActivityPanel()
-        self.displayExistingPlayers()
+        #self.displayExistingPlayers()
 
     #************************************************************
     #   build a display of existing players on file
@@ -845,8 +847,8 @@ class PlayersTab (object):
         # cfg.playerXref = {p.id: p.LastName + ', ' + p.FirstName for p in list(Player.select())}
         CribbageStartup.createPlayersXRef()
     def installPlayersActivity(self):
-        print ('show players activity panel')
-        # have to add insot the mastert activity stacked widget
-        self.widx = cfg.screenDict['stackedwidget'].addWidget(self)
+        print ('install players activity panel')
+        # have to add insert the master activity stacked widget
+        self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index
-        cfg.stackedActivityDict['playersActivity'] = self.widx
+        cfg.stackedActivityDict['playersactivitypanel'] = self.widx

@@ -39,7 +39,7 @@ from PySide6 import QtCore, QtWidgets
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
 
-from CribbageV1_1_Reports_Activity import Ui_ReportsActivity
+from reportsActivityPanel import Ui_reportsactivitypanel
 from datetime import date
 
 # Personal imports
@@ -56,7 +56,7 @@ import skunkreport
 import tourneyreport
 # from masterscreen import MasterScreen
 
-class ReportsTab (object:
+class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
     # screen class is always a frame
 
     #************************************************************   
@@ -64,10 +64,8 @@ class ReportsTab (object:
     #   sets up tab for requesting reports & regiester with notebook frame
 
     def __init__ (self, parent=None):
-        # super().__init__( parent)
-        # self.grid()
-        self.reportsActivity = Ui_ReportsActivity()
-        self.reportsActivity.setupUi(self.reportsActivity)
+        super().__init__( parent)
+        self.setupUi(self)
 
         # all of the fields should already be in the widget inside the QTabWidget
 
@@ -263,8 +261,8 @@ class ReportsTab (object:
 
     def buildActivityPanel(self):
         # make the appropriate stacked widget current
-        self.widgetIndex = cfg.stackedActivityDict['reportsActivityPage']
-        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
+        self.widgetIndex = cfg.stackedActivityDict['reportsactivitypanel']
+        cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
         # MasterScreen.wipeActivityPanel()
         # self.ap = cfg.screenDict['activity']
@@ -279,12 +277,14 @@ class ReportsTab (object:
         # self.instr2.grid(row=1, column=0, sticky='w')
         # self.instr3.grid(row=2, column=0, sticky='w')
 
-    def tabChange(self,event):
+    def tabChange(self):
+        # no longer event driven
+        # tabchanged signal caught in MasterScreen
         # show the menu of choices for reports
         # reports will be run from the database
         # which has been updated with the latest tournament
         self.buildActivityPanel()
-        print ('Tourney List', cfg.at.getTourneysWithResults(cfg.season))
+        # print ('Tourney List', cfg.at.getTourneysWithResults(cfg.season))
         self.trnyList = cfg.at.getTourneysWithResults(cfg.season)
         # print('rpt', dir(rpt))
         self.tourneysWithResults.delete(0, tk.END)
@@ -386,6 +386,6 @@ class ReportsTab (object:
         print ('show reports activity panel')
 
         # have to add this into the master activity stacked widget
-        self.widx = cfg.screenDict['activitystack'] = self.widx
+        self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index
-        cfg.stackedActivityDict['reportsActivity'] = self.widx
+        cfg.stackedActivityDict['reportsactivitypanel'] = self.widx

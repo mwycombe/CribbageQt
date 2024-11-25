@@ -15,7 +15,7 @@ from club import Club
 from accessResults import AccessResults
 from accessTourneys import AccessTourneys
 from accessPlayers import AccessPlayers
-from cribbagetso import *
+# from cribbagetso import *
 
 # system imports
 import os, sys

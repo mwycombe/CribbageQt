@@ -146,7 +146,7 @@ from cribbagestartup    import CribbageStartup
 
 from masterscreenV3      import MasterScreen
 
-from playerstab         import PlayersTab
+#from playerstab         import PlayersTab
 # from tourneystab  		import TourneysTab
 # from resultstab         import ResultsTab
 # from reportstab         import ReportsTab
@@ -177,7 +177,7 @@ class Cribbage (object):
 
 		self.buildPanels()
 
-		# on return MasterAcreen has built everything
+		# on return MasterScreen has built everything
 		# call class level init methods
 		print ('Starting cribbage...')
 
@@ -233,10 +233,12 @@ class Cribbage (object):
 	#************************************************************
 	#   route captured tab event
 	#
-def tabChange (self,tabIndex):
-	tabIndex = cfg.screenDict['notebook'].currentIndex
-	print('Tab Index:=',tabIndex)
-	cfg.screenDict['notebook'].setIndex(tabIndex)
+	#	now donw with a QTabWidget signal handled in MasterScreen
+
+# def tabChange (self,tabIndex):
+# 	tabIndex = cfg.screenDict['notebook'].currentIndex
+# 	print('Tab Index:=',tabIndex)
+# 	cfg.screenDict['notebook'].setIndex(tabIndex)
 	# if tabIndex == 0:
 	# 	# pass
 	# 	cfg.screenDict['ptab'].tabChange(event)

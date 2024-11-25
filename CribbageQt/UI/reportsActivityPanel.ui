@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>reportsactivitypanel</class>
+ <widget class="QWidget" name="reportsactivitypanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>711</width>
+    <height>161</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+    <fontweight>Medium</fontweight>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Cribbage Grass Roots</string>
+  </property>
+  <widget class="QWidget" name="reportsactivitywidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>711</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>3</y>
+      <width>301</width>
+      <height>151</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="reportsPickTourneyActivityLabel">
+       <property name="text">
+        <string>First Pick a Tourney</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="reportsSelectReportsActivityLabel">
+       <property name="text">
+        <string>Then Select One or More Reports</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="reportsRunReportsActivityLabel">
+       <property name="text">
+        <string>Then Press Run Reports</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

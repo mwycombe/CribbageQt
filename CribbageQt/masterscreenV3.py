@@ -30,7 +30,10 @@ import os as os
 # Personal imports
 import cribbageconfig as cfg
 from CribbageQt import Ui_MainCribbageWindow
+from playerstab import PlayersTab
+from reportstab import ReportsTab
 from tourneystab import TourneysTab
+from resultstab import ResultsTab
 from club import Club
 from player import Player
 from ctrlVariables import StringVar, IntVar, DoubleVar
@@ -50,6 +53,19 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
 
         # set up for stackedwidgets
         cfg.screenDict['activitystack'] = self.stackedActivityWidget
+
+        self.playerstab = PlayersTab()      # initialize players tab
+        self.tourneystab = TourneysTab()    # initialize tourneys tab
+        self.resultstab = ResultsTab()      # initialize results tab
+        self.reportstab = ReportsTab()      # initalize results tab
+
+        # prime the activity stack
+        # should not need to do this.
+        # stackedActivityDict gets widget index when activitypanel is added to the dict
+        # cfg.stackedActivityDict['playersactivitypanel'] = 0
+        # cfg.stackedActivityDict['tourneysactivitypanel'] = 1
+        # cfg.stackedActivityDict['resultsactivitypanel'] = 2
+        # cfg.stackedActivityDict['reportsactivitypanel'] = 3
 
     # no longer applies as we now use the stackedActivityWidget
     # @classmethod
@@ -217,11 +233,24 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         # tabs within this notebook will register themselves
         self.tabWidget.currentChanged.connect(self.tabChange)
 
+        # start out in tourney tab
+        cfg.screenDict['notebook'].setCurrentIndex(1)   # show tourney tab
+        self.tabChange(1)                               # show tourney activity
+
 
     @qtc.Slot(int)
     def tabChange(self, index):
+        # this is triggered by tabwidget changed signal
         print ('Tab changed:= ' + str(index))
-
+        match (index):
+            case 0:
+                 self.playerstab.tabChange()
+            case 1:
+                self.tourneystab.tabChange()
+            case 2:
+                self.resultstab.tabChange()
+            case 3:
+                self.reportstab.tabChange()
 
 if __name__ == '__main__':
 

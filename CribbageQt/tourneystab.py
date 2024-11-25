@@ -23,7 +23,7 @@
 # from tkinter import ttk
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
-
+from PyQt5.QtWidgets import QWidget
 # System imports
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
@@ -32,7 +32,7 @@ from PySide6.QtCore import Slot
 from PySide6 import QtCore, QtWidgets
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
-from CribbageV1_1_Tourneys_Activity import Ui_TourneysActivity
+from tourneysActivityPanel import Ui_tourneysactivitypanel
 
 
 
@@ -48,16 +48,16 @@ import cribbageconfig as cfg
 from tourney import Tourney
 
 
-class TourneysTab (object):
+class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     # screen class is always a frame
     #************************************************************   
     #   
     #   sets up tab for add/change/delete tourney dates
 
     def __init__ (self, parent=None):
-        self.selectedResultsTourney = ''
-        self.tourneysActivity = Ui_TourneysActivity()
-        self.tourneysActivity.setupUi(self.tourneysActivity)
+        print ('starting tourneystab')
+        super().__init__()
+        self.setupUi(self)
 
         # all of the fields should already be in the widget inside the QTabWidget
 
@@ -354,9 +354,8 @@ class TourneysTab (object):
         # Don't do this with stackedWidget solution
         # MasterScreen.wipeActivityPanel()
         # make the appropriate stacked widget current
-        self.widgetIndex = cfg.stackedActivityDict['tourneysActivityPage']
-        cfg.stackedActivityDict['activitystack'].setIndex(self.widgetIndex)
-        # select this stacked widget
+        self.widgetIndex = cfg.stackedActivityDict['tourneysactivitypanel']
+        cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
 
         # self.mtp = cfg.screenDict['activity']
@@ -373,7 +372,9 @@ class TourneysTab (object):
         # self.keyF10.grid(sticky='w')
         # self.keyEsc.grid(sticky='w')
 
-    def tabChange(self,event):
+    def tabChange(self):
+        # no longer event driven
+        # tabchanged signal caught in MasterScreen
         #
         # if no tournaments, then must request at least one to be created
         #
@@ -1005,11 +1006,11 @@ class TourneysTab (object):
 
     def installTourneysActivity(self):
         # MasterScreen.wipeActivityPanel()
-        print ('show tourneys activity panel')
+        print ('install tourneys activity panel')
         # have to add this into the master activity stacked widget
         self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index
-        cfg.stackedActivityDict['tourneysActivity'] = self.widx
+        cfg.stackedActivityDict['tourneysactivitypanel'] = self.widx
 
         # self.tourneysActivity.tourneysActivityPanel.show()
         # self.tourneysActivity.tourneysActivityPanel.activateWindow()
