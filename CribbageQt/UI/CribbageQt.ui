@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -702,6 +702,9 @@ background-color: rgb(255, 255, 255);</string>
         <height>641</height>
        </rect>
       </property>
+      <property name="focusPolicy">
+       <enum>Qt::FocusPolicy::StrongFocus</enum>
+      </property>
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
@@ -722,6 +725,9 @@ background-color: rgb(255, 255, 255);</string>
          <width>1021</width>
          <height>631</height>
         </rect>
+       </property>
+       <property name="focusPolicy">
+        <enum>Qt::FocusPolicy::StrongFocus</enum>
        </property>
        <property name="autoFillBackground">
         <bool>true</bool>
@@ -791,6 +797,9 @@ color: rgb(65, 161, 5);</string>
           <width>261</width>
           <height>541</height>
          </rect>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::FocusPolicy::StrongFocus</enum>
         </property>
         <property name="autoFillBackground">
          <bool>true</bool>

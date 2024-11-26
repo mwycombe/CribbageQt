@@ -45,7 +45,12 @@
 ['tourneysactivitytab'] tourneys activity panel\
 ['sessionpanel']        session header panel\
 ['clubpanel]']          club header panel\
-['activitystack']       where all the action  panels are displayed\'
+['activitystack']       where all the action  panels are displayed\
+
+## stackedActivityDict
+Dictionary contains '<name>':activitystack index xref into\
+the activitystack QStackWidget where all of the activity widgets have been pushed\
+
 
 
 ## Setting up the UI with Qt vs. tkinter

@@ -2,6 +2,13 @@
 # 7/21/2020 updated to cribbageconfig
 #   Nov 2024 replace tkinter with PySide6
 #
+#   tab is automatically part of PyQt master screen definition
+#   no need for separate registration in 'notebook' screenDict entry
+#
+#   tkinter uses control variables with call-backs to link fields
+#   PyQt replaces these with Signals and Slots
+#   Use ctrVariables to get Signals from changed variables
+#   All tourney screen fields accessed via cfg.screenDict['masterwindow'] widget
 #####################################################################
 #
 #   Creates tab screen for add/change/delete tourneys by date
@@ -9,7 +16,7 @@
 #   ManageTourneys was Version 1.0
 #   triple-list-box-tourneystab.py was version with multiple listboxes
 #   this turned out to be an unnecessary complication - only needed for results, if then
-#
+#####################################################################
 #   Tourneys 1-36 are regular club weekly tourneys
 #   41 is reserved for GRRT tourney results
 #   42 is reserved for GRNT tourney results
@@ -19,17 +26,26 @@
 # TODO: Add up/down key actions to existing tourneys listbox
 # TODO: When tourneystab first open up, focus positioned in listbox but line not activated
 # System imports
+##########################################
+# tkinter replaced with PySide6
+#
 # import tkinter as tk
 # from tkinter import ttk
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
+########################################
+from PyQt5.QtGui import QKeySequence
 from PyQt5.QtWidgets import QWidget
-# System imports
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
 from PySide6.QtCore import Slot
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtCore import Qt
+
+from PySide6.QtCore import QObject, Property, Signal
+from PySide6.QtGui import QShortcut, QKeySequence
+
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
 from tourneysActivityPanel import Ui_tourneysactivitypanel
@@ -58,9 +74,39 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         print ('starting tourneystab')
         super().__init__()
         self.setupUi(self)
+        # set up reference to main ui
+        self.main = cfg.screenDict['masterwindow']
 
-        # all of the fields should already be in the widget inside the QTabWidget
+        self.tourneyToDelete = ''       # holds tourney record for deleting
+        self.unsortedTourneys = []      # unstored all tourney records for club, season
+        self.tourneysByNumber = []        # holds tourney records sorted by number
+        self.tourneysByDate = []        # tourneys sorted by date
+        self.editingState = ''   #1 = creating #2 = editing #3 = deleting
 
+        #   [PYQT BINDING] section
+        #   Set up short cut keys then connect signals to slots
+
+        # self.F3_shortcut = QShortcut(QKeySequence("F3"),self.main.newTourneyNumberEntry)
+        self.F2_shortcut = QShortcut(QKeySequence(Qt.Key_F2), self.main.tourneysTabPanel)
+        self.F2_shortcut.activated.connect(self.editSelectedTourney)
+
+        self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.tourneysTabPanel)
+        self.F3_shortcut.activated.connect(self.createNewTourney)
+
+        self.F6_shortcut = QShortcut(QKeySequence(Qt.Key_F6),self.main.tourneysTabPanel)
+        self.F6_shortcut.activated.connect(self.enterResults)
+
+        self.F9_shortcut = QShortcut(QKeySequence(Qt.Key_F9), self.main.tourneysTabPanel)
+        self.F9_shortcut.activated.connect(self.deleteChosenTourney)
+
+        self.F10_shortcut = QShortcut(QKeySequence(Qt.Key_F10), self.main.tourneysTabPanel)
+        self.F10_shortcut.activated.connect(self.saveEditedTourney)
+
+        self.Esc_shortcut = QShortcut(QKeySequence(Qt.Key_Escape), self.main.tourneysTabPanel)
+        self.Esc_shortcut.activated.connect(self.cancelEdit)
+
+
+        # puts activity panel into widget stack
         self.installTourneysActivity()
 
         # super().__init__(parent)
@@ -77,11 +123,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.deleteNumber = tk.StringVar()
         # self.deleteDate = tk.StringVar()
 
-        # self.tourneyToDelete = ''       # holds tourney record for deleting
-        # self.unsortedTourneys = []      # unstored all tourney records for club, season
-        # self.tourneysByNumber = []        # holds tourney records sorted by number
-        # self.tourneysByDate = []        # tourneys sorted by date
-        # self.editingState = ''   #1 = creating #2 = editing #3 = deleting
+        ################################################################
+        #   UI code now in masterscreen - ref'd by self.main
+        #
         # # build out tab and register with notebook
         # self.config(padx = 5, pady = 5)
         # parent.add(self,text='Tourneys')
@@ -323,6 +367,10 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.existingTourneys.grid(row=2, column=0)
         # self.vsb['command'] = self.existingTourneys.yview
         #
+        #   End of tkinter GUI definitions
+        ########################################################################################
+        #
+        #   [BINDING] to be replaced by Signal/Slot definitions
         # # # [binding section]
         # self.editTourneyDateEntry.bind('<F1>', self.showContextHelp)
         # self.newTourneyNumberEntry.bind('<F1>', self.showContextHelp)
@@ -346,7 +394,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         #
         # self.existingTourneys.bind('<Up>', self.listBoxUpDown)
         # self.existingTourneys.bind('<Down>', self.listBoxUpDown)
-
+        # End of tkinter bindings section
+        ######################################################################################
         # self.startOver()
 
     def buildActivityPanel(self):
@@ -379,6 +428,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # if no tournaments, then must request at least one to be created
         #
         self.buildActivityPanel()
+        self.main.tourneysTabPanel.setFocus()
         # if cfg.at.countTourneysForSeason(cfg.season) < 1:
         #     self.createNewTourney(event)
         # else:
@@ -435,17 +485,18 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         if 0 <= selection < event.widget.size():
             event.widget.selection_clear(0, tk.END)
             event.widget.selection_set(selection)
-    def createNewTourney (self, event):
+    def createNewTourney (self):
         # show the new tourney panel and Add/Cancel buttons
         # set editState
-        exit()
+        # now receives slot call
         self.editingState = 1       # show we are creating - for context help
         print('Create new tourney')
+        return
         self.hideAll()
         self.showCreateTourney()
-    def enterResults(self, event):
+    def enterResults(self):
         print('Enter results')
-        exit()
+        return
         self.listBoxIndex = event.widget.curselection()[0]  # tourney to enter results for
         cfg.tourneyRecord = self.tourneysByNumber[self.listBoxIndex]
         cfg.tourneyRecordId = cfg.tourneyRecord.id
@@ -459,9 +510,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         print ('Switch to results tab')
         self.parent.select(2)       # select tab 2 which is for results
 
-    def cancelEdit(self,event):
+    def cancelEdit(self):
         print ('Cancel the edit - save nothing')
-        exit()
+        return
         self.editingState = 0       # not in any state
         self.hideEditTourney()
         self.hideCreateTourney()
@@ -688,8 +739,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     #     # this is activated by DoubleClick-1
     #     self.beingEdited = self.existingNumbers.curselection()[0]
     #     self.editSelectedTourney(self.beingEdited)
-    def editSelectedTourney(self, event):
-        exit()
+    def editSelectedTourney(self):
+        print('edit selected tourney')
+        return
         # this is activated by F2
         self.editingState = 2       # show we we are editing - for context help
         self.listBoxIndex = event.widget.curselection()[0]  # always get a tuple even on single select
@@ -718,8 +770,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.editTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
         self.existingTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
         self.editTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
-    def saveEditedTourney(self, event):
-        exit()
+    def saveEditedTourney(self):
+        print('save tourney')
+        return
         # validate date entered then save if ok
         if not (self.validateEntryField('number', self.editTourneyNumber.get(), self.editTourneyNumberEntry))or \
             not (self.validateEntryField('date', self.editTourneyDate.get(), self.editTourneyDateEntry)):

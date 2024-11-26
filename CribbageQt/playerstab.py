@@ -10,7 +10,8 @@
 #   Version 1.0 name was ManagePlayers.py
 #
 #####################################################################
-
+from PyQt5.QtGui import QKeySequence
+from PyQt5.QtWidgets import QShortcut
 # TODO: When a new player is added or change need to rebuild the xref tables in cfg -
 #  use CribbageStartUp.createPlayersXref()
 # TODO: When a new player is added, refresh the in-memory list of players
@@ -40,14 +41,14 @@ import dateparser
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtGui import Qt, QShortcut, QKeySequence
 
 # Personal imports
 import cribbageconfig as cfg
 from playersActivityPanel import Ui_playersactivitypanel
 from ctrlVariables import StringVar, IntVar, DoubleVar
-from CribbageV1_1_Players_Activity import Ui_PlayersActivity
 from club import Club
 from player import Player
 
@@ -63,8 +64,11 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # self.selectResultsTourney = ''
         super().__init__()
         self.setupUi(self)
+        self.main = cfg.screenDict['masterwindow']
 
         self.installPlayersActivity()
+
+
     #     super().__init__(parent)
     #     self.grid()
     #
@@ -204,10 +208,29 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #     self.buildActivityPanel()
     #     self.displayExistingPlayers()
 
+    #   setup signals for responding to user requests per activity panel
+
+        self.F2_shortcut = QShortcut(QKeySequence(Qt.Key_F2),self.main.playerTabPanel)
+        self.F2_shortcut.activated.connect(self.editAPlayer)
+
+        self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.playerTabPanel)
+        self.F3_shortcut.activated.connect(self.createPlayer)
+
+        self.F9_shortcut = QShortcut(QKeySequence(Qt.Key_F9), self.main.playerTabPanel)
+        self.F9_shortcut.activated.connect(self.togglePlayer)
+
+        self.F10_shortcut = QShortcut(QKeySequence(Qt.Key_F10), self.main.playerTabPanel)
+        self.F10_shortcut.activated.connect(self.submitNewPlayer)
+
+        self.DoubleClick_shortcut = QShortcut(QKeySequence(Qt.MouseEventCreatedDoubleClick), self.main.playerTabPanel)
+        self.DoubleClick_shortcut.activate.comment(self.toggleAPlayer)
+
+
+
     # ************************************************************
     #   build out activity panel entries
     def buildActivityPanel(self):
-        # MasterScreen.wipeActivityPanel()    # start with a clean slate
+
         self.widgetIndex = cfg.stackedActivityDict['playersactivitypanel']
         cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
@@ -299,8 +322,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #***********************************************************
     #   handler for double-click player state toggle
-    def togglePlayer(self,event):
+    def togglePlayer(self):
         # convert the double-click position into a selection
+        print('togge active state')
+        return
         self.exp.selection_clear(0,tk.END)     # clear any current selection
         self.lbIndex = self.exp.nearest(event.y)
         self.playerInExpName = self.exp.activate(self.lbIndex)
@@ -322,9 +347,9 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #************************************************************
     #
-    def submitNewPlayer(self, event):
+    def submitNewPlayer(self):
         print('Validate and add new player')
-        
+        return
         #validate the required fields
         print ('len(fname): ' + str(len(self.fname.get())))
         print ('len(lname): ' + str(len(self.lname.get())))
@@ -487,7 +512,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # self.fnameEntry.focus_force()
     # ************************************************************
     #
-    def createPlayer(self,event):
+    def createPlayer(self):
         pass
         # self.hideWidget(self.editPlayerPanel)
         # self.showWidget(self.newPlayerPanel)
@@ -595,7 +620,8 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #************************************************************
     #
-    def toggleAPlayer(self,event):
+    def toggleAPlayer(self):
+        print('toggle player active status')
         pass
     #     self.ListBoxIndex = event.widget.curselection()[0]
     #     self.deleteMsg = """\tPlayer Toggle is a soft delete that marks player inactive.
@@ -618,8 +644,9 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #************************************************************
     #
-    def editSelectedPlayer(self,event):
+    def editSelectedPlayer(self):
         print ('Edit selected player from listbox')
+        return
         #
         # replace NewPlayer panel with EditPlayer panel
         #
@@ -848,6 +875,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         CribbageStartup.createPlayersXRef()
     def installPlayersActivity(self):
         print ('install players activity panel')
+
         # have to add insert the master activity stacked widget
         self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index

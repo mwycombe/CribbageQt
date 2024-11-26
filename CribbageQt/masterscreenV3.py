@@ -21,6 +21,10 @@ from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
 from PySide6.QtCore import Slot
 
+# imports for handling PyQt versions of events
+from PySide6.QtCore import QObject, Property, Signal
+from PySide6.QtGui import QShortcut, QKeySequence
+
 
 from sqlobject import *
 
@@ -235,13 +239,17 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
 
         # start out in tourney tab
         cfg.screenDict['notebook'].setCurrentIndex(1)   # show tourney tab
+
+        # self.F3_shortcut = QShortcut(QKeySequence("Ctrl+F3"), self)
+        # self.F3_shortcut.activated.connect(self.newTourney)
+
         self.tabChange(1)                               # show tourney activity
 
-
+    #   tab switching handler
     @qtc.Slot(int)
     def tabChange(self, index):
         # this is triggered by tabwidget changed signal
-        print ('Tab changed:= ' + str(index))
+        # print ('Tab changed:= ' + str(index))
         match (index):
             case 0:
                  self.playerstab.tabChange()
@@ -251,6 +259,17 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
                 self.resultstab.tabChange()
             case 3:
                 self.reportstab.tabChange()
+
+    #   [SIGNAL HANDLERS]
+    #   All signal handlers reside in their respective modules and are called with the module prefix
+    #   [PLAYER SIGNALS]
+    #   [TOURNEY SIGNALS]
+
+
+    @qtc.Slot()
+    def newTourney(self):
+        self.tourneystab.createNewTourney()
+        self.tourneystab.F3_shortcut.activated.connect(newTourney)
 
 if __name__ == '__main__':
 
