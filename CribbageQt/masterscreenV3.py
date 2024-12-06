@@ -265,11 +265,11 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
     #   [PLAYER SIGNALS]
     #   [TOURNEY SIGNALS]
 
-
-    @qtc.Slot()
-    def newTourney(self):
-        self.tourneystab.createNewTourney()
-        self.tourneystab.F3_shortcut.activated.connect(newTourney)
+    # not needed here - move to tourneystab
+    # @qtc.Slot()
+    # def newTourney(self):
+    #     self.tourneystab.createNewTourney()
+    #     self.tourneystab.F3_shortcut.activated.connect(newTourney)
 
 if __name__ == '__main__':
 

@@ -37,10 +37,11 @@
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
 
+from PySide6.QtGui import QKeySequence, QShortcut
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
@@ -86,6 +87,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # all of the fields should already be in the widget inside teh QTqbWidget
 
         self.installResultsActivity()
+        self.main=cfg.screenDict['masterwindow']
 
         # super().__init__(parent)
         # self.grid()
@@ -303,6 +305,30 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.resultsGvnEntry.bind('<Return>', self.handleResultLine)
         # self.resultsOrderEntry.bind('<Return>', self.handleResultLine)
         #
+        # PySide6 bindings
+        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerGp)
+        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerGw)
+        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerSprd)
+        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerTkn)
+        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerCash)
+        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerGp)
+        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerGw)
+        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerSprd)
+        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerTkn)
+        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerCash)
+
+        self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine())
+        self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine())
+        self.Enter_Key_Shortcut_Sprd.activated.connect(self.handleResultLine())
+        self.Enter_Key_Shortcut_Tkn.activated.connect(self.handleResultLine())
+        self.Enter_Key_Shortcut_Cash.activated.connect(self.handleResultLine())
+
+        self.Escape_Key_Shortcut_Gp.activated.connect(self.quitResults())
+        self.Escape_Key_Shortcut_Gw.activated.connect(self.quitResults())
+        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults())
+        self.Escape_Key_Shortcut_Tkn.activated.connect(self.quitResults())
+        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults())
+
         # # allow user to quit entering a result line
         # self.resultsNameEntry.bind('<Escape>', self.quitResultLine)
         # self.resultsGpEntry.bind('<Escape>', self.quitResultLine)
@@ -352,14 +378,12 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # tabchanged signal caught in MasterScreen
         # populate the tab whenever we get selected
         ##  if cfg.screenDict['notebook'].index(cfg.screenDict['notebook'].select()) == 4:
-        print('**Resultstab got the notebook changed event***')
-
+        # print('**Resultstab got the notebook changed event***')
         # TODO this has to be deferred until after the tourney date has been selected
         # TODO if entered without a selection, issues message and return to tourneytab for selection
         self.buildActivityPanel()
         # self.buildScoringPanels()
         # position in player panel for now
-        # TODO: Provide the future ability to sort various ways.
         # TODO: Check for non-empty listOfResultLines i.e. uncommitted
         #       This implies a tab switch out then back - else honor F6 for
         #       current tourney record from dbms
@@ -404,7 +428,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.populateResultsHeaderPanel()
 
     def populateResultsHeaderPanel(self):
-        pass
+        return
         # self.tsp = self.resultsSummaryPanel
         #
         # self.resultsLabels = tk.Frame(self.tsp,
@@ -478,7 +502,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.diffSkunksLabel.grid(row = 2, column = 3, sticky = 'w')
 
     def buildScoringPanels(self):
-        pass
+        return
         # self.tourneyDateLabel = tk.Label(self.tourneyHeaderPanel,
         #                                text='Tourney Date:')
         # self.tourneyDateLabel.grid(row=0, column=0, sticky='w')
@@ -523,7 +547,6 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # #     self.populatePframe()
     def createWidgets(self):
         # TODO: No - use in-memory list if return for same tourney
-        # TODO: Add sort feature to the Tourney Results columns
         # TODO: Now depends on the in-memory list of resultLine objects
 
         # always start with another next list of listboxes
@@ -766,7 +789,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #             lb.selection_clear(0, tk.END)
     #             lb.selection_set(selection)
     #
-    # # multil-istbox handler area for results
+    # # multi-listbox handler area for results
     # def r_OnVsb(self, *args):
     #     for lb in self.rListOfListboxes:
     #         lb.yview(*args)
@@ -1023,9 +1046,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.resultsSortDict['orderHdr'] = 'Desc'
 
     # handle add/edit/delete
-    def quitResultLine(self, event):
+    def quitResultLine(self):
         # quit and determine where to reposition
-        print ('Quit the result line entry with no action.')
+        print ('Quit the result line entry with no action stub.')
+        return
         # self.clearEditLine()
         # self.hideResultsInputPanel()
         # self.hideResultsInstructionsPanel()
@@ -1128,12 +1152,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             plb.activate(0)
         self.pListOfListboxes[0].see(0)
         self.pListOfListboxes[0].activate(0)
-    def handleResultLine(self, event):
+
+    @qtc.Slot()
+    def handleResultLine(self):
         # validate entry line then leave in listOfResults in memory if new tourney, else update dbms immediately
         # input could be a correction to an existing line for a new or existing tourney.
         # a new result line could be an addition to new tourney or an addition to an existing tourney
         # TODO: update the points list box for the player list; each location has a ' ' if no points
         #       Update the namePointsDict while still in memory.
+        print('handle result line stub')
+        return
         resultPlayerName = ''
         resultPoints = ''
         goodEntry = True
@@ -1235,7 +1263,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         print ('maxEO. ', maxEO)
         return maxEO
     def clearEditLine(self):
-        pass
+        return
         # reset all edit line fields for a new results or editing an existing result
         # self.resultsNameVar.set('')
         # self.resultsGpVar.set('')
@@ -1324,13 +1352,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # user pressed F7 to return to list of Players
         # just leave the listOfResults as they are
         self.playerNameListBox.selection_set(0)     # back to first player list bax entry
-    def quitResults(self, event):
+
+    @qtc.Slot()
+    def quitResults(self):
+        return
         # user pressed Escape to abandon work in progress
-        if mbx.askyesno('Quit Entry', 'Quit and drop any new input?') == 'Yes':
-            self.clearResultLines()
-            self.backToPlayers()
-        else:
-            pass    # just do nothing
+        # if mbx.askyesno('Quit Entry', 'Quit and drop any new input?') == 'Yes':
+        #     self.clearResultLines()
+        #     self.backToPlayers()
+        # else:
+        #     pass    # just do nothing
     # def createPlayerXref(self):
     #     # cross-refs used to build results screens
     #     cfg.playerXref = {p.id : p.LastName + ', ' + p.FirstName for p in list(Player.select())}

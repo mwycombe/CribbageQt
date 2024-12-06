@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -427,7 +427,7 @@ background-color: rgb(255, 255, 255);</string>
          <rect>
           <x>100</x>
           <y>10</y>
-          <width>91</width>
+          <width>191</width>
           <height>20</height>
          </rect>
         </property>
@@ -565,12 +565,12 @@ background-color: rgb(255, 255, 255);</string>
        <property name="lineWidth">
         <number>2</number>
        </property>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="existingPlayersLabel">
         <property name="geometry">
          <rect>
-          <x>50</x>
+          <x>40</x>
           <y>10</y>
-          <width>111</width>
+          <width>211</width>
           <height>20</height>
          </rect>
         </property>
@@ -1221,7 +1221,7 @@ color: rgb(65, 161, 5);</string>
         <widget class="QLabel" name="label_15">
          <property name="geometry">
           <rect>
-           <x>140</x>
+           <x>141</x>
            <y>10</y>
            <width>51</width>
            <height>20</height>
@@ -1268,7 +1268,7 @@ background-color: rgb(187, 255, 215)
         <widget class="QLabel" name="spreadMinusValue">
          <property name="geometry">
           <rect>
-           <x>139</x>
+           <x>145</x>
            <y>34</y>
            <width>41</width>
            <height>20</height>
@@ -1325,7 +1325,7 @@ background-color: rgb(187, 255, 215)
         <widget class="QLabel" name="skunkMinusValue">
          <property name="geometry">
           <rect>
-           <x>140</x>
+           <x>146</x>
            <y>59</y>
            <width>41</width>
            <height>20</height>
@@ -1344,7 +1344,7 @@ background-color: rgb(187, 255, 215)
         <widget class="QLabel" name="skunkDiffValue">
          <property name="geometry">
           <rect>
-           <x>209</x>
+           <x>210</x>
            <y>58</y>
            <width>31</width>
            <height>20</height>
@@ -2336,6 +2336,8 @@ background-color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <tabstops>
+  <tabstop>showAllPlayers</tabstop>
+  <tabstop>listOfPlayers</tabstop>
   <tabstop>firstNameEntry</tabstop>
   <tabstop>lastNameEntry</tabstop>
   <tabstop>streetEntry</tabstop>
@@ -2348,28 +2350,16 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>expiresEntry</tabstop>
   <tabstop>joinedEntry</tabstop>
   <tabstop>activeEntry</tabstop>
-  <tabstop>listOfPlayers</tabstop>
-  <tabstop>showAllPlayers</tabstop>
-  <tabstop>listOfResultsGw</tabstop>
-  <tabstop>newTourneyDateEntry</tabstop>
-  <tabstop>listOfPlayerPoints</tabstop>
-  <tabstop>listOfTourneys</tabstop>
   <tabstop>newTourneyNumberEntry</tabstop>
+  <tabstop>newTourneyDateEntry</tabstop>
+  <tabstop>listOfTourneys</tabstop>
   <tabstop>listOfResultPlayers</tabstop>
-  <tabstop>listOfResultsNames</tabstop>
-  <tabstop>tabWidget</tabstop>
-  <tabstop>listOfResultsGp</tabstop>
-  <tabstop>listOfResultsSprd</tabstop>
-  <tabstop>listOfResultsTkn</tabstop>
-  <tabstop>listOfResultsCash</tabstop>
-  <tabstop>listOfResultsGvn</tabstop>
-  <tabstop>listOfResultsOrder</tabstop>
   <tabstop>resultLinePlayerGp</tabstop>
   <tabstop>resultLinePlayerGw</tabstop>
+  <tabstop>resultLinePlayerSprd</tabstop>
   <tabstop>resultLinePlayerTkn</tabstop>
   <tabstop>resultLinePlayerCash</tabstop>
-  <tabstop>resultLinePlayerSprd</tabstop>
-  <tabstop>listOfReportTourneys</tabstop>
+  <tabstop>listOfResultsNames</tabstop>
   <tabstop>allReportsCKB</tabstop>
   <tabstop>alphaCKB</tabstop>
   <tabstop>battingAverageCKB</tabstop>
@@ -2377,10 +2367,23 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>individStatsCKB</tabstop>
   <tabstop>nationalAvgesCKB</tabstop>
   <tabstop>qtrDropCKB</tabstop>
-  <tabstop>qtrFullCKB</tabstop>
   <tabstop>skunkCKB</tabstop>
   <tabstop>tourneyCKB</tabstop>
   <tabstop>runReportsButton</tabstop>
+  <tabstop>listOfResultsGw</tabstop>
+  <tabstop>listOfResultsSprd</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>listOfResultsGp</tabstop>
+  <tabstop>listOfResultsGvn</tabstop>
+  <tabstop>listOfPlayerPoints</tabstop>
+  <tabstop>listOfResultsTkn</tabstop>
+  <tabstop>qtrFullCKB</tabstop>
+  <tabstop>listOfResultsOrder</tabstop>
+  <tabstop>listOfResultsCash</tabstop>
+  <tabstop>tourneysTabPanel</tabstop>
+  <tabstop>listOfReportTourneys</tabstop>
+  <tabstop>TourneysFrame</tabstop>
+  <tabstop>ExistingTourneysPanel</tabstop>
  </tabstops>
  <resources/>
  <connections/>

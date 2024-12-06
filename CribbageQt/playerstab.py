@@ -10,8 +10,11 @@
 #   Version 1.0 name was ManagePlayers.py
 #
 #####################################################################
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QShortcut
+from operator import truediv
+
+from PySide6.QtCore import QObject, QEvent
+from PySide6.QtGui import QKeySequence, QMouseEvent
+
 # TODO: When a new player is added or change need to rebuild the xref tables in cfg -
 #  use CribbageStartUp.createPlayersXref()
 # TODO: When a new player is added, refresh the in-memory list of players
@@ -38,12 +41,15 @@ import os as os
 import datetime
 import dateparser
 
+
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
-from PySide6.QtCore import Slot, Qt
+from PySide6.QtCore import Slot, QEvent
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtGui import Qt, QShortcut, QKeySequence
+from PySide6.QtWidgets import QListWidgetItem
+
 
 # Personal imports
 import cribbageconfig as cfg
@@ -67,6 +73,17 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.main = cfg.screenDict['masterwindow']
 
         self.installPlayersActivity()
+
+        # working on detecting listOfPlayers doubleclidk
+        # self.main.listOfPlayers.setMouseTracking(True)
+        self.main.listOfPlayers.setEnabled(True)
+
+        self.main.listOfPlayers.itemDoubleClicked.connect(self.toggleAPlayer)
+
+        self.main.showAllPlayers.stateChanged.connect(self.displayExistingPlayers)
+
+
+
 
 
     #     super().__init__(parent)
@@ -222,9 +239,8 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.F10_shortcut = QShortcut(QKeySequence(Qt.Key_F10), self.main.playerTabPanel)
         self.F10_shortcut.activated.connect(self.submitNewPlayer)
 
-        self.DoubleClick_shortcut = QShortcut(QKeySequence(Qt.MouseEventCreatedDoubleClick), self.main.playerTabPanel)
-        self.DoubleClick_shortcut.activate.comment(self.toggleAPlayer)
-
+        self.Esc_shortcut = QShortcut(QKeySequence(Qt.Key_Escape),self.main.playerTabPanel)
+        self.Esc_shortcut.activated.connect(self.cancelNewPlayer)
 
 
     # ************************************************************
@@ -259,41 +275,60 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # always refreshes the list of existing players
 
         self.buildActivityPanel()
-        #self.displayExistingPlayers()
+        # self.main.listOfPlayers.setEnabled(True)
+        self.displayExistingPlayers()
 
     #************************************************************
     #   build a display of existing players on file
+
+    @qtc.Slot()
     def displayExistingPlayers(self):
         # list out existing players
-        self.hideWidget(self.noPlayers)
+        # let's add and item or two to the listwidget
+        # self.main.listOfPlayers.clear()
+        # self.ql0 = QListWidgetItem("Bowers, Yvonne")
+        # self.ql1 = QListWidgetItem('Charkarian, Aram')
+        # self.main.listOfPlayers.insertItem(0,self.ql0)
+        # self.main.listOfPlayers.insertItem(1,self.ql1)
+        # self.main.listOfPlayers.insertItem(2,'label')
+        # return
+
+        # self.hideWidget(self.noPlayers)
         if Player.select().count() == 0:
-            self.showWidget(self.noPlayers)
-            self.hideWidget(self.oldPlayerPanel)
+            self.main.existingPlayersLabel.setText('No Players!')
         else:
 #           print('Get and print players')
 #           remove any No Players message
-            self.hideWidget(self.noPlayers)
-            self.showWidget(self.oldPlayerPanel)
+            self.main.existingPlayersLabel.setText('Existing Players')
+            # self.hideWidget(self.noPlayers)
+            # self.showWidget(self.oldPlayerPanel)
 
-            if self.showAllPlayers.get() > 0 :
+            if self.main.showAllPlayers.isChecked() :
+                self.main.existingPlayersLabel.setText('All Players')
                 self.existingPlayers = cfg.ap.playersByLastName(cfg.clubRecord)
             else:
+                self.main.existingPlayersLabel.setText('Active Players')
                 self.existingPlayers = cfg.ap.allActivePlayers(cfg.clubRecord)
 
-            print ('Show all players retrieved')
-            print (self.existingPlayers)
+            # print ('Show all players retrieved')
+            # print (self.existingPlayers)
             # self.existingPlayers = list(Player.select().orderBy('FirstName'))
 ##            print (self.existingPlayers)
             self.playersInDbms = []
 #            print (self.existingPlayers[0].FirstName)
-            # always leve room for the active asterisk
+            # always leave room for the active asterisk
+
+            self.main.listOfPlayers.clear()
+
             for p in self.existingPlayers:
                 if p.Active > 0:
                     self.playersInDbms.append(' * ' + p.LastName + ', ' +p.FirstName)
                 else:
                     self.playersInDbms.append('   ' + p.LastName + ', ' + p.FirstName)
+
+            self.main.listOfPlayers.insertItems(0,self.playersInDbms)
             # build listbox
-            self.players.set(self.playersInDbms)
+            # self.players.set(self.playersInDbms)
             # self.exp = tk.Listbox(self.oldPlayerPanel,
             #                       listvariable=self.players,
             #                       height = 20
@@ -312,19 +347,19 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
             #
             # # [binding section]
             # Do this binding everytime we recreate the listbox of players
-            self.exp.bind('<F2>', self.editSelectedPlayer)
-            self.exp.bind('<F3>', self.createPlayer)
-            self.exp.bind('<F9>', self.toggleAPlayer)
-            self.exp.bind('<Double-1>',self.togglePlayer)
+            # self.exp.bind('<F2>', self.editSelectedPlayer)
+            # self.exp.bind('<F3>', self.createPlayer)
+            # self.exp.bind('<F9>', self.toggleAPlayer)
+            # self.exp.bind('<Double-1>',self.togglePlayer)
         # set focus and selection for listbox
-        self.exp.selection_set(0)
-        self.exp.focus_force()
+        # self.exp.selection_set(0)
+        # self.exp.focus_force()
 
     #***********************************************************
     #   handler for double-click player state toggle
     def togglePlayer(self):
         # convert the double-click position into a selection
-        print('togge active state')
+        print('togge active state with F9 stub')
         return
         self.exp.selection_clear(0,tk.END)     # clear any current selection
         self.lbIndex = self.exp.nearest(event.y)
@@ -348,7 +383,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #************************************************************
     #
     def submitNewPlayer(self):
-        print('Validate and add new player')
+        print('Validate and add new player stub')
         return
         #validate the required fields
         print ('len(fname): ' + str(len(self.fname.get())))
@@ -513,7 +548,8 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     # ************************************************************
     #
     def createPlayer(self):
-        pass
+        print ('create player stub')
+        return
         # self.hideWidget(self.editPlayerPanel)
         # self.showWidget(self.newPlayerPanel)
         # self.resetAllErrorHiLites()
@@ -620,8 +656,8 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #************************************************************
     #
-    def toggleAPlayer(self):
-        print('toggle player active status')
+    def toggleAPlayer(self,item):
+        print('toggle player active status with double click')
         pass
     #     self.ListBoxIndex = event.widget.curselection()[0]
     #     self.deleteMsg = """\tPlayer Toggle is a soft delete that marks player inactive.
@@ -659,8 +695,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         
     #************************************************************
     #
-    def editAPlayer (self, event):
+    def editAPlayer (self):
+        # stub for UI testing
         print ('Replace player entry')
+        return
         # changePlayer = cfg.ap.singlePlayerByFirstandLastNames(self.existingPlayers[self.ListBoxIndex].FirstName,
         #                                               self.existingPlayers[self.ListBoxIndex].LastName)
         # # changePlayer = Player.select(Player.q.FirstName == (self.exp[self.ListBoxIndex].FirstName))[0]
@@ -698,8 +736,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # changePlayer.Joined     = '' if self.joined.get() == 'None' else self.makeIsoDate(self.joined.get())
     #************************************************************
     #
-    def cancelNewPlayer(self, event):
-        print('Cancel new player add')
+    def cancelNewPlayer(self):
+        print('Cancel player activity stub')
+        # print('Player: ' + self.main.listOfPlayers.currentItem().text())
+        return
         # self.resetForm()
         # self.hideWidget(self.newPlayerPanel)
         # self.exp.selection_clear(0, self.exp.size()-1)
@@ -873,6 +913,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     def reBuildXrefs(self):
         # cfg.playerXref = {p.id: p.LastName + ', ' + p.FirstName for p in list(Player.select())}
         CribbageStartup.createPlayersXRef()
+
     def installPlayersActivity(self):
         print ('install players activity panel')
 
@@ -880,3 +921,15 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.widx = cfg.screenDict['activitystack'].addWidget(self)
         # remember this index
         cfg.stackedActivityDict['playersactivitypanel'] = self.widx
+
+    def eventFilter(self, obj, event):
+        print ('Event: ', event.type().name)
+        if event.type().value == QEvent.MouseButtonPress:
+            print('saw mouse button')
+            self.toggleAPlayer()
+            return True
+        else:
+            print(event.type())
+            return False    # stop propagation for now
+
+

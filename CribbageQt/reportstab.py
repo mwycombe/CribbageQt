@@ -287,7 +287,7 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # print ('Tourney List', cfg.at.getTourneysWithResults(cfg.season))
         self.trnyList = cfg.at.getTourneysWithResults(cfg.season)
         # print('rpt', dir(rpt))
-        self.tourneysWithResults.delete(0, tk.END)
+        # self.tourneysWithResults.delete(0, tk.END)
         for trny in self.trnyList:
             print(trny)
             tDate = date.fromisoformat(trny[2]).strftime('%m/%d/%Y')

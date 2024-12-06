@@ -64,3 +64,8 @@ needs to be in the invidual tab objects are the activity panel entries which are
 The challenge will be to connect the signals and control properties when in the various tab objects to the centrally defined tab ui fields.
 
 The main activity panel is set up with blank content and each tab activates their own content when the tab is switched to.
+
+## Learnings
+1. QListWidget will not respond to mouseevents if it's empty - specifically DoubleClick events.
+2. QListItems do have an inbuilt signal, including DoubleClick that they will emit.
+3. Always remove the () from the target slot of a signal. Only the name is required. () tries to call it.

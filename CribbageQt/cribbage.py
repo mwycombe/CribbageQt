@@ -124,6 +124,7 @@ from PySide6 import QtCore, QtGui, QtWidgets
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
+from PySide6.QtGui import	QShortcut, QKeySequence,Qt
 
 import sys as sys
 import os as os
