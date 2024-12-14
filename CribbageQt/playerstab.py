@@ -78,7 +78,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # self.main.listOfPlayers.setMouseTracking(True)
         self.main.listOfPlayers.setEnabled(True)
 
-        self.main.listOfPlayers.itemDoubleClicked.connect(self.toggleAPlayer)
+        self.main.listOfPlayers.itemDoubleClicked.connect(self.togglePlayer)
 
         self.main.showAllPlayers.stateChanged.connect(self.displayExistingPlayers)
 
@@ -163,7 +163,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #     #
     #     # allow ListBox entry to respond to double click for editing
     #     #
-    #     # TODO: F2 will edit player, F3 to create new player, F9 to delete player
+    #     # TODO: F2 will edit player, F3 to create new player, F9 to toggle active status
     #
     #     # # [binding section]
     #     # Do this binding everytime we recreate the listbox of players
@@ -357,9 +357,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
     #***********************************************************
     #   handler for double-click player state toggle
+    @qtc.Slot()
     def togglePlayer(self):
         # convert the double-click position into a selection
-        print('togge active state with F9 stub')
+        print('togge player active state with stub')
         return
         self.exp.selection_clear(0,tk.END)     # clear any current selection
         self.lbIndex = self.exp.nearest(event.y)
