@@ -429,15 +429,14 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         #
         self.buildActivityPanel()
         self.main.tourneysTabPanel.setFocus()
-        # if cfg.at.countTourneysForSeason(cfg.season) < 1:
-        #     self.createNewTourney(event)
-        # else:
-        #     self.populateExistingTourneys()
-            # self.showWidget((self.newTourneyPanel))
+        if cfg.at.countTourneysForSeason(cfg.season) < 1:
+            self.createNewTourney()
+        else:
+            self.populateExistingTourneys()
+            self.showWidget((self.newTourneyPanel))
 
     def populateExistingTourneys(self):
         print('Populate existing tourneys')
-        exit()
         self.clearListBoxes()
         self.unsortedTourneys = cfg.at.allTourneysForClubBySeason(cfg.clubRecord, cfg.season)
         for t in self.unsortedTourneys:
@@ -491,8 +490,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # now receives slot call
         self.editingState = 1       # show we are creating - for context help
         print('Create new tourney')
-        return
-        self.hideAll()
+        self.main.newTourneyFrameLabel.setText('New Tourney')
+        # self.hideAll()
         self.showCreateTourney()
     def enterResults(self):
         print('Enter results')
@@ -741,11 +740,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     #     self.editSelectedTourney(self.beingEdited)
     def editSelectedTourney(self):
         print('edit selected tourney')
-        return
         # this is activated by F2
         self.editingState = 2       # show we we are editing - for context help
         self.listBoxIndex = event.widget.curselection()[0]  # always get a tuple even on single select
-        print ('List box index:', self.listBoxIndex)
         # print('Tourney number: ',self.existingNumbers.get(listBoxIndex))
         # print('Tourney date: ', self.existingDates.get(listBoxIndex))
         # self.showEditPanels(self.existingTourneys.curselection())
@@ -873,7 +870,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.tourneyToDelete = Tourney.select(Tourney.q.TourneyNumber == int(self.deleteNumberEntry.get()))
     def deleteChosenTourney(self):
         print (self.tourneyToDelete)
-        exit()
+        return
         # self.tourneyToDelete holds the record for this tourney
         try:
             self.tourneyToDelete.delete(self.tourneyToDelete.id)
@@ -946,19 +943,19 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         exit()
         self.hideWidget(self.newHalpPanel)
     def showCreateTourney(self):
-        exit()
         self.editingState = 1       # create state
-        self.hideEditTourney()
-        self.resetNewHelpFields()
-        self.hideDeleteTourney()
-        self.showCreatePanels()
+
+        # self.hideEditTourney()
+        # self.resetNewHelpFields()
+        # self.hideDeleteTourney()
+        self.showCreatePanel()
     def resetNewHelpFields(self):
         exit()
         self.hideWidget(self.newHelpPanel)
         self.hideWidget(self.newHelpDuplicateDate)
         self.hideWidget(self.newHelpDuplicateNumber)
         self.hideWidget(self.newHelpBadFormatField)
-    def showCreatePanels(self):
+    def showCreatePanel(self):
         exit()
         self.showWidget(self.tourneyCreationPanel)
         self.showWidget(self.newTourneyPanel)

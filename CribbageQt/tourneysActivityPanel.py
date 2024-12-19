@@ -56,6 +56,6 @@ class Ui_tourneysactivitypanel(object):
         self.playersF1ActivityLabel.setText(_translate("tourneysactivitypanel", "F1    Get help with this activity"))
         self.playersF2ActivityLabel.setText(_translate("tourneysactivitypanel", "F2    Edit Currently Selected Tourney"))
         self.playersF3ActivityLabel.setText(_translate("tourneysactivitypanel", "F3    Create new tourney"))
-        self.playersF9ActivityLabel.setText(_translate("tourneysactivitypanel", "F9    Delect selected tourney"))
+        self.playersF9ActivityLabel.setText(_translate("tourneysactivitypanel", "F9    Delete selected tourney"))
         self.playersF10ActivityLabel.setText(_translate("tourneysactivitypanel", "F10  Save updates"))
         self.playersEscActivityLabel.setText(_translate("tourneysactivitypanel", "Esc   Quit current activity"))

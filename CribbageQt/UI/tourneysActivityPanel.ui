@@ -68,7 +68,7 @@
      <item>
       <widget class="QLabel" name="playersF9ActivityLabel">
        <property name="text">
-        <string>F9    Delect selected tourney</string>
+        <string>F9    Delete selected tourney</string>
        </property>
       </widget>
      </item>

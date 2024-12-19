@@ -174,16 +174,16 @@ class Cribbage (object):
 		# self.createClubXref()
 		# self.openAccessModules()
 
-		self.buildPanels()
-
-		# on return MasterScreen has built everything
-		# call class level init methods
+			# call class level init methods
 		print ('Starting cribbage...')
 
 		CribbageStartup.initDbms()
 		CribbageStartup.createPlayersXref()
 		CribbageStartup.createClubXref()
 		CribbageStartup.createTourneyXref()
+
+		self.buildPanels()
+		# on return MasterScreen has built everything
 
 	#************************************************************
 	#
@@ -282,7 +282,7 @@ if __name__ == '__main__':
 	# # cfg.appTitle = 'From the club table in dbms'
 	# # app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
 
-	# cribbageApp = Cribbage()
+	cribbageApp = Cribbage()
 
 	app = qtw.QApplication(sys.argv)
 	window = MasterScreen()

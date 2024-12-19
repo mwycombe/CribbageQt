@@ -10,13 +10,13 @@
 #####################################################
 
 # System imports
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox as mbx
-from tkinter import filedialog as fdg
+# import tkinter as tk
+# from tkinter import ttk
+# from tkinter import messagebox as mbx
+# from tkinter import filedialog as fdg
 import sys as sys
 import os as os
-from tkinter.messagebox import askokcancel
+# from tkinter.messagebox import askokcancel
 # replace tkinter with PySide6
 
 from PySide6 import QtWidgets, QtCore, QtGui
@@ -93,7 +93,10 @@ class CribbageStartup ():
         print ('season:= ' + cfg.season)
         print ('clubNumber:= ' + str(cfg.clubNumber))
 
-        result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
+        print ('QMessageBox...')
+        # result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
+        self.msgBox = QMessageBox()
+        self.msgBox.setIcon(QMessageBox.Information)
 
         if result != QMessageBox.Yes:
             sys.exit('Wrong data base in use')

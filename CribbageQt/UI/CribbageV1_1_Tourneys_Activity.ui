@@ -31,8 +31,8 @@
    <widget class="QFrame" name="sessionPanel">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>20</y>
+      <x>20</x>
+      <y>30</y>
       <width>1091</width>
       <height>201</height>
      </rect>
@@ -309,7 +309,7 @@ font: 700 11pt &quot;Segoe UI&quot;;</string>
        <item>
         <widget class="QLabel" name="playersF9ActivityLabel">
          <property name="text">
-          <string>F9    Delect selected tourney</string>
+          <string>F9    Delete selected tourney</string>
          </property>
         </widget>
        </item>
