@@ -67,7 +67,9 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #   sets up tab for managing players & register with 'notebook' frame
 
     def __init__ (self, parent=None):
-        # self.selectResultsTourney = ''
+        if cfg.debug:
+            print('starting playerstab')
+
         super().__init__()
         self.setupUi(self)
         self.main = cfg.screenDict['masterwindow']

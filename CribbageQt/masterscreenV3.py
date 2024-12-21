@@ -34,6 +34,7 @@ import os as os
 # Personal imports
 import cribbageconfig as cfg
 from CribbageQt import Ui_MainCribbageWindow
+from cribbagestartup import CribbageStartup
 from playerstab import PlayersTab
 from reportstab import ReportsTab
 from tourneystab import TourneysTab
@@ -46,6 +47,13 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+
+        # set up database to sue
+        CribbageStartup.initDbms()
+
+        if cfg.debug:
+            print('continue gui setup')
+
         # populate cfg.screenDict
         cfg.screenDict['masterwindow'] = self
         cfg.screenDict['sessionpanel'] = self.sessionPanel      # container for activity panels

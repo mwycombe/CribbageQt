@@ -81,13 +81,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # screen class is always a frame
 
     def __init__(self, parent=None):
+        if cfg.debug:
+            print('starting resultstab')
+
         super().__init__()
         self.setupUi(self)
 
-        # all of the fields should already be in the widget inside teh QTqbWidget
+        # all of the fields should already be in the widget inside the QTqbWidget
 
-        self.installResultsActivity()
         self.main=cfg.screenDict['masterwindow']
+        self.installResultsActivity()
 
         # super().__init__(parent)
         # self.grid()
@@ -317,17 +320,17 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerTkn)
         self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerCash)
 
-        self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine())
-        self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine())
-        self.Enter_Key_Shortcut_Sprd.activated.connect(self.handleResultLine())
-        self.Enter_Key_Shortcut_Tkn.activated.connect(self.handleResultLine())
-        self.Enter_Key_Shortcut_Cash.activated.connect(self.handleResultLine())
+        self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine)
+        self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine)
+        self.Enter_Key_Shortcut_Sprd.activated.connect(self.handleResultLine)
+        self.Enter_Key_Shortcut_Tkn.activated.connect(self.handleResultLine)
+        self.Enter_Key_Shortcut_Cash.activated.connect(self.handleResultLine)
 
-        self.Escape_Key_Shortcut_Gp.activated.connect(self.quitResults())
-        self.Escape_Key_Shortcut_Gw.activated.connect(self.quitResults())
-        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults())
-        self.Escape_Key_Shortcut_Tkn.activated.connect(self.quitResults())
-        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults())
+        self.Escape_Key_Shortcut_Gp.activated.connect(self.quitResults)
+        self.Escape_Key_Shortcut_Gw.activated.connect(self.quitResults)
+        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
+        self.Escape_Key_Shortcut_Tkn.activated.connect(self.quitResults)
+        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
 
         # # allow user to quit entering a result line
         # self.resultsNameEntry.bind('<Escape>', self.quitResultLine)

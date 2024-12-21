@@ -428,15 +428,16 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # if no tournaments, then must request at least one to be created
         #
         self.buildActivityPanel()
-        self.main.tourneysTabPanel.setFocus()
+        # self.main.tourneysTabPanel.setFocus()
         if cfg.at.countTourneysForSeason(cfg.season) < 1:
             self.createNewTourney()
         else:
             self.populateExistingTourneys()
-            self.showWidget((self.newTourneyPanel))
+            # self.showWidget((self.newTourneyPanel))
 
     def populateExistingTourneys(self):
-        print('Populate existing tourneys')
+        if cfg.debug:
+            print('Populate existing tourneys')
         self.clearListBoxes()
         self.unsortedTourneys = cfg.at.allTourneysForClubBySeason(cfg.clubRecord, cfg.season)
         for t in self.unsortedTourneys:
@@ -445,17 +446,21 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneysByNumber = sorted(self.unsortedTourneys, key = lambda Tourney: Tourney.TourneyNumber)
         self.tourneysByDate = sorted(self.unsortedTourneys, key = lambda Tourney: Tourney.Date)
         # show tourneys by date list
-        print ('Tourneys by list: ')
-        print (self.tourneysByDate)
+        if cfg.debug:
+            print ('Tourneys by list: ')
+            print (self.tourneysByDate)
+            print (self.tourneysByNumber)
         # change to use listbox.insert(posn, value) method
         # print ('Sorted tourney numbers')
         for x in self.tourneysByNumber:
             # single listbox version with concatenated fields
-            print (x.TourneyNumber)
+            if cfg.debug:
+                print (x.TourneyNumber)
+
             tno = str(x.TourneyNumber)
             tno = tno.rjust(3) if x.TourneyNumber < 10 else tno
             d ='|   ' + x.Entered + '   |' if x.Entered == '*' else'|        |'
-            self.existingTourneys.insert(tk.END, tno + '      ' + d + '    ' +self.makeUSDate(x.Date))
+            self.main.listOfTourneys.addItem( qtw.QListWidgetItem(tno + '      ' + d + '    ' +self.makeUSDate(x.Date)))
             # self.existingNumbers.insert(tk.END, x.TourneyNumber)
             # self.existingValues.insert(tk.END, x.Entered)
             # self.existingDates.insert(tk.END, self.makeUSDate(x.Date))
@@ -472,8 +477,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.existingTourneys.see(0)
         # self.existingTourneys.focus_force()
     def clearListBoxes(self):
-        exit()
-        self.existingTourneys.delete(0, tk.END)
+        self.main.listOfTourneys.clear()
+        # self.existingTourneys.delete(0, tk.END)
     def listBoxUpDown(self, event):
         exit()
         selection = event.widget.curselection()[0]

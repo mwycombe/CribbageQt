@@ -19,7 +19,9 @@ import os as os
 # from tkinter.messagebox import askokcancel
 # replace tkinter with PySide6
 
-from PySide6 import QtWidgets, QtCore, QtGui
+from PySide6 import QtWidgets as qtw
+from PySide6 import  QtCore as qtc
+from PySide6 import QtGui as qtg
 from PySide6.QtWidgets import QWidget, QApplication
 from PySide6.QtWidgets import QMessageBox
 
@@ -44,7 +46,7 @@ class CribbageStartup ():
 
 
     @classmethod
-    def initDbms(cls):
+    def initGlobalCfg(cls):
         
         # search baseDir for a sqlite3 file - i.e. a dbms
         # make sure we are positioned at the appropriate directory
@@ -57,6 +59,8 @@ class CribbageStartup ():
         cfg.dbmsName = ''
         cfg.season = ''
         cfg.reportDirectory = ''
+        cfg.debug = True
+
         try:
             dbmsCfg = open('cribbage.cfg')      # this is the master config file
         except FileNotFoundError:
@@ -80,6 +84,12 @@ class CribbageStartup ():
                 cfg.season = eValue
             elif eName == 'reportDirectory':
                 cfg.reportDirectory = eValue
+            elif eName == 'debug':
+                if eValue == 'yes':
+                    cfg.debug = True
+                else:
+                    cfg.debug = False
+
         # and go to where the data base is located - ?? why??
 ##        os.chdir(cfg.dbmsDirectory)
         # close out the config file
@@ -93,12 +103,18 @@ class CribbageStartup ():
         print ('season:= ' + cfg.season)
         print ('clubNumber:= ' + str(cfg.clubNumber))
 
+    @classmethod
+    def initDbms(cls):
         print ('QMessageBox...')
         # result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
-        self.msgBox = QMessageBox()
-        self.msgBox.setIcon(QMessageBox.Information)
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText('Use ' + cfg.dbmsDirectory + cfg.dbmsName + ' ?')
+        msgBox.setWindowTitle('Check dbms name')
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
 
-        if result != QMessageBox.Yes:
+        result = msgBox.exec()
+        if result != QMessageBox.Ok:
             sys.exit('Wrong data base in use')
         else:
             print ('QMessageBox dropped thru')
@@ -138,11 +154,18 @@ class CribbageStartup ():
         cfg.clubName = cfg.clubRecord.clubName
         cfg.clubLocation = cfg.clubRecord.location
         cfg.reportDirectory = cfg.clubRecord.reportDirectory
-
         cfg.clubCount = len(cfg.ap.allActivePlayers(cfg.clubRecord))
-        # PeggersStartup.createPlayersXref()
-        # PeggersStartup.createClubXref()
-        # we may need to also count players for 21
+
+        if cfg.debug == True:
+            print('clubId:= ' + str(cfg.clubId))
+            print('clubName:= ' + cfg.clubName)
+            print('clubLocation:= ' + cfg.clubLocation)
+            print ('reportDirectory:= ' + cfg.reportDirectory)
+            print('clubCount:= ' + str(cfg.clubCount))
+
+        CribbageStartup.createPlayersXref()
+        CribbageStartup.createTourneyXref()
+        CribbageStartup.createClubXref()
 
     @classmethod
     def createPlayersXref(cls):
@@ -178,5 +201,9 @@ class CribbageStartup ():
 
 
 if __name__ == '__main__':
+    app = qtw.QApplication(sys.argv)
+    window = qtw.QMainWindow()
+    window.show()
+    CribbageStartup.initGlobalCfg()
     CribbageStartup.initDbms()
  

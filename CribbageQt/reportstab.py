@@ -65,6 +65,8 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
 
     def __init__ (self, parent=None):
         super().__init__( parent)
+        if cfg.debug:
+            print('starting reportstab')
         self.setupUi(self)
 
         # all of the fields should already be in the widget inside the QTabWidget
@@ -383,7 +385,7 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
     def showWidget (self,w):
         w.grid()
     def installReportsActivity(self):
-        print ('show reports activity panel')
+        print ('install reports activity panel')
 
         # have to add this into the master activity stacked widget
         self.widx = cfg.screenDict['activitystack'].addWidget(self)

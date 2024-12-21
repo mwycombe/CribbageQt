@@ -177,10 +177,10 @@ class Cribbage (object):
 			# call class level init methods
 		print ('Starting cribbage...')
 
-		CribbageStartup.initDbms()
-		CribbageStartup.createPlayersXref()
-		CribbageStartup.createClubXref()
-		CribbageStartup.createTourneyXref()
+		CribbageStartup.initGlobalCfg()
+		# CribbageStartup.createPlayersXref()
+		# CribbageStartup.createClubXref()
+		# CribbageStartup.createTourneyXref()
 
 		self.buildPanels()
 		# on return MasterScreen has built everything
@@ -251,8 +251,6 @@ class Cribbage (object):
 
 
 if __name__ == '__main__':
-
-
 
 	# cfg variables should now be populated
 
