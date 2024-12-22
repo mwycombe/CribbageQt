@@ -816,7 +816,7 @@ color: rgb(65, 161, 5);</string>
         <widget class="QLabel" name="trnyNoHdr">
          <property name="geometry">
           <rect>
-           <x>8</x>
+           <x>10</x>
            <y>30</y>
            <width>41</width>
            <height>41</height>
@@ -832,7 +832,7 @@ color: rgb(65, 161, 5);</string>
         <widget class="QLabel" name="trnyDataHdr">
          <property name="geometry">
           <rect>
-           <x>70</x>
+           <x>60</x>
            <y>50</y>
            <width>41</width>
            <height>20</height>
@@ -845,7 +845,7 @@ color: rgb(65, 161, 5);</string>
         <widget class="QLabel" name="trnyDateHdr">
          <property name="geometry">
           <rect>
-           <x>150</x>
+           <x>140</x>
            <y>30</y>
            <width>41</width>
            <height>41</height>

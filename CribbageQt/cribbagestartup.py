@@ -87,8 +87,18 @@ class CribbageStartup ():
             elif eName == 'debug':
                 if eValue == 'yes':
                     cfg.debug = True
-                else:
-                    cfg.debug = False
+            elif eName == 'playerdebug':
+                if eValue == 'yes':
+                    cfg.playerdebug = True
+            elif eName == 'tourneydebug':
+                if eValue == 'yes':
+                    cfg.tourneydebug = True
+            elif eName == 'resultsdebug':
+                if eValue == 'yes':
+                    cfg.resultsdebug = True
+            elif eName == 'reportsdebug':
+                if eValue == 'yes':
+                    cfg.reportsdebug = True
 
         # and go to where the data base is located - ?? why??
 ##        os.chdir(cfg.dbmsDirectory)

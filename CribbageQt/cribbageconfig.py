@@ -58,6 +58,14 @@ tourneyNumber = 0       # must be an integer
 tourneyRecordId = 0     # must be an integer
 tourneyRecord = ''      # used to keep a copy of the tourney sqlobject record during scoring
 
+# debug section to allow granular debugging printouts
+
+debug = False
+playerdebug = False
+tourneydebug = False
+resultsdebug = False
+reportsdebug = False
+
 # tab and screen control
 # any module/class that creates a tab or screen puts an entry in here
 # any moduel that depends on a tab or screen checks here first before building

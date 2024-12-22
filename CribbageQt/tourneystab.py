@@ -446,25 +446,41 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneysByNumber = sorted(self.unsortedTourneys, key = lambda Tourney: Tourney.TourneyNumber)
         self.tourneysByDate = sorted(self.unsortedTourneys, key = lambda Tourney: Tourney.Date)
         # show tourneys by date list
-        if cfg.debug:
-            print ('Tourneys by list: ')
+        print ('debug: ' + str(cfg.debug))
+        print ('tourneydebug: ' + str(cfg.tourneydebug))
+        if cfg.debug and cfg.tourneydebug:
+            print ('Tourneys by date: ')
             print (self.tourneysByDate)
+            print ('Tourneys by number:')
             print (self.tourneysByNumber)
         # change to use listbox.insert(posn, value) method
         # print ('Sorted tourney numbers')
+        self.tourneysInDbms = []
         for x in self.tourneysByNumber:
             # single listbox version with concatenated fields
-            if cfg.debug:
+
+            if cfg.debug and cfg.tourneydebug:
                 print (x.TourneyNumber)
 
             tno = str(x.TourneyNumber)
             tno = tno.rjust(3) if x.TourneyNumber < 10 else tno
-            d ='|   ' + x.Entered + '   |' if x.Entered == '*' else'|        |'
-            self.main.listOfTourneys.addItem( qtw.QListWidgetItem(tno + '      ' + d + '    ' +self.makeUSDate(x.Date)))
+            tno = tno + '    '
+            d ='|      ' + x.Entered + '      |' if x.Entered == '*' else'|              |'
+            if cfg.debug and cfg.tourneydebug:
+                print(d)
+                myDate = self.makeUSDate(x.Date)
+                print(type(myDate))
+
+            # build up the list of items
+            tourneyLine = tno + d + '    ' + self.makeUSDate(x.Date)
+            self.tourneysInDbms.append(tourneyLine)
+
+        self.main.listOfTourneys.addItems(self.tourneysInDbms)
             # self.existingNumbers.insert(tk.END, x.TourneyNumber)
             # self.existingValues.insert(tk.END, x.Entered)
             # self.existingDates.insert(tk.END, self.makeUSDate(x.Date))
-        print ('Setting focus and activate')
+        if cfg.debug and cfg.tourneydebug:
+            print ('Setting focus and activate')
         # self.existingTourneys.activate(0)
         # self.existingTourneys.focus_force()
         # self.existingTourneys.update()
@@ -656,7 +672,6 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # SQLObject DateCol returns date objects
         return dateparser.parse(USDate).date()
     def makeUSDate(self, ISODate):
-        exit()
         # presumes the incoming ISODate is valid
         return  ISODate.strftime('%m/%d/%Y')
 
