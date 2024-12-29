@@ -915,7 +915,7 @@ color: rgb(65, 161, 5);</string>
         <property name="lineWidth">
          <number>2</number>
         </property>
-        <widget class="QLabel" name="newTourneyNumberLabel">
+        <widget class="QLabel" name="tourneyNumberLabel">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -925,10 +925,10 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
          <property name="text">
-          <string>New Tourney Number</string>
+          <string>Tourney Number</string>
          </property>
         </widget>
-        <widget class="QLabel" name="newTourneyDateLabel">
+        <widget class="QLabel" name="tourneyDateLabel">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -938,10 +938,10 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
          <property name="text">
-          <string>New Tourney Date</string>
+          <string>Tourney Date</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="newTourneyNumberEntry">
+        <widget class="QLineEdit" name="tourneyNumberEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -951,7 +951,7 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
         </widget>
-        <widget class="QLineEdit" name="newTourneyDateEntry">
+        <widget class="QLineEdit" name="tourneyDateEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -2350,8 +2350,8 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>expiresEntry</tabstop>
   <tabstop>joinedEntry</tabstop>
   <tabstop>activeEntry</tabstop>
-  <tabstop>newTourneyNumberEntry</tabstop>
-  <tabstop>newTourneyDateEntry</tabstop>
+  <tabstop>tourneyNumberEntry</tabstop>
+  <tabstop>tourneyDateEntry</tabstop>
   <tabstop>listOfTourneys</tabstop>
   <tabstop>listOfResultPlayers</tabstop>
   <tabstop>resultLinePlayerGp</tabstop>

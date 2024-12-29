@@ -87,12 +87,12 @@ class CribbageStartup ():
             elif eName == 'debug':
                 if eValue == 'yes':
                     cfg.debug = True
-            elif eName == 'playerdebug':
+            elif eName == 'playersdebug':
                 if eValue == 'yes':
-                    cfg.playerdebug = True
-            elif eName == 'tourneydebug':
+                    cfg.playersdebug = True
+            elif eName == 'tourneysdebug':
                 if eValue == 'yes':
-                    cfg.tourneydebug = True
+                    cfg.tourneysdebug = True
             elif eName == 'resultsdebug':
                 if eValue == 'yes':
                     cfg.resultsdebug = True

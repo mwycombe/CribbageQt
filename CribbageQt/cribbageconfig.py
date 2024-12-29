@@ -61,8 +61,8 @@ tourneyRecord = ''      # used to keep a copy of the tourney sqlobject record du
 # debug section to allow granular debugging printouts
 
 debug = False
-playerdebug = False
-tourneydebug = False
+playersdebug = False
+tourneysdebug = False
 resultsdebug = False
 reportsdebug = False
 

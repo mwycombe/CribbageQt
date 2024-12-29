@@ -35,7 +35,7 @@
 # from tkinter import filedialog as fdg
 ########################################
 from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QMessageBox
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
@@ -46,11 +46,9 @@ from PySide6.QtCore import Qt
 from PySide6.QtCore import QObject, Property, Signal
 from PySide6.QtGui import QShortcut, QKeySequence
 
-
+from cribbageconfig import tourneysdebug
 from ctrlVariables import StringVar, IntVar, DoubleVar
 from tourneysActivityPanel import Ui_tourneysactivitypanel
-
-
 
 from sqlobject import *
 
@@ -100,15 +98,26 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.F9_shortcut.activated.connect(self.deleteChosenTourney)
 
         self.F10_shortcut = QShortcut(QKeySequence(Qt.Key_F10), self.main.tourneysTabPanel)
-        self.F10_shortcut.activated.connect(self.saveEditedTourney)
+        self.F10_shortcut.activated.connect(self.addOrEditTourney)
 
         self.Esc_shortcut = QShortcut(QKeySequence(Qt.Key_Escape), self.main.tourneysTabPanel)
         self.Esc_shortcut.activated.connect(self.cancelEdit)
 
+        # self.main.listOfTourneys.currentItemChanged.connect(self.listBoxUpDown)
+        self.main.listOfTourneys.currentRowChanged.connect(self.listBoxUpDown)
 
         # puts activity panel into widget stack
         self.installTourneysActivity()
 
+        # simulated tk.control vars
+        self.tourneyNumberEntry = StringVar()
+        self.tourneyDateEntry = StringVar()
+
+        self.main.tourneyNumberEntry.textEdited.connect(self.tourneyNumberEntry.myValue)
+        self.main.tourneyDateEntry.textEdited.connect(self.tourneyDateEntry.myValue)
+
+        self.tourneyNumberEntry.strValueChanged.connect(self.main.tourneyNumberEntry.setText)
+        self.tourneyDateEntry.strValueChanged.connect(self.main.tourneyDateEntry.setText)
         # super().__init__(parent)
         # self.grid()
         # self.parent = parent
@@ -447,8 +456,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneysByDate = sorted(self.unsortedTourneys, key = lambda Tourney: Tourney.Date)
         # show tourneys by date list
         print ('debug: ' + str(cfg.debug))
-        print ('tourneydebug: ' + str(cfg.tourneydebug))
-        if cfg.debug and cfg.tourneydebug:
+        print ('tourneysdebug: ' + str(cfg.tourneysdebug))
+        if cfg.debug and cfg.tourneysdebug:
             print ('Tourneys by date: ')
             print (self.tourneysByDate)
             print ('Tourneys by number:')
@@ -459,14 +468,14 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         for x in self.tourneysByNumber:
             # single listbox version with concatenated fields
 
-            if cfg.debug and cfg.tourneydebug:
+            if cfg.debug and cfg.tourneysdebug:
                 print (x.TourneyNumber)
 
             tno = str(x.TourneyNumber)
             tno = tno.rjust(3) if x.TourneyNumber < 10 else tno
             tno = tno + '    '
             d ='|      ' + x.Entered + '      |' if x.Entered == '*' else'|              |'
-            if cfg.debug and cfg.tourneydebug:
+            if cfg.debug and cfg.tourneysdebug:
                 print(d)
                 myDate = self.makeUSDate(x.Date)
                 print(type(myDate))
@@ -479,8 +488,14 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             # self.existingNumbers.insert(tk.END, x.TourneyNumber)
             # self.existingValues.insert(tk.END, x.Entered)
             # self.existingDates.insert(tk.END, self.makeUSDate(x.Date))
-        if cfg.debug and cfg.tourneydebug:
+        self.main.listOfTourneys.setCurrentItem(self.main.listOfTourneys.item(0))
+        if cfg.debug and cfg.tourneysdebug:
             print ('Setting focus and activate')
+
+
+        # set focus to first row
+        self.main.listOfTourneys.setCurrentRow(0)
+        self.main.listOfTourneys.setFocus()
         # self.existingTourneys.activate(0)
         # self.existingTourneys.focus_force()
         # self.existingTourneys.update()
@@ -495,25 +510,38 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def clearListBoxes(self):
         self.main.listOfTourneys.clear()
         # self.existingTourneys.delete(0, tk.END)
-    def listBoxUpDown(self, event):
-        exit()
-        selection = event.widget.curselection()[0]
-        if event.keysym == 'Up':
-            selection += -1
-        if event.keysym == 'Down':
-            selection += 1
-        if 0 <= selection < event.widget.size():
-            event.widget.selection_clear(0, tk.END)
-            event.widget.selection_set(selection)
+
+    @qtc.Slot()
+    def listBoxUpDown(self,row):
+
+        # selection = event.widget.curselection()[0]
+        if cfg.debug and cfg.tourneysdebug:
+            print('Row/Item change signal')
+        # self.main.listOfTourneys.setCurrentRow(new)
+        if cfg.debug and cfg.tourneysdebug:
+            print ('Row: ' + str(row))
+            print(self.main.listOfTourneys.item(row).text())    # show row contents
+        # if event.keysym == 'Up':
+        #     selection += -1
+        # if event.keysym == 'Down':
+        #     selection += 1
+        # if 0 <= selection < event.widget.size():
+        #     event.widget.selection_clear(0, tk.END)
+        #     event.widget.selection_set(selection)
     def createNewTourney (self):
         # show the new tourney panel and Add/Cancel buttons
         # set editState
         # now receives slot call
         self.editingState = 1       # show we are creating - for context help
-        print('Create new tourney')
+        if cfg.debug and cfg.tourneysdebug:
+            print('Create new tourney')
         self.main.newTourneyFrameLabel.setText('New Tourney')
-        # self.hideAll()
-        self.showCreateTourney()
+        self.tourneyNumberEntry.myValue = ' '
+        self.tourneyDateEntry.myValue = ' '
+        self.main.tourneyNumberEntry.setFocus()
+        # return
+        # # self.hideAll()
+        # self.showCreateTourney()
     def enterResults(self):
         print('Enter results')
         return
@@ -569,16 +597,44 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # this is an event handler - there is nothing to pass on from the event
         print ('Save new tourney')
         self.addTourney()
-    def addNewTourney (self,event):
+    def addOrEditTourney(self):
+        # no longer have signal from different entry fields...
+        match self.editingState:
+            case 1:
+                self.addNewTourney()
+            case 2:
+                self.saveEditedTourney()
+            case _:
+                self.showNothingToSave()
+        # if self.editingState == 1:
+        #     self.addNewTourney()
+        # elif self.editingState == 2:
+        #     self.saveEditedTourney()
+        # else:
+        #     self.showNothingToSave()
+
+    def showNothingToSave(self) -> None:
+        # result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText('Not New or Edit Tourney')
+        msgBox.setWindowTitle('Unrecognized Edit Mode')
+        msgBox.setStandardButtons(QMessageBox.Ok )
+
+        result = msgBox.exec()
+        if cfg.debug and cfg.tourneysdebug:
+            print('No Tourney info to handle')
+
+    def addNewTourney (self):
         # On F10 build a new Tourney and add it to the data base
         # and reshow
         print('Add new tourney')
-        exit()
-        self.resetNewHelpFields()
-        if not (self.validateEntryField('number', self.newTourneyNumber.get(), self.newTourneyNumberEntry)) or \
-               not (self.validateEntryField('date', self.newTourneyDate.get(), self.newTourneyDateEntry)):
+        # exit()
+        # self.resetNewHelpFields()
+        if not (self.validateEntryField('number', self.tourneyNumber, self.main.tourneyNumberEntry)) or \
+               not (self.validateEntryField('date', self.tourneyDate, self.main.tourneyDateEntry)):
             self.showWidget(self.newHelpBadFormatField)
-            self.newTourneyNumberEntry.focus_force()
+            self.main.tourneyNumberEntry.setFocus()
             return
         # check for duplicates of number and date
         if self.duplicateNewNumber() and self.duplicateNewDate():
@@ -665,7 +721,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         return False
 
     def makeIsoDate(self, USDate):
-        exit()
+        # exit()
         # take date in US format and turn into ISO8601 format data object
         # date format aleadys validate by validateNewTourneyDate
         # mon, day, yr = USDate.split(sep = '/')
@@ -676,8 +732,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         return  ISODate.strftime('%m/%d/%Y')
 
     def validateTourneyNumber(self, value, w):
-        print ('Number value: ', value)
-        exit()
+        if cfg.debug and cfg.tourneysdebug:
+            print ('Number value: ', value)
+        # exit()
         self.resetErrorHiLite(w)
         if not value.isnumeric():
             print ('Not numeric')
@@ -706,26 +763,33 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
                                   'Select a Tourney before using Right Arrow',
                                   icon=mbx.Error)
     def validateEntryField(self, field, input, w):
-        exit()
-        # invokes appropriate validation field
-        switcher = {
-            'number': self.validateTourneyNumber,
-            'date': self.validateTourneyDate
-        }
-        return switcher.get(field)(input, w)
+        # exit()
+        # use new python match statement
+        match input:
+            case 'number':
+                self.validateTourneyNumber(self.tourneyNumberEntry,w)
+            case 'date':
+                self.validateTourneyDate(self.tourneyDateEntry,w)
 
-    def setNumberEntryHandler(self, w):
-        exit()
-        # pass in extra parameters to event handler
-        def entryHandler(event, self = self, ):
-            return self.numberInputValidation(event)
-        w.bind('<KeyPress>', entryHandler)
-    def setDateEntryHandler(self, w):
-        exit()
-        # pass in extra parameters to event handler
-        def entryHandler(event, self = self):
-            return self.dateInputValidation(event)
-        w.bind('<KeyPress>', entryHandler)
+        # # invokes appropriate validation field
+        # switcher = {
+        #     'number': self.validateTourneyNumber,
+        #     'date': self.validateTourneyDate
+        # }
+        # return switcher.get(field)(input, w)
+
+    # def setNumberEntryHandler(self, w):
+    #     exit()
+    #     # pass in extra parameters to event handler
+    #     def entryHandler(event, self = self, ):
+    #         return self.numberInputValidation(event)
+    #     w.bind('<KeyPress>', entryHandler)
+    # def setDateEntryHandler(self, w):
+    #     exit()
+    #     # pass in extra parameters to event handler
+    #     def entryHandler(event, self = self):
+    #         return self.dateInputValidation(event)
+    #     w.bind('<KeyPress>', entryHandler)
     def numberInputValidation(self, event):
         if event.keysym == 'Return' or event.keysym == 'Tab':
             # self.validateNewTourneyNumber(self.newTourneyNumberEntry.get())
@@ -761,41 +825,58 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def editSelectedTourney(self):
         print('edit selected tourney')
         # this is activated by F2
-        self.editingState = 2       # show we we are editing - for context help
-        self.listBoxIndex = event.widget.curselection()[0]  # always get a tuple even on single select
+        self.editingState = 2       # show we are editing - for context help
+        self.main.newTourneyFrameLabel.setText('Edit Tourney')
+        self.splitRow = self.main.listOfTourneys.currentItem().text().split()
+        if cfg.debug and cfg.tourneysdebug:
+            print (self.splitRow)
+        self.tourneyNumberEntry.myValue = self.splitRow[0]
+        self.tourneyDateEntry.myValue = self.splitRow[4]
+        #
+        # test hi-lighting for pyqt
+        #
+        # parse current row data and initialize
+        # self.listBoxIndex = event.widget.curselection()[0]  # always get a tuple even on single select
         # print('Tourney number: ',self.existingNumbers.get(listBoxIndex))
         # print('Tourney date: ', self.existingDates.get(listBoxIndex))
         # self.showEditPanels(self.existingTourneys.curselection())
-        # capture record being edited.
-        self.tourneyUnderEdit = self.tourneysByNumber[self.listBoxIndex]
-        print('tourney to edit', self.tourneyUnderEdit)
+        # capture tourney record being edited.
+        self.tourneyUnderEdit = self.tourneysByNumber[int(self.tourneyNumberEntry.myValue)]
+        # print('tourney to edit', self.tourneyUnderEdit)
         # print('Tourney under edit: ', self.tourneyUnderEdit)
         # save original parameters in case user user cancels or forgets the edits
-        # self.editTourneyOriginalDate = self.tourneyUnderEdit.Date
-        # self.editTourneyOriginalNumber = self.tourneyUnderEdit.TourneyNumber
-        # print(str(eval(self.existingTourneyNumbers.get())[self.listBoxIndex[0]]))
-        # print(str(eval(self.existingTourneyValues.get())[self.listBoxIndex[0]]))
+
+        self.editTourneyOriginalDate = self.tourneyUnderEdit.Date
+        self.editTourneyOriginalNumber = self.tourneyUnderEdit.TourneyNumber
+        if cfg.debug and cfg.tourneysdebug:
+            print(str(self.editTourneyOriginalNumber))
+            print(str(self.editTourneyOriginalDate))
+
         # self.tourneyDate.set(eval(self.existingTourneyDates.get()))self.listBoxIndex[0]))
-        self.hideAll()
-        self.showEditPanels(self.listBoxIndex)
+        # self.hideAll()
+        # self.showEditPanels(self.listBoxIndex)
         # populate the existing selected tourney params
-        self.populateEditFields(self.listBoxIndex)
-        self.editTourneyNumberEntry.focus_force()
-    def populateEditFields(self, index):
-        exit()
-        self.existingTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
-        self.editTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
-        self.existingTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
-        self.editTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
+        self.populateEditFields()
+        print('Set focus to entrynumber')
+        self.main.self.tourneyNumberEntry.setFocus()
+
+    def populateEditFields(self):
+        # exit()
+        # self.existingTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
+        # self.editTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
+        # self.existingTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
+        # self.editTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
+        self.main.self.tourneyNumberEntry.setText(str(self.tourneyNumberEntry))
+        self.main.self.tourneyDateEntry.setText(str(self.tourneyDateEntry))
+
     def saveEditedTourney(self):
         print('save tourney')
-        return
         # validate date entered then save if ok
-        if not (self.validateEntryField('number', self.editTourneyNumber.get(), self.editTourneyNumberEntry))or \
-            not (self.validateEntryField('date', self.editTourneyDate.get(), self.editTourneyDateEntry)):
+        if not (self.validateEntryField('number', self.tourneyNumberEntry, self.main.self.tourneyNumberEntry))or \
+            not (self.validateEntryField('date', self.tourneyDateEntry, self.main.self.tourneyDateEntry)):
             # bad entry fields
             self.showBadEditEntry()
-            self.editTourneyNumberEntry.focus_force()
+            self.main.tourneyNumberEntry.setFocus()
             return
         # if we drop through we have a viable edit to try for Existing Tourney
         try:
@@ -976,14 +1057,17 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.hideWidget(self.newHelpDuplicateNumber)
         self.hideWidget(self.newHelpBadFormatField)
     def showCreatePanel(self):
-        exit()
-        self.showWidget(self.tourneyCreationPanel)
-        self.showWidget(self.newTourneyPanel)
-        # position focus on first entry field
-        self.newTourneyNumberEntry.focus_force()
-        self.showWidget(self.newHelpPanel)
-        self.hideWidget(self.newHelpDuplicateNumber)
-        self.hideWidget(self.newHelpDuplicateDate)
+        if cfg.debug and cfg.tourneysdebug:
+            print('In create tourney panel')
+        self.main.newTourneyFrameLabel.setText('New Tourney')
+        self.main.newTourneyNumberEntry.setFocus()
+        # self.showWidget(self.tourneyCreationPanel)
+        # self.showWidget(self.newTourneyPanel)
+        # # position focus on first entry field
+        # self.newTourneyNumberEntry.focus_force()
+        # self.showWidget(self.newHelpPanel)
+        # self.hideWidget(self.newHelpDuplicateNumber)
+        # self.hideWidget(self.newHelpDuplicateDate)
     def showEditTourney(self):
         exit()
         self.editingState = 2       # edit state
@@ -1053,27 +1137,36 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.hideEditTourney()
         self.hideDeleteTourney()
     def hideWidget(self, w):
-        exit()
-        w.grid_remove()
+        # exit()
+        w.hide()
     def showWidget(self, w):
-        exit()
-        w.grid()
+        # exit()
+        w.show()
     def errorHiLite(self, w):
-        exit()
-        # print ('Entry config: ', w.config())
-        exit()
-        w.config(background = 'pink', foreground = 'black')
+        # PyQt color change
+        # does not work if separated
+        # self.pinkBackground(w)
+        # self.blackText(w)
+        w.setStyleSheet('background-color: pink; color: black')
+        # exit()
+        # # print ('Entry config: ', w.config())
+        # exit()
+        # w.config(background = 'pink', foreground = 'black')
     def resetErrorHiLite(self, w):
-        exit()
+        # exit()
         w.config(background = 'white', foreground = 'black')
     def redText(self, w):
-        exit()
-        w.config(foreground='red')
-
+        w.setStyleSheet('color: red')
+        # exit()
+        # w.config(foreground='red')
     def blackText(self, w):
-        exit()
-        w.config(foreground='black')
-
+        w.setStyleSheet('color: black')
+        # exit()
+        # w.config(foreground='black')
+    def pinkBackground(self,w):
+        w.setStyleSheet('background-color: pink')
+    def whiteBackground(self,w):
+        w.setStyleSheet('background-color: white')
     def installTourneysActivity(self):
         # MasterScreen.wipeActivityPanel()
         print ('install tourneys activity panel')

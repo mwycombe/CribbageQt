@@ -13,7 +13,7 @@ class StringVar(QObject):
 
     @Property(str)
     def myValue(self):
-        self.strValueRead(_my_value)
+        self.strValueRead.emit(self._my_value)
         return self._my_value
 
     @myValue.setter
@@ -48,8 +48,8 @@ class IntVar(QObject):
 class DoubleVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals
         to emulate tkinter DoubleVar()'''
-    dblValueChanged = Signal(int)  # must be defined inside a QObject class type
-    dblValueRead = Signal(int)  # optional signal on read
+    dblValueChanged = Signal(float)  # must be defined inside a QObject class type
+    dblValueRead = Signal(float)  # optional signal on read
 
     def __init__(self):
         super().__init__()
