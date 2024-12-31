@@ -513,7 +513,6 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
     @qtc.Slot()
     def listBoxUpDown(self,row):
-
         # selection = event.widget.curselection()[0]
         if cfg.debug and cfg.tourneysdebug:
             print('Row/Item change signal')
@@ -830,8 +829,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.splitRow = self.main.listOfTourneys.currentItem().text().split()
         if cfg.debug and cfg.tourneysdebug:
             print (self.splitRow)
-        self.tourneyNumberEntry.myValue = self.splitRow[0]
-        self.tourneyDateEntry.myValue = self.splitRow[4]
+        self.tourneyNumberEntry.myValue = self.splitRow[0].strip()
+        self.tourneyDateEntry.myValue = self.splitRow[4].strip()
         #
         # test hi-lighting for pyqt
         #
@@ -880,10 +879,10 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             return
         # if we drop through we have a viable edit to try for Existing Tourney
         try:
-            print ('tourneyNumber: ', self.editTourneyNumber.get())
-            print ('tourneyDate: ', dateparser.parse(self.editTourneyDate.get()).date().isoformat())
-            self.tourneyUnderEdit.set(TourneyNumber = int(self.editTourneyNumber.get()), \
-                                      Date = dateparser.parse(self.editTourneyDate.get()).date().isoformat())
+            print ('tourneyNumber: ', self.tourneyNumberEntry.myValue
+            print ('tourneyDate: ', dateparser.parse(self.tourneyDateEntry.date().isoformat())
+            self.tourneyUnderEdit.set(TourneyNumber = int(self.tourneyNumberEntry), \
+                                      Date = dateparser.parse(self.tourneyDateEntry).date().isoformat())
         except (DuplicateEntryError, IntegrityError, DataError):
             print ('Tourney update failed with error: ', sys.exc_info()[0])
             # TODO: highlight error fields and reposition at number entry field
