@@ -581,7 +581,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.deleteDate.set('')
     def startOver(self):
         print('startOver')
-        exit()
+        # exit()
         self.populateExistingTourneys()
         self.existingTourneys.selection_set(0)
         self.existingTourneys.activate((0))
@@ -635,32 +635,35 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             self.showWidget(self.newHelpBadFormatField)
             self.main.tourneyNumberEntry.setFocus()
             return
-        # check for duplicates of number and date
-        if self.duplicateNewNumber() and self.duplicateNewDate():
+        # check for duplicates of number or date
+        if self.duplicateNewNumber() or self.duplicateNewDate():
             self.showNewHelpPanel()
             self.showNewNumberError()
             self.showNewDateError()
             return
         try:
             print ('Try new tourney add')
-            Tourney(TourneyNumber = int(self.newTourneyNumber.get()),
-                    Date = self.makeIsoDate(self.newTourneyDate.get()),
+            Tourney(TourneyNumber = int(self.tourneyNumberEntry),
+                    Date = self.makeIsoDate(self.tourneyDateEntry),
                     Club = cfg.clubRecord, Season = cfg.season
                     )
+            # repopulate tourney on-screen list
             self.populateExistingTourneys()
-            self.newTourneyDate.set('')
-            self.newTourneyNumber.set('')
-            self.hideAll()
-            self.existingTourneys.focus_force()
-            self.existingTourneys.selection_set(0)
+            self.tourneyNumberEntry.myValue(' ')
+            self.tourneyDateEntry.myValue(' ')
+            # self.newTourneyDate.set('')
+            # self.newTourneyNumber.set('')
+            # self.hideAll()
+            # self.existingTourneys.focus_force()
+            # self.existingTourneys.selection_set(0)
             # self.hideWidget(self.newTourneyPanel)
             # self.hideNewHelpPanel()
             # self.showWidget(self.manageTourneyPanel)
             # self.showCreateButtons()
         except dberrors.DuplicateEntryError:
             print('Duplicate tourney date or Number')
-            self.errorHiLite(self.newTourneyDateEntry)
-            self.errorHiLite(self.newTourneyNumberEntry)
+            self.errorHiLite(self.tourneyNumberEntry)
+            self.errorHiLite(self.tourneyDateEntry)
             if mbx.askretrycancel('Duplicate number or date','Retry/edit or Cancel',parent = self):
                 # set focus and let user retry the date
                 self.newTourneyNumberEntry.focus_force()
