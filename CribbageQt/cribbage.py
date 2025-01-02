@@ -1,4 +1,5 @@
 # cribbage.py
+
 #
 #	11/4/2024 converted to PySide6 (PyQt)
 #
@@ -280,7 +281,7 @@ if __name__ == '__main__':
 	# # cfg.appTitle = 'From the club table in dbms'
 	# # app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
 
-	cribbageApp = Cribbage()
+
 
 	app = qtw.QApplication(sys.argv)
 	window = MasterScreen()
@@ -294,8 +295,7 @@ if __name__ == '__main__':
 
 	print('Window should show...')
 
-	# create a Cribbage object to initialize everything..
-	cribbage = Cribbage()
+	cribbageApp = Cribbage()
 
 	sys.exit(app.exec())
 

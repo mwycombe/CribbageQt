@@ -657,7 +657,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             # self.existingTourneys.focus_force()
             # self.existingTourneys.selection_set(0)
             # self.hideWidget(self.newTourneyPanel)
-            # self.hideNewHelpPanel()
+            # self.hideNewHelpPanel()exe
             # self.showWidget(self.manageTourneyPanel)
             # self.showCreateButtons()
         except dberrors.DuplicateEntryError:
@@ -882,8 +882,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             return
         # if we drop through we have a viable edit to try for Existing Tourney
         try:
-            print ('tourneyNumber: ', self.tourneyNumberEntry.myValue
-            print ('tourneyDate: ', dateparser.parse(self.tourneyDateEntry.date().isoformat())
+            print ('tourneyNumber: ', self.tourneyNumberEntry.myValue)
+            print ('tourneyDate: ', dateparser.parse(self.tourneyDateEntry.date().isoformat()))
             self.tourneyUnderEdit.set(TourneyNumber = int(self.tourneyNumberEntry), \
                                       Date = dateparser.parse(self.tourneyDateEntry).date().isoformat())
         except (DuplicateEntryError, IntegrityError, DataError):
