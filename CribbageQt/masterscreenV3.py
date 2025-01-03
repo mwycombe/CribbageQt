@@ -48,7 +48,7 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         super().__init__()
         self.setupUi(self)
 
-        # set up database to sue
+        # set up database to use
         CribbageStartup.initDbms()
 
         if cfg.debug:

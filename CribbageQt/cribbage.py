@@ -281,7 +281,8 @@ if __name__ == '__main__':
 	# # cfg.appTitle = 'From the club table in dbms'
 	# # app = Cribbage(cfg.screenDict['root'],cfg.appTitle)
 
-
+	# this will run cfg setup
+	cribbageApp = Cribbage()
 
 	app = qtw.QApplication(sys.argv)
 	window = MasterScreen()
@@ -295,7 +296,6 @@ if __name__ == '__main__':
 
 	print('Window should show...')
 
-	cribbageApp = Cribbage()
 
 	sys.exit(app.exec())
 
