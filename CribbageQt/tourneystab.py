@@ -116,6 +116,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.main.tourneyNumberEntry.textEdited.connect(self.setTourneyNumberEntry)
         self.main.tourneyDateEntry.textEdited.connect(self.setTourneyDateEntry)
 
+        # this does not create a loop because textEdited signal is not raised
+        # by programmatic changes to the lineEdit field
         self.tourneyNumberEntry.strValueChanged.connect(self.main.tourneyNumberEntry.setText)
         self.tourneyDateEntry.strValueChanged.connect(self.main.tourneyDateEntry.setText)
         # super().__init__(parent)
@@ -409,11 +411,11 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
     @qtc.Slot(str)
     def setTourneyNumberEntry(self, value):
-        self.tourneyNumberEntry.myValue(value)
+        self.tourneyNumberEntry.myValue = value
 
     @qtc.Slot(str)
     def setTourneyDateEntry(self, value):
-        self.tourneyDateEntry.myValue(value)
+        self.tourneyDateEntry.myValue = value
 
     def buildActivityPanel(self):
             # start by wiping any prior entries
@@ -637,9 +639,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         print('Add new tourney')
         # exit()
         # self.resetNewHelpFields()
-        if not (self.validateEntryField('number', self.tourneyNumber, self.main.tourneyNumberEntry)) or \
-               not (self.validateEntryField('date', self.tourneyDate, self.main.tourneyDateEntry)):
-            self.showWidget(self.newHelpBadFormatField)
+        if not (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.tourneyNumberEntry)) or \
+           not (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.tourneyDateEntry)):
+            # self.showWidget(self.newHelpBadFormatField)
             self.main.tourneyNumberEntry.setFocus()
             return
         # check for duplicates of number or date
