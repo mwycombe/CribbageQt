@@ -1,5 +1,6 @@
 
 from PySide6.QtCore import QObject, Property, Signal
+from PySide6 import QtCore as qtc
 
 class StringVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals

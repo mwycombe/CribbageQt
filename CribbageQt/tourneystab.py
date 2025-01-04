@@ -113,8 +113,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneyNumberEntry = StringVar()
         self.tourneyDateEntry = StringVar()
 
-        self.main.tourneyNumberEntry.textEdited.connect(self.tourneyNumberEntry.myValue)
-        self.main.tourneyDateEntry.textEdited.connect(self.tourneyDateEntry.myValue)
+        self.main.tourneyNumberEntry.textEdited.connect(self.setTourneyNumberEntry)
+        self.main.tourneyDateEntry.textEdited.connect(self.setTourneyDateEntry)
 
         self.tourneyNumberEntry.strValueChanged.connect(self.main.tourneyNumberEntry.setText)
         self.tourneyDateEntry.strValueChanged.connect(self.main.tourneyDateEntry.setText)
@@ -407,14 +407,21 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         ######################################################################################
         # self.startOver()
 
-    def buildActivityPanel(self):
-        # start by wiping any prior entries
-        # Don't do this with stackedWidget solution
-        # MasterScreen.wipeActivityPanel()
-        # make the appropriate stacked widget current
-        self.widgetIndex = cfg.stackedActivityDict['tourneysactivitypanel']
-        cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
+    @qtc.Slot(str)
+    def setTourneyNumberEntry(self, value):
+        self.tourneyNumberEntry.myValue(value)
 
+    @qtc.Slot(str)
+    def setTourneyDateEntry(self, value):
+        self.tourneyDateEntry.myValue(value)
+
+    def buildActivityPanel(self):
+            # start by wiping any prior entries
+            # Don't do this with stackedWidget solution
+            # MasterScreen.wipeActivityPanel()
+            # make the appropriate stacked widget current
+            self.widgetIndex = cfg.stackedActivityDict['tourneysactivitypanel']
+            cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
 
         # self.mtp = cfg.screenDict['activity']
         # self.keyF1 = tk.Label(self.mtp, text = 'F1   Get help with this activity')
@@ -860,7 +867,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # populate the existing selected tourney params
         self.populateEditFields()
         print('Set focus to entrynumber')
-        self.main.self.tourneyNumberEntry.setFocus()
+        self.main.tourneyNumberEntry.setFocus()
 
     def populateEditFields(self):
         # exit()
@@ -868,8 +875,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.editTourneyNumber.set(self.tourneyUnderEdit.TourneyNumber)
         # self.existingTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
         # self.editTourneyDate.set(self.makeUSDate(self.tourneyUnderEdit.Date))
-        self.main.self.tourneyNumberEntry.setText(str(self.tourneyNumberEntry))
-        self.main.self.tourneyDateEntry.setText(str(self.tourneyDateEntry))
+        self.main.tourneyNumberEntry.setText(str(self.tourneyNumberEntry.myValue))
+        self.main.tourneyDateEntry.setText(str(self.tourneyDateEntry.myValue))
 
     def saveEditedTourney(self):
         print('save tourney')
