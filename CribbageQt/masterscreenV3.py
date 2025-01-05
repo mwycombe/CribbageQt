@@ -48,6 +48,17 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         super().__init__()
         self.setupUi(self)
 
+        # set initial conditions
+        # make error messages red then hide them
+        self.lb_badNumber.setStyleSheet('background-color: white; color: red')
+        self.lb_badNumber.hide()
+        self.lb_duplicateTourneyNumber.setStyleSheet('background-color: white; color: red')
+        self.lb_duplicateTourneyNumber.hide()
+        self.lb_badDateFormat.setStyleSheet('background-color: white; color: red')
+        self.lb_badDateFormat.hide()
+        self.lb_duplicateTourneyDate.setStyleSheet('background-color: white; color: red')
+        self.lb_duplicateTourneyDate.hide()
+
         # set up database to use
         CribbageStartup.initDbms()
 

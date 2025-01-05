@@ -637,23 +637,24 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # On F10 build a new Tourney and add it to the data base
         # and reshow
         print('Add new tourney')
-        # exit()
-        # self.resetNewHelpFields()
-        if not (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.tourneyNumberEntry)) or \
-           not (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.tourneyDateEntry)):
+        # strip off extraneous characters
+        self.tourneyNumberEntry.myValue = self.tourneyNumberEntry.myValue.strip()
+        self.tourneyDateEntry.myValue = self.tourneyDateEntry.myValue.strip()
+        if (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.tourneyNumberEntry)) and \
+           (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.tourneyDateEntry)):
             # self.showWidget(self.newHelpBadFormatField)
             self.main.tourneyNumberEntry.setFocus()
             return
         # check for duplicates of number or date
         if self.duplicateNewNumber() or self.duplicateNewDate():
-            self.showNewHelpPanel()
+            # self.showNewHelpPanel()
             self.showNewNumberError()
             self.showNewDateError()
             return
         try:
             print ('Try new tourney add')
-            Tourney(TourneyNumber = int(self.tourneyNumberEntry),
-                    Date = self.makeIsoDate(self.tourneyDateEntry),
+            Tourney(TourneyNumber = self.tourneyNumberEntry.myValue,
+                    Date = self.makeIsoDate(self.tourneyDateEntry.myValue),
                     Club = cfg.clubRecord, Season = cfg.season
                     )
             # repopulate tourney on-screen list
@@ -682,25 +683,25 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
                 self.resetErrorHiLite((self.newTourneyNumberEntry))
                 self.startOver()
     def duplicateNewNumber(self):
-        exit()
+        # exit()
         # already validated as a number
         # if int(self.newTourneyNumber.get()) in cfg.tourneyXref:
         #     self.errorHiLite(self.newTourneyNumberEntry)
         #     self.showNewNumberError()
         #     return True;
-        if self.duplicateNumber( int(self.newTourneyNumber.get())):
-            self.errorHiLite(self.newTourneyNumberEntry)
+        if self.duplicateNumber( self.tourneyNumberEntry.myValue):
+            self.errorHiLite(self.main.tourneyNumberEntry)
             self.showNewNumberError()
             return True
         return False
         # return False
     def duplicateNewDate(self):
-        exit()
+        # exit()
         # already validated as a date
         # SQLObject datecol returns datetime.date objects, so dow makeIsoDate so then can be compared
-        newDate = self.makeIsoDate(self.newTourneyDateEntry.get())
+        newDate = self.makeIsoDate(self.tourneyDateEntry.myValue)
         if self.duplicateDate(newDate):
-            self.errorHiLite(self.newTourneyDateEntry)
+            self.errorHiLite(self.tourneyDateEntry)
             self.showNewDateError()
             return True
         return False
@@ -716,13 +717,13 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         #     return True
         # return False
     def duplicateNumber(self, value):
-        exit()
+        # exit()
         # receives string valued from entry field
         if int(value) in cfg.tourneyXref:
             return True;
         return False
     def duplicateDate(self, value):
-        exit()
+        # exit()
         # value should be an isoformat date object
         tdates = []
         for tny in self.tourneysByDate:
@@ -743,6 +744,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         return  ISODate.strftime('%m/%d/%Y')
 
     def validateTourneyNumber(self, value, w):
+        # incoming value is a string
         if cfg.debug and cfg.tourneysdebug:
             print ('Number value: ', value)
         # exit()
@@ -776,11 +778,11 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def validateEntryField(self, field, input, w):
         # exit()
         # use new python match statement
-        match input:
+        match field:
             case 'number':
-                self.validateTourneyNumber(self.tourneyNumberEntry,w)
+                self.validateTourneyNumber(self.tourneyNumberEntry.myValue,w)
             case 'date':
-                self.validateTourneyDate(self.tourneyDateEntry,w)
+                self.validateTourneyDate(self.tourneyDateEntry.myValue,w)
 
         # # invokes appropriate validation field
         # switcher = {
@@ -1165,7 +1167,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # w.config(background = 'pink', foreground = 'black')
     def resetErrorHiLite(self, w):
         # exit()
-        w.config(background = 'white', foreground = 'black')
+        w.setStyleSheet('background-color: white; color: black')
     def redText(self, w):
         w.setStyleSheet('color: red')
         # exit()

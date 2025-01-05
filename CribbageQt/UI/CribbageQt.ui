@@ -981,12 +981,59 @@ color: rgb(65, 161, 5);</string>
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
+       <widget class="QFrame" name="frame">
+        <property name="geometry">
+         <rect>
+          <x>415</x>
+          <y>310</y>
+          <width>351</width>
+          <height>122</height>
+         </rect>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Shape::StyledPanel</enum>
+        </property>
+        <property name="frameShadow">
+         <enum>QFrame::Shadow::Raised</enum>
+        </property>
+        <layout class="QVBoxLayout" name="verticalLayout_3">
+         <item>
+          <widget class="QLabel" name="lb_badNumber">
+           <property name="text">
+            <string>Bad Number:       Tourney number not a number</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_duplicateTourneyNumber">
+           <property name="text">
+            <string>Duplicate Tourney Number:       </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_badDateFormat">
+           <property name="text">
+            <string>Bad Date Format:  </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_duplicateTourneyDate">
+           <property name="text">
+            <string>Duplicate Date:</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
        <zorder>F6TourneyFrame</zorder>
        <zorder>ExistingTourneysPanel</zorder>
        <zorder>label_4</zorder>
        <zorder>NewTourneyPanel</zorder>
-       <zorder>newTourneyFrameLabel</zorder>
        <zorder>listOfTourneys</zorder>
+       <zorder>newTourneyFrameLabel</zorder>
+       <zorder>frame</zorder>
       </widget>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
