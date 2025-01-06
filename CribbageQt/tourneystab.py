@@ -568,7 +568,6 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
     def cancelEdit(self):
         print ('Cancel the edit - save nothing')
-        return
         self.editingState = 0       # not in any state
         self.hideEditTourney()
         self.hideCreateTourney()
@@ -640,8 +639,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # strip off extraneous characters
         self.tourneyNumberEntry.myValue = self.tourneyNumberEntry.myValue.strip()
         self.tourneyDateEntry.myValue = self.tourneyDateEntry.myValue.strip()
-        if (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.tourneyNumberEntry)) and \
-           (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.tourneyDateEntry)):
+        if not ((self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.tourneyNumberEntry)) and \
+            (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.tourneyDateEntry))):
             # self.showWidget(self.newHelpBadFormatField)
             self.main.tourneyNumberEntry.setFocus()
             return
@@ -885,8 +884,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def saveEditedTourney(self):
         print('save tourney')
         # validate date entered then save if ok
-        if not (self.validateEntryField('number', self.tourneyNumberEntry, self.main.self.tourneyNumberEntry))or \
-            not (self.validateEntryField('date', self.tourneyDateEntry, self.main.self.tourneyDateEntry)):
+        if not (self.validateEntryField('number', self.tourneyNumberEntry, self.main.tourneyNumberEntry))or \
+            not (self.validateEntryField('date', self.tourneyDateEntry, self.main.tourneyDateEntry)):
             # bad entry fields
             self.showBadEditEntry()
             self.main.tourneyNumberEntry.setFocus()
@@ -1112,16 +1111,21 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.showWidget(self.editTourneyPanel)
         self.showWidget(self.editHelpPanel)
     def hideCreateTourney(self):
-        exit()
-        self.hideWidget(self.tourneyCreationPanel)
-        self.hideWidget(self.newTourneyPanel)
-        self.hideCreateHelp()
-        self.resetCreateFields()
-    def hideCreateHelp(self):
-        exit()
-        self.hideWidget(self.newHelpPanel)
-        self.hideWidget(self.newHelpDuplicateDate)
-        self.hideWidget(self.newHelpDuplicateNumber)
+        self.resetTourneyEntry()
+        # self.hideWidget(self.tourneyCreationPanel)
+        # self.hideWidget(self.newTourneyPanel)
+        # self.hideCreateHelp()
+        # self.resetCreateFields()
+    def resetTourneyEntry(self):
+        self.main.newTourneyFrameLabel.setTest('New Tourney')
+        self.main.tourneyNumberEntry.setText('')
+        self.main.tourneyDateEntry.setText('')
+        self.main.tourneyNumberEntry.setFocus()
+    # def hideCreateHelp(self):
+    #     exit()
+    #     self.hideWidget(self.newHelpPanel)
+    #     self.hideWidget(self.newHelpDuplicateDate)
+    #     self.hideWidget(self.newHelpDuplicateNumber)
     def hideEditTourney(self):
         exit()
         self.hideWidget(self.tourneyMaintenance)
@@ -1144,11 +1148,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.hideWidget(self.deleteHelp1)
         self.hideWidget(self.deleteHelpNoMatch)
     def hideAll(self):
-        exit()
         self.editingState = 0
-        self.hideCreateTourney()
-        self.hideEditTourney()
-        self.hideDeleteTourney()
+        self.resetTourneyEntry()
     def hideWidget(self, w):
         # exit()
         w.hide()
