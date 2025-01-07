@@ -571,10 +571,14 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def cancelEdit(self):
         print ('Cancel the edit - save nothing')
         self.editingState = 0       # not in any state
+<<<<<<< HEAD
         # self.hideEditTourney()
         # self.hideCreateTourney()
         # self.hideDeleteTourney()
         self.startOver()
+=======
+        self.resetTourneyEntry()
+>>>>>>> 364b600286c63073924b45b4c58b1fcee2613148
     def cancelCreate(self, event):
         print ('Cancel the create - save nothing')
         exit()
@@ -1139,7 +1143,11 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.hideCreateHelp()
         # self.resetCreateFields()
     def resetTourneyEntry(self):
-        self.main.newTourneyFrameLabel.setTest('New Tourney')
+        self.main.newTourneyFrameLabel.setText('New Tourney')
+        self.main.tourneyNumberEntry.setText('')
+        self.main.tourneyDateEntry.setText('')
+        self.tourneyNumberEntry.myValue = ' '
+        self.tourneyDateEntry.myValue = ' '
         self.main.tourneyNumberEntry.setText('')
         self.main.tourneyDateEntry.setText('')
         self.main.tourneyNumberEntry.setFocus()
