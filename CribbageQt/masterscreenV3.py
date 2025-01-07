@@ -52,6 +52,8 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         # make error messages red then hide them
         self.lb_badNumber.setStyleSheet('background-color: white; color: red')
         self.lb_badNumber.hide()
+        self.lb_tourneyOutofRange.setStyleSheet('background-color: white; color: red')
+        self.lb_tourneyOutofRange.hide()
         self.lb_duplicateTourneyNumber.setStyleSheet('background-color: white; color: red')
         self.lb_duplicateTourneyNumber.hide()
         self.lb_badDateFormat.setStyleSheet('background-color: white; color: red')

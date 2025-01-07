@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1114</width>
+    <width>1156</width>
     <height>915</height>
    </rect>
   </property>
@@ -987,7 +987,7 @@ color: rgb(65, 161, 5);</string>
           <x>415</x>
           <y>310</y>
           <width>351</width>
-          <height>122</height>
+          <height>181</height>
          </rect>
         </property>
         <property name="frameShape">
@@ -1001,6 +1001,13 @@ color: rgb(65, 161, 5);</string>
           <widget class="QLabel" name="lb_badNumber">
            <property name="text">
             <string>Bad Number:       Tourney number not a number</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_tourneyOutofRange">
+           <property name="text">
+            <string>Out of Range:       Number must be from 1 - 65</string>
            </property>
           </widget>
          </item>
