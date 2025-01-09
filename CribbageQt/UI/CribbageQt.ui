@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -878,7 +878,7 @@ color: rgb(65, 161, 5);</string>
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QListWidget" name="listOfTourneys">
+       <widget class="QListWidget" name="lw_listOfTourneys">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -941,7 +941,7 @@ color: rgb(65, 161, 5);</string>
           <string>Tourney Date</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="tourneyNumberEntry">
+        <widget class="QLineEdit" name="lb_tourneyNumberEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -951,7 +951,7 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
         </widget>
-        <widget class="QLineEdit" name="tourneyDateEntry">
+        <widget class="QLineEdit" name="lb_tourneyDateEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -1038,7 +1038,7 @@ color: rgb(65, 161, 5);</string>
        <zorder>ExistingTourneysPanel</zorder>
        <zorder>label_4</zorder>
        <zorder>NewTourneyPanel</zorder>
-       <zorder>listOfTourneys</zorder>
+       <zorder>lw_listOfTourneys</zorder>
        <zorder>newTourneyFrameLabel</zorder>
        <zorder>frame</zorder>
       </widget>
@@ -1166,7 +1166,7 @@ color: rgb(65, 161, 5);</string>
           <string>Count</string>
          </property>
         </widget>
-        <widget class="QLabel" name="tourneyHdrDate">
+        <widget class="QLabel" name="lb_tourneyHdrDate">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -1182,7 +1182,7 @@ color: rgb(65, 161, 5);</string>
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="tourneyHdrNumber">
+        <widget class="QLabel" name="lb_tourneyHdrNumber">
          <property name="geometry">
           <rect>
            <x>131</x>
@@ -1198,7 +1198,7 @@ color: rgb(65, 161, 5);</string>
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="tourneyHdrCount">
+        <widget class="QLabel" name="lb_tourneyHdrCount">
          <property name="geometry">
           <rect>
            <x>130</x>
@@ -1298,7 +1298,7 @@ color: rgb(65, 161, 5);</string>
           <string>Diff</string>
          </property>
         </widget>
-        <widget class="QLabel" name="spreadPlusValue">
+        <widget class="QLabel" name="lb_spreadPlusValue">
          <property name="geometry">
           <rect>
            <x>88</x>
@@ -1319,7 +1319,7 @@ background-color: rgb(187, 255, 215)
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="spreadMinusValue">
+        <widget class="QLabel" name="lb_spreadMinusValue">
          <property name="geometry">
           <rect>
            <x>145</x>
@@ -1338,7 +1338,7 @@ background-color: rgb(187, 255, 215)
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="spreadDiffValue">
+        <widget class="QLabel" name="lb_spreadDiffValue">
          <property name="geometry">
           <rect>
            <x>210</x>
@@ -1357,7 +1357,7 @@ background-color: rgb(187, 255, 215)
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="skunkPlusValue">
+        <widget class="QLabel" name="lb_skunkPlusValue">
          <property name="geometry">
           <rect>
            <x>88</x>
@@ -1376,7 +1376,7 @@ background-color: rgb(187, 255, 215)
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="skunkMinusValue">
+        <widget class="QLabel" name="lb_skunkMinusValue">
          <property name="geometry">
           <rect>
            <x>146</x>
@@ -1395,7 +1395,7 @@ background-color: rgb(187, 255, 215)
           <string/>
          </property>
         </widget>
-        <widget class="QLabel" name="skunkDiffValue">
+        <widget class="QLabel" name="lb_skunkDiffValue">
          <property name="geometry">
           <rect>
            <x>210</x>
@@ -1463,7 +1463,7 @@ background-color: rgb(255, 255, 255);</string>
           <string>Player Name</string>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfPlayerPoints">
+        <widget class="QListWidget" name="lw_listOfPlayersPoints">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1473,7 +1473,7 @@ background-color: rgb(255, 255, 255);</string>
           </rect>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultPlayers">
+        <widget class="QListWidget" name="lw_listOfResultPlayers">
          <property name="geometry">
           <rect>
            <x>60</x>
@@ -1505,7 +1505,7 @@ background-color: rgb(255, 255, 255);</string>
         <property name="lineWidth">
          <number>2</number>
         </property>
-        <widget class="QListWidget" name="listOfResultsNames">
+        <widget class="QListWidget" name="lw_listOfResultsNames">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -1684,7 +1684,7 @@ background-color: rgb(255, 255, 255);</string>
           <string>$'s</string>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsGp">
+        <widget class="QListWidget" name="lw_listOfResultsGp">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -1703,7 +1703,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsGw">
+        <widget class="QListWidget" name="lw_listOfResultsGw">
          <property name="geometry">
           <rect>
            <x>220</x>
@@ -1722,7 +1722,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsSprd">
+        <widget class="QListWidget" name="lw_listOfResultsSprd">
          <property name="geometry">
           <rect>
            <x>260</x>
@@ -1741,7 +1741,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsTkn">
+        <widget class="QListWidget" name="lw_listOfResultsTkn">
          <property name="geometry">
           <rect>
            <x>320</x>
@@ -1760,7 +1760,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsCash">
+        <widget class="QListWidget" name="lw_listOfResultsCash">
          <property name="geometry">
           <rect>
            <x>360</x>
@@ -1779,7 +1779,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsGvn">
+        <widget class="QListWidget" name="lw_listOfResultsGvn">
          <property name="geometry">
           <rect>
            <x>410</x>
@@ -1798,7 +1798,7 @@ background-color: rgb(255, 255, 255);</string>
           <number>2</number>
          </property>
         </widget>
-        <widget class="QListWidget" name="listOfResultsOrder">
+        <widget class="QListWidget" name="lw_listOfResultsOrder">
          <property name="geometry">
           <rect>
            <x>450</x>
@@ -1853,7 +1853,7 @@ background-color: rgb(255, 255, 255);</string>
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QLabel" name="resultLinePlayerName">
+       <widget class="QLabel" name="lb_resultLinePlayerName">
         <property name="geometry">
          <rect>
           <x>590</x>
@@ -1988,7 +1988,7 @@ background-color: rgb(255, 255, 255);</string>
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QLineEdit" name="resultLinePlayerGp">
+       <widget class="QLineEdit" name="lb_resultLinePlayerGp">
         <property name="geometry">
          <rect>
           <x>737</x>
@@ -2007,7 +2007,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="resultLinePlayerGw">
+       <widget class="QLineEdit" name="lb_resultLinePlayerGw">
         <property name="geometry">
          <rect>
           <x>783</x>
@@ -2023,7 +2023,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="resultLinePlayerTkn">
+       <widget class="QLineEdit" name="lb_resultLinePlayerTkn">
         <property name="geometry">
          <rect>
           <x>900</x>
@@ -2036,7 +2036,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="resultLinePlayerCash">
+       <widget class="QLineEdit" name="lb_resultLinePlayerCash">
         <property name="geometry">
          <rect>
           <x>950</x>
@@ -2049,7 +2049,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="resultLinePlayerSprd">
+       <widget class="QLineEdit" name="lb_resultLinePlayerSprd">
         <property name="geometry">
          <rect>
           <x>830</x>
@@ -2062,7 +2062,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLabel" name="resultLinePlayerGvn">
+       <widget class="QLabel" name="lb_resultLinePlayerGvn">
         <property name="geometry">
          <rect>
           <x>1000</x>
@@ -2155,7 +2155,7 @@ background-color: rgb(255, 255, 255);</string>
        <property name="lineWidth">
         <number>3</number>
        </property>
-       <widget class="QListWidget" name="listOfReportTourneys">
+       <widget class="QListWidget" name="lw_listOfReportTourneys">
         <property name="geometry">
          <rect>
           <x>10</x>
@@ -2203,7 +2203,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QCheckBox" name="alphaCKB">
+       <widget class="QCheckBox" name="ckd_alpha">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2216,7 +2216,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Alpha Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="battingAverageCKB">
+       <widget class="QCheckBox" name="ckb_battingAverage">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2229,7 +2229,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Batting Average Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="cashCKB">
+       <widget class="QCheckBox" name="ckb_cash">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2242,7 +2242,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Cash Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="individStatsCKB">
+       <widget class="QCheckBox" name="ckb_individStats">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2255,7 +2255,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Individ. Stats Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="nationalAvgesCKB">
+       <widget class="QCheckBox" name="ckb_nationalAvges">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2268,7 +2268,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>National Avges Reports</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="qtrDropCKB">
+       <widget class="QCheckBox" name="ckb_qtrDrop">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2281,7 +2281,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Qtr Drop Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="qtrFullCKB">
+       <widget class="QCheckBox" name="ckb_qtrFull">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2294,7 +2294,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Qtr Full Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="skunkCKB">
+       <widget class="QCheckBox" name="ckb_skunk">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2307,7 +2307,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Skunk Report</string>
         </property>
        </widget>
-       <widget class="QCheckBox" name="tourneyCKB">
+       <widget class="QCheckBox" name="ckb_tourney">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2390,10 +2390,11 @@ background-color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <tabstops>
-  <tabstop>showAllPlayers</tabstop>
-  <tabstop>listOfPlayers</tabstop>
-  <tabstop>firstNameEntry</tabstop>
-  <tabstop>lastNameEntry</tabstop>
+  <tabstop>lb_resultLinePlayerGp</tabstop>
+  <tabstop>lb_resultLinePlayerGw</tabstop>
+  <tabstop>lb_resultLinePlayerSprd</tabstop>
+  <tabstop>lb_resultLinePlayerTkn</tabstop>
+  <tabstop>lb_resultLinePlayerCash</tabstop>
   <tabstop>streetEntry</tabstop>
   <tabstop>cityEntry</tabstop>
   <tabstop>stateEntry</tabstop>
@@ -2404,38 +2405,37 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>expiresEntry</tabstop>
   <tabstop>joinedEntry</tabstop>
   <tabstop>activeEntry</tabstop>
-  <tabstop>tourneyNumberEntry</tabstop>
-  <tabstop>tourneyDateEntry</tabstop>
-  <tabstop>listOfTourneys</tabstop>
-  <tabstop>listOfResultPlayers</tabstop>
-  <tabstop>resultLinePlayerGp</tabstop>
-  <tabstop>resultLinePlayerGw</tabstop>
-  <tabstop>resultLinePlayerSprd</tabstop>
-  <tabstop>resultLinePlayerTkn</tabstop>
-  <tabstop>resultLinePlayerCash</tabstop>
-  <tabstop>listOfResultsNames</tabstop>
+  <tabstop>lb_tourneyNumberEntry</tabstop>
+  <tabstop>lb_tourneyDateEntry</tabstop>
+  <tabstop>lw_listOfTourneys</tabstop>
+  <tabstop>lw_listOfResultPlayers</tabstop>
+  <tabstop>showAllPlayers</tabstop>
+  <tabstop>listOfPlayers</tabstop>
+  <tabstop>firstNameEntry</tabstop>
+  <tabstop>lastNameEntry</tabstop>
+  <tabstop>lw_listOfResultsNames</tabstop>
   <tabstop>allReportsCKB</tabstop>
-  <tabstop>alphaCKB</tabstop>
-  <tabstop>battingAverageCKB</tabstop>
-  <tabstop>cashCKB</tabstop>
-  <tabstop>individStatsCKB</tabstop>
-  <tabstop>nationalAvgesCKB</tabstop>
-  <tabstop>qtrDropCKB</tabstop>
-  <tabstop>skunkCKB</tabstop>
-  <tabstop>tourneyCKB</tabstop>
+  <tabstop>ckd_alpha</tabstop>
+  <tabstop>ckb_battingAverage</tabstop>
+  <tabstop>ckb_cash</tabstop>
+  <tabstop>ckb_individStats</tabstop>
+  <tabstop>ckb_nationalAvges</tabstop>
+  <tabstop>ckb_qtrDrop</tabstop>
+  <tabstop>ckb_skunk</tabstop>
+  <tabstop>ckb_tourney</tabstop>
   <tabstop>runReportsButton</tabstop>
-  <tabstop>listOfResultsGw</tabstop>
-  <tabstop>listOfResultsSprd</tabstop>
+  <tabstop>lw_listOfResultsGw</tabstop>
+  <tabstop>lw_listOfResultsSprd</tabstop>
   <tabstop>tabWidget</tabstop>
-  <tabstop>listOfResultsGp</tabstop>
-  <tabstop>listOfResultsGvn</tabstop>
-  <tabstop>listOfPlayerPoints</tabstop>
-  <tabstop>listOfResultsTkn</tabstop>
-  <tabstop>qtrFullCKB</tabstop>
-  <tabstop>listOfResultsOrder</tabstop>
-  <tabstop>listOfResultsCash</tabstop>
+  <tabstop>lw_listOfResultsGp</tabstop>
+  <tabstop>lw_listOfResultsGvn</tabstop>
+  <tabstop>lw_listOfPlayersPoints</tabstop>
+  <tabstop>lw_listOfResultsTkn</tabstop>
+  <tabstop>ckb_qtrFull</tabstop>
+  <tabstop>lw_listOfResultsOrder</tabstop>
+  <tabstop>lw_listOfResultsCash</tabstop>
   <tabstop>tourneysTabPanel</tabstop>
-  <tabstop>listOfReportTourneys</tabstop>
+  <tabstop>lw_listOfReportTourneys</tabstop>
   <tabstop>TourneysFrame</tabstop>
   <tabstop>ExistingTourneysPanel</tabstop>
  </tabstops>
