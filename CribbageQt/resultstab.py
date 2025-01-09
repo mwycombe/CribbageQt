@@ -309,16 +309,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.resultsOrderEntry.bind('<Return>', self.handleResultLine)
         #
         # PySide6 bindings
-        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerGp)
-        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerGw)
-        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerSprd)
-        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerTkn)
-        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.resultLinePlayerCash)
-        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerGp)
-        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerGw)
-        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerSprd)
-        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerTkn)
-        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.resultLinePlayerCash)
+        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerGp)
+        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerGw)
+        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerSprd)
+        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerTkn)
+        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerCash)
+        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerGp)
+        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerGw)
+        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerSprd)
+        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerTkn)
+        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerCash)
 
         self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine)
         self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine)
@@ -366,8 +366,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #                                    text='Tourney Results')
         # self.tourneyResultsPanel.grid(row=1, column=1, columnspan=2, sticky='nsew')
 
-        # start by assuming not an edit
+        # start by assuming it's a fresh tourney of results
         cfg.tourneyEdit = False
+        cfg.newTourney = not cfg.tourneyEdit
 
     # ************************************************************
     #   check to see if our tab was selected.
@@ -431,6 +432,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.populateResultsHeaderPanel()
 
     def populateResultsHeaderPanel(self):
+        # this is all taken care of by CribbageQt.py from CribbageQt.ui in masterscreenV3.py
         return
         # self.tsp = self.resultsSummaryPanel
         #
@@ -505,7 +507,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.diffSkunksLabel.grid(row = 2, column = 3, sticky = 'w')
 
     def buildScoringPanels(self):
-        return
+
+        # all ui elements pre-built in CribbageQt.ui -> CribbageQt.py -> masterscreen3.py
+
         # self.tourneyDateLabel = tk.Label(self.tourneyHeaderPanel,
         #                                text='Tourney Date:')
         # self.tourneyDateLabel.grid(row=0, column=0, sticky='w')
@@ -549,14 +553,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # #     # self.create_widgets()        # just rebuild everything
     # #     self.populatePframe()
     def createWidgets(self):
+
         # TODO: No - use in-memory list if return for same tourney
         # TODO: Now depends on the in-memory list of resultLine objects
 
-        # always start with another next list of listboxes
+        # always start with another new list of listboxes
 
         self.pListOfListboxes = []      # synchronized player names and points list boxes
         self.rListOfListboxes = []      # synchronized results list boxes
-
 
         # create synchronized listboxes to hold players and points
         # self.playerPointsListBoxLabel = tk.Label(self.playerPanel, text='Points')

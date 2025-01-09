@@ -551,7 +551,6 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.showCreateTourney()
     def enterResults(self):
         print('Enter results')
-        return
         # TODO Change to reference current row for listOfTourneys
         # self.listBoxIndex = event.widget.curselection()[0]  # tourney to enter results for
         self.listBoxIndex = self.main.lw_listOfTourneys.currentRow()
@@ -566,7 +565,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             print ('Selected tourney for results: ', cfg.tourneyRecord)
             print ('Tourney id:', cfg.tourneyRecordId)
             print ('Switch to results tab')
-        self.parent.select(2)       # select tab 2 which is for results
+        self.main.tabWidget.setCurrentIndex(2)       # select tab 2 which is for results
 
     def cancelEdit(self):
         print ('Cancel the edit - save nothing')
