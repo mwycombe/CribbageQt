@@ -319,6 +319,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.lw_listOfResultPlayers)
         self.F3_shortcut.activated.connect(self.newResult)
 
+        self.F10_shortcut_points = QShortcut(QKeySequence(Qt.Key_F10).self.main.lw_listOfPlayersPoint)
+        self.F10_shortcut_points.activated.conect(self.commitResults)
+        self.F10_shortcut_players = QShortcut(QKeySequence(Qt.Key_F10).self.main.lw_listOfResultPlayers)
+        self.Fq0_shortcut_players.activate.connect(self.commitResults)
+
+        self.F11_shortcut_points = QShortcut(QKeySequence(Qt.Key_F11).self.main.lw_listOfPlayersPoint)
+        self.F11_shortcut_points.activated.conect(self.forceResultsCommit())
+        self.F11_shortcut_players = QShortcut(QKeySequence(Qt.Key_F11).self.main.lw_listOfResultPlayers)
+        self.Fq0_shortcut_players.activate.connect(self.forceResultsCommit())
+
         self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGp)
         self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGw)
         self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerSprd)
@@ -1353,7 +1363,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # return to tourneytabs screen
     # def saveNewTourney(self):
     #     print('Save newly entered Tourney in dbms and update results display')
-    def forceResultsCommit(self, event):
+    def forceResultsCommit(self):
         # user pressed F11 to commit an unbalanced tourney to dbms or just save for now - leave memory intact
         if mbx.askyesno('Force out-of-balance save', 'Force save of tourney results?')  == True:
             print ('Force updatedmbs')
