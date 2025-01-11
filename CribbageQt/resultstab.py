@@ -308,17 +308,27 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.resultsGvnEntry.bind('<Return>', self.handleResultLine)
         # self.resultsOrderEntry.bind('<Return>', self.handleResultLine)
         #
+
         # PySide6 bindings
-        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerGp)
-        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerGw)
-        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerSprd)
-        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerTkn)
-        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.lb_resultLinePlayerCash)
-        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerGp)
-        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerGw)
-        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerSprd)
-        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerTkn)
-        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.lb_resultLinePlayerCash)
+
+        self.F2_shortcut_player = QShortcut(QKeySequence(Qt.Key_F2),self.main.lw_listOfResultPlayers)
+        self.F2_shortcut_player.activate.connect(self.editResultsFromPlayer)
+        self.F2_shortcut_results = QShortcut(QKeySequence(Qt.Key_F2),self.main.lw_listOfResultsNames)
+        self.F2_shortcut_results.activaet.connect(self.editResultsFromResults)
+
+        self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.lw_listOfResultPlayers)
+        self.F3_shortcut.activated.connect(self.newResult)
+
+        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGp)
+        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGw)
+        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerSprd)
+        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerTkn)
+        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerCash)
+        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGp)
+        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGw)
+        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerSprd)
+        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerTkn)
+        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerCash)
 
         self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine)
         self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine)
@@ -1064,7 +1074,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.hideWidget(self.resultsNewTourney)
         # self.playerNameListBox.activate(0)
         # self.playerNameListBox.focus_force()
-    def editResultsFromPlayer(self, event):
+    def editResultsFromPlayer(self):
         # user pressed F2 on a player entry
         # check that player has entry in listOfResults
         # if none found then convert to new Result entry
@@ -1073,11 +1083,11 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
         else:
             self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
-    def editResultsFromResults(self, event):
+    def editResultsFromResults(self:
         # user pressed F2 at a result line
         # set up edit for player on result line
         self.buildEditLine(self.resultsNamesLB.get(self.resultsNamesLB.curselection()[0]))
-    def newResult(self, event):
+    def newResult(self):
         # user pressed F3 on a player entry - doesn't make sense on a result line
         # get player record for curselection player then create and append resultLine
         # if already result line, then convert to edit
@@ -1331,7 +1341,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.tourneyEdit = not cfg.newTourney
         print ('self.newTourney, newTourney, tourneyEdit: ', cfg.newTourney, ' ', cfg.tourneyEdit)
         return cfg.newTourney
-    def commitResults(self, event):
+    def commitResults(self):
         # user pressed F10 to commit results to dbms
         if self.outOfBalance():
             mbx.showinfo('Tourney out of balance.', 'Use F11 to force results save.')

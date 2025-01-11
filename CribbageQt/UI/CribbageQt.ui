@@ -1988,7 +1988,7 @@ background-color: rgb(255, 255, 255);</string>
          <set>Qt::AlignmentFlag::AlignCenter</set>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lb_resultLinePlayerGp">
+       <widget class="QLineEdit" name="le_resultLinePlayerGp">
         <property name="geometry">
          <rect>
           <x>737</x>
@@ -2007,7 +2007,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lb_resultLinePlayerGw">
+       <widget class="QLineEdit" name="le_resultLinePlayerGw">
         <property name="geometry">
          <rect>
           <x>783</x>
@@ -2036,7 +2036,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lb_resultLinePlayerCash">
+       <widget class="QLineEdit" name="le_resultLinePlayerCash">
         <property name="geometry">
          <rect>
           <x>950</x>
@@ -2049,7 +2049,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>true</bool>
         </property>
        </widget>
-       <widget class="QLineEdit" name="lb_resultLinePlayerSprd">
+       <widget class="QLineEdit" name="le_resultLinePlayerSprd">
         <property name="geometry">
          <rect>
           <x>830</x>
@@ -2390,11 +2390,11 @@ background-color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <tabstops>
-  <tabstop>lb_resultLinePlayerGp</tabstop>
-  <tabstop>lb_resultLinePlayerGw</tabstop>
-  <tabstop>lb_resultLinePlayerSprd</tabstop>
+  <tabstop>le_resultLinePlayerGp</tabstop>
+  <tabstop>le_resultLinePlayerGw</tabstop>
+  <tabstop>le_resultLinePlayerSprd</tabstop>
   <tabstop>lb_resultLinePlayerTkn</tabstop>
-  <tabstop>lb_resultLinePlayerCash</tabstop>
+  <tabstop>le_resultLinePlayerCash</tabstop>
   <tabstop>streetEntry</tabstop>
   <tabstop>cityEntry</tabstop>
   <tabstop>stateEntry</tabstop>
