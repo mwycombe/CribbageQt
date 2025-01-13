@@ -73,6 +73,8 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
 
         self.installReportsActivity()
 
+        cfg.screenDict['rtab'] = self
+
         # control variables for report selection
         # self.allReportsVar = tk.IntVar()
         # self.alphaVar = tk.IntVar()

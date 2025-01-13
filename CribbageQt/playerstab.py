@@ -76,6 +76,8 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
         self.installPlayersActivity()
 
+        cfg.screenDict['ptab'] = self
+
         # working on detecting listOfPlayers doubleclidk
         # self.main.listOfPlayers.setMouseTracking(True)
         self.main.listOfPlayers.setEnabled(True)

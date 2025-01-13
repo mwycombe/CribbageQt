@@ -46,10 +46,10 @@ newResultLine = False   # could be new result for new tourney or for an existing
 # These dbms access routines are initialized by
 # peggers __init__ function
 #
-ap = ''     # AccessPlayers ojbect
+ap = ''     # AccessPlayers object
 at = ''     # AccessTourneys object
 ar = ''     # AccessRsults object
-ac = ''     # AccessClubs objct
+ac = ''     # AccessClubs object
 
 # these are dynamic globals between factored modules
 

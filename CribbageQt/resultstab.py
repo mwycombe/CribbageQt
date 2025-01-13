@@ -14,7 +14,6 @@
 #   TODO:   Replace in situ entry/edit with pull out line above results
 #   TODO:   Results edit changed entry order; duplicates entry in dbms on Enter accept
 #   TODO:   Allow new entry, old edit, old delete
-#   TODO:   Support odd player count with imbalance of spread points and skunks
 #   TODO:   Show cash totals
 #   TODO:   Allow test commit/final commit for a tourney - needed for odd player count
 #   TODO:   when we finish a results line entry and hit enter at the end of the line
@@ -23,7 +22,7 @@
 #           Also, there is no visual clue that the results have been accepted
 #   TODO:   When results line is accepted upon enter, Count of players is never updated
 #           though player points get shown ok
-#   TODO:   When results rolls off the bottom of the srcollable area, need to shift
+#   TODO:   When results rolls off the bottom of the scrollable area, need to shift
 #           focus to the last new entry so we can key in results
 #   TODO:   If any results exist for a tourney then update the entered indicator in tourney row
 #   TODO:   Implement concept of commit or quit or pause tourney entry
@@ -91,6 +90,30 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
         self.main=cfg.screenDict['masterwindow']
         self.installResultsActivity()
+
+        cfg.screenDict['rsltab'] = self
+
+        # simulated control variables
+        # by default IntVar set to 0 by default
+        self.count = IntVar()
+        self.tourneyDate = StringVar()
+        self.tourneyNumber = IntVar()
+        self.plusSpread = IntVar()
+        self.minusSpread = IntVar()
+        self.diffSpread = IntVar()
+        self.givenSkunks = IntVar()
+        self.takenSkunks = IntVar()
+        self.diffSkunks = IntVar()
+
+        # used for results entry line
+        self.resultsNameVar = StringVar()
+        self.resultsGpVar = IntVar()
+        self.resultsGwVar = IntVar()
+        self.resultsSprdVar = IntVar()
+        self.resultsCashVar = IntVar()
+        self.resultsTknVar = IntVar()
+        self.resultsGvnVar = IntVar()
+        self.resultsOrderVar = IntVar()
 
         # super().__init__(parent)
         # self.grid()
@@ -311,46 +334,53 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
         # PySide6 bindings
 
-        self.F2_shortcut_player = QShortcut(QKeySequence(Qt.Key_F2),self.main.lw_listOfResultPlayers)
-        self.F2_shortcut_player.activate.connect(self.editResultsFromPlayer)
-        self.F2_shortcut_results = QShortcut(QKeySequence(Qt.Key_F2),self.main.lw_listOfResultsNames)
-        self.F2_shortcut_results.activaet.connect(self.editResultsFromResults)
+        self.F2_shortcut_player = QShortcut(QKeySequence(Qt.Key_F2),self.main.fr_selectedPlayersPanel)
+        self.F2_shortcut_player.activated.connect(self.editResultsFromPlayer)
+        self.F2_shortcut_results = QShortcut(QKeySequence(Qt.Key_F2),self.main.fr_tourneyResultsPanel)
+        self.F2_shortcut_results.activated.connect(self.editResultsFromResults)
 
-        self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.lw_listOfResultPlayers)
+        self.F3_shortcut = QShortcut(QKeySequence(Qt.Key_F3), self.main.fr_selectedPlayersPanel)
         self.F3_shortcut.activated.connect(self.newResult)
 
-        self.F10_shortcut_points = QShortcut(QKeySequence(Qt.Key_F10).self.main.lw_listOfPlayersPoint)
-        self.F10_shortcut_points.activated.conect(self.commitResults)
-        self.F10_shortcut_players = QShortcut(QKeySequence(Qt.Key_F10).self.main.lw_listOfResultPlayers)
-        self.Fq0_shortcut_players.activate.connect(self.commitResults)
+        self.F10_shortcut_points = QShortcut(QKeySequence(Qt.Key_F10),self.main.fr_selectedPlayersPanel)
+        self.F10_shortcut_points.activated.connect(self.commitResults)
+        self.F10_shortcut_players = QShortcut(QKeySequence(Qt.Key_F10),self.main.fr_tourneyResultsPanel)
+        self.F10_shortcut_players.activated.connect(self.commitResults)
 
-        self.F11_shortcut_points = QShortcut(QKeySequence(Qt.Key_F11).self.main.lw_listOfPlayersPoint)
-        self.F11_shortcut_points.activated.conect(self.forceResultsCommit())
-        self.F11_shortcut_players = QShortcut(QKeySequence(Qt.Key_F11).self.main.lw_listOfResultPlayers)
-        self.Fq0_shortcut_players.activate.connect(self.forceResultsCommit())
+        self.F11_shortcut_points = QShortcut(QKeySequence(Qt.Key_F11),self.main.fr_selectedPlayersPanel)
+        self.F11_shortcut_points.activated.connect(self.forceResultsCommit)
+        self.F11_shortcut_players = QShortcut(QKeySequence(Qt.Key_F11),self.main.fr_tourneyResultsPanel)
+        self.F11_shortcut_players.activated.connect(self.forceResultsCommit)
 
-        self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGp)
-        self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGw)
-        self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerSprd)
-        self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerTkn)
-        self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerCash)
-        self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGp)
-        self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGw)
-        self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerSprd)
-        self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerTkn)
-        self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerCash)
+        # use containter frame for all members
+        self.result_line_enter = QShortcut(QKeySequence(Qt.Key_Enter),self.main.fr_resultLine)
+        self.result_line_escape = QShortcut(QKeySequence(Qt.Key_Escape),self.main.fr_resultLine)
 
-        self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine)
-        self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine)
-        self.Enter_Key_Shortcut_Sprd.activated.connect(self.handleResultLine)
-        self.Enter_Key_Shortcut_Tkn.activated.connect(self.handleResultLine)
-        self.Enter_Key_Shortcut_Cash.activated.connect(self.handleResultLine)
+        self.result_line_enter.activated.connect(self.handleResultLine)
+        self.result_line_escape.activated.connect(self.quitResultLine)
 
-        self.Escape_Key_Shortcut_Gp.activated.connect(self.quitResults)
-        self.Escape_Key_Shortcut_Gw.activated.connect(self.quitResults)
-        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
-        self.Escape_Key_Shortcut_Tkn.activated.connect(self.quitResults)
-        self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
+        # self.Enter_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGp)
+        # self.Enter_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerGw)
+        # self.Enter_Key_Shortcut_Sprd = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerSprd)
+        # self.Enter_Key_Shortcut_Tkn = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerTkn)
+        # self.Enter_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Enter), self.main.le_resultLinePlayerCash)
+        # self.Escape_Key_Shortcut_Gp = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGp)
+        # self.Escape_Key_Shortcut_Gw = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerGw)
+        # self.Escape_Key_Shortcut_Sprd  = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerSprd)
+        # self.Escape_Key_Shortcut_Tkn= QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerTkn)
+        # self.Escape_Key_Shortcut_Cash = QShortcut(QKeySequence(Qt.Key_Escape), self.main.le_resultLinePlayerCash)
+
+        # self.Enter_Key_Shortcut_Gp.activated.connect(self.handleResultLine)
+        # self.Enter_Key_Shortcut_Gw.activated.connect(self.handleResultLine)
+        # self.Enter_Key_Shortcut_Sprd.activated.connect(self.handleResultLine)
+        # self.Enter_Key_Shortcut_Tkn.activated.connect(self.handleResultLine)
+        # self.Enter_Key_Shortcut_Cash.activated.connect(self.handleResultLine)
+        #
+        # self.Escape_Key_Shortcut_Gp.activated.connect(self.quitResults)
+        # self.Escape_Key_Shortcut_Gw.activated.connect(self.quitResults)
+        # self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
+        # self.Escape_Key_Shortcut_Tkn.activated.connect(self.quitResults)
+        # self.Escape_Key_Shortcut_Sprd.activated.connect(self.quitResults)
 
         # # allow user to quit entering a result line
         # self.resultsNameEntry.bind('<Escape>', self.quitResultLine)
@@ -390,6 +420,11 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.tourneyEdit = False
         cfg.newTourney = not cfg.tourneyEdit
 
+        # create widgets now happens when object is instantiated as
+        # all ui elements are pre-built by CribbageQt in masterscreen3
+
+        self.createWidgets()    # build all dynamic structures for ui support
+
     # ************************************************************
     #   check to see if our tab was selected.
     #
@@ -423,6 +458,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # make teh appropriate stacked widget current
         self.widgetIndex = cfg.stackedActivityDict['resultsactivitypanel']
         cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
+        return
 
         # MasterScreen.wipeActivityPanel()
         # mtp = cfg.screenDict['activity']
@@ -527,6 +563,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.diffSkunksLabel.grid(row = 2, column = 3, sticky = 'w')
 
     def buildScoringPanels(self):
+        pass
 
         # all ui elements pre-built in CribbageQt.ui -> CribbageQt.py -> masterscreen3.py
 
@@ -561,7 +598,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #
         # # TODO: Update count after every input of new line of results.
 
-        self.createWidgets()
+        # create widgets now gets moved to the __init__ fucntion
+        # with Qt all ui elements are pre-built in CribbageQt
+        # self.createWidgets()
 
     # def computeDifferences(self):
     #     # just compute the running differences
@@ -573,15 +612,31 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # #     # self.create_widgets()        # just rebuild everything
     # #     self.populatePframe()
     def createWidgets(self):
-
+        #
         # TODO: No - use in-memory list if return for same tourney
         # TODO: Now depends on the in-memory list of resultLine objects
 
-        # always start with another new list of listboxes
+        # always start with a new list of listboxes
+        # this only needs to be done at instantiation
+        # content is refreshed on tabchange event
 
         self.pListOfListboxes = []      # synchronized player names and points list boxes
         self.rListOfListboxes = []      # synchronized results list boxes
 
+        self.pListOfListboxes.append(self.main.lw_listOfPlayersPoints)
+        self.pListOfListboxes.append(self.main.lw_listOfResultPlayers)
+
+        self.rListOfListboxes.append(self.main.lw_listOfResultsName)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsGp)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsGw)
+        self.rListOfListboxes.append(self.main.listOfResultsSprd)
+        self.rListOfListboxes.append(self.main.listOfResultsTkn)
+        self.rListOfListboxes.append(self.main.listOfResultsCash)
+        self.rListOfListboxes.append(self.main.listOfResultsGvn)
+        self.rListOfListboxes.append(self.main.istOfResultsOrder)
+
+        self.plistOfListboxes[0].currentRowChanged.connect(self.pListOfListboxes[1].setCurrentRow)
+        self.pListOfListboxes[1].currentRowChanges.connect(self.pListOflistboxes[0].setCurrentRow)
         # create synchronized listboxes to hold players and points
         # self.playerPointsListBoxLabel = tk.Label(self.playerPanel, text='Points')
         # self.playerNameListBoxLabel = tk.Label(self.playerPanel, text='Player Name')
@@ -725,25 +780,27 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #
         # # self.listOfPlayers = []
         # # self.listOfResults = []
+        # cannot do this until tabchange time
+        # self.tourneyResultsCount = cfg.ar.countTourneyResults(cfg.tourneyRecord)
 
-        self.tourneyResultsCount = cfg.ar.countTourneyResults(cfg.tourneyRecord)
-        self.tourneyResults = []
-        self.gp = []
-        self.gw = []
-        self.sprd = []
-        self.taken = []
-        self.cash = []
-        self.given = []         # these are computed
+        # self.tourneyResults = []
+        # self.gp = []
+        # self.gw = []
+        # self.sprd = []
+        # self.taken = []
+        # self.cash = []
+        # self.given = []         # these are computed
 
-        # results frame listboxes binds and handler
-        for lb in self.rListOfListboxes:
-            lb.bind('<<ListboxSelect>>', self.r_handle_select)
-            lb.bind('<Up>', self.r_UpDownHandler)
-            lb.bind('<Down>', self.r_UpDownHandler)
-        self.populatePframe()
-        self.populateRframe()
+        # # results frame listboxes binds and handler
+        # for lb in self.rListOfListboxes:
+        #     lb.bind('<<ListboxSelect>>', self.r_handle_select)
+        #     lb.bind('<Up>', self.r_UpDownHandler)
+        #     lb.bind('<Down>', self.r_UpDownHandler)
 
-        self.goToTopOfPlayers()
+        # self.populatePframe()
+        # self.populateRframe()
+        #
+        # self.goToTopOfPlayers()
 
         #****************************************************
         # bind section
@@ -784,7 +841,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.gvnHdr.bind('<1>', self.rSortHandler)
         # self.orderHdr.bind('<1>', self.rSortHandler)
 
-        self.updateTotals()
+        # self.updateTotals()
 
     # multi-listbox handler area for players
     # def p_OnVsb(self, *args):
@@ -1093,7 +1150,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
         else:
             self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
-    def editResultsFromResults(self:
+    def editResultsFromResults(self):
         # user pressed F2 at a result line
         # set up edit for player on result line
         self.buildEditLine(self.resultsNamesLB.get(self.resultsNamesLB.curselection()[0]))

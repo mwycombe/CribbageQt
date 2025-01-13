@@ -81,6 +81,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneysByDate = []        # tourneys sorted by date
         self.editingState = ''   #1 = creating #2 = editing #3 = deleting
 
+        cfg.screenDict['ttab'] = self
+
         #   [PYQT BINDING] section
         #   Set up short cut keys then connect signals to slots
 
