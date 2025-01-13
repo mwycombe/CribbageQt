@@ -94,7 +94,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.screenDict['rsltab'] = self
 
         # simulated control variables
-        # by default IntVar set to 0 by default
+        # IntVar set to 0 by default
         self.count = IntVar()
         self.tourneyDate = StringVar()
         self.tourneyNumber = IntVar()
@@ -105,15 +105,19 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.takenSkunks = IntVar()
         self.diffSkunks = IntVar()
 
+        # connect control variables to their ui fields
+        # int must be converted to/from string for ui
+
         # used for results entry line
         self.resultsNameVar = StringVar()
-        self.resultsGpVar = IntVar()
-        self.resultsGwVar = IntVar()
-        self.resultsSprdVar = IntVar()
-        self.resultsCashVar = IntVar()
-        self.resultsTknVar = IntVar()
-        self.resultsGvnVar = IntVar()
-        self.resultsOrderVar = IntVar()
+        # these will require conversion for UI field
+        self.resultsGpVar = StringVar()
+        self.resultsGwVar = StringVar()
+        self.resultsSprdVar = StringVar()
+        self.resultsCashVar = StringVar()
+        self.resultsTknVar = StringVar()
+        self.resultsGvnVar = StringVar()
+        self.resultsOrderVar = StringVar()
 
         # super().__init__(parent)
         # self.grid()
@@ -352,7 +356,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.F11_shortcut_players = QShortcut(QKeySequence(Qt.Key_F11),self.main.fr_tourneyResultsPanel)
         self.F11_shortcut_players.activated.connect(self.forceResultsCommit)
 
-        # use containter frame for all members
+        # use container frame for all members
         self.result_line_enter = QShortcut(QKeySequence(Qt.Key_Enter),self.main.fr_resultLine)
         self.result_line_escape = QShortcut(QKeySequence(Qt.Key_Escape),self.main.fr_resultLine)
 
@@ -416,14 +420,18 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #                                    text='Tourney Results')
         # self.tourneyResultsPanel.grid(row=1, column=1, columnspan=2, sticky='nsew')
 
-        # start by assuming it's a fresh tourney of results
-        cfg.tourneyEdit = False
-        cfg.newTourney = not cfg.tourneyEdit
+        # start by assuming it's a fresh tourney of results#
 
-        # create widgets now happens when object is instantiated as
+        # this should be deferred until we know if new tourney or edit tourney results
+        # cfg.tourneyEdit = False
+        # cfg.newTourney = not cfg.tourneyEdit
+
+        self.createWidgets()    # initialize UI with static UI structure
+
+        # create of widgets now happens when object is instantiated as
         # all ui elements are pre-built by CribbageQt in masterscreen3
+        # createWidgets sets up the list of listboxes structure
 
-        self.createWidgets()    # build all dynamic structures for ui support
 
     # ************************************************************
     #   check to see if our tab was selected.
@@ -433,7 +441,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #   into the current tab index (from zero)
     #
     def tabChange(self):
-        # no longer event driven
+        # on entry check that cfg.tourneyRecord has a valid entry
+        # happens when user enters by delecting tab directly rather than
+        # via tourneystab F6
         # tabchanged signal caught in MasterScreen
         # populate the tab whenever we get selected
         ##  if cfg.screenDict['notebook'].index(cfg.screenDict['notebook'].select()) == 4:
@@ -447,8 +457,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #       This implies a tab switch out then back - else honor F6 for
         #       current tourney record from dbms
         # TODO: Detect new tourney results vs existing & set flag
+
+        self.initializeTourneyResults()
+
         cfg.newTourney = self.newTourney()
         print ('cfg.newTourney: ', cfg.newTourney)
+
+
         self.goToTopOfPlayers()
         # if cfg.newTourney:
         #     self.showWidget(self.resultsNewTourney)
@@ -485,7 +500,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.keyEsc.grid(row=3, column=0, sticky='w')
         # self.button.grid(row=3, column=0, sticky='w')
 
-        self.populateResultsHeaderPanel()
+        # self.populateResultsHeaderPanel()
 
     def populateResultsHeaderPanel(self):
         # this is all taken care of by CribbageQt.py from CribbageQt.ui in masterscreenV3.py
@@ -563,7 +578,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.diffSkunksLabel.grid(row = 2, column = 3, sticky = 'w')
 
     def buildScoringPanels(self):
-        pass
+        return
 
         # all ui elements pre-built in CribbageQt.ui -> CribbageQt.py -> masterscreen3.py
 
@@ -637,6 +652,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
         self.plistOfListboxes[0].currentRowChanged.connect(self.pListOfListboxes[1].setCurrentRow)
         self.pListOfListboxes[1].currentRowChanges.connect(self.pListOflistboxes[0].setCurrentRow)
+
+        for rlb in self.rListOfListboxes:
+            for lb in self.rListOfListboxes:
+                if rlb is  lb:  # check for same object
+                    continue
+                rlb.currentRowChanged.connect(lb.setCurrentRow)
+
         # create synchronized listboxes to hold players and points
         # self.playerPointsListBoxLabel = tk.Label(self.playerPanel, text='Points')
         # self.playerNameListBoxLabel = tk.Label(self.playerPanel, text='Player Name')
@@ -1023,10 +1045,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #         self.resultsOrderLB.insert(tk.END, r.playerEntryOrder)
     def emptyRframeLBs(self):
         for rlb in self.rListOfListboxes:
-            rlb.delete(0, tk.END)
+            rlb.clear()
     def emptyPframeLBs(self):
         for plb in self.pListOfListboxes:
-            plb.delete(0, tk.END)
+            plb.clear()
     def positionInResultsAtTop(self):
         self.ensureResultLineVisibility(0)
         self.positionInResults(0,1)
@@ -1133,8 +1155,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def quitResultLine(self):
         # quit and determine where to reposition
         print ('Quit the result line entry with no action stub.')
-        return
-        # self.clearEditLine()
+
+        self.clearEditLine()
         # self.hideResultsInputPanel()
         # self.hideResultsInstructionsPanel()
         # self.hideWidget(self.resultsExistingTourney)
