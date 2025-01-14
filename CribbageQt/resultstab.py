@@ -94,30 +94,80 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.screenDict['rsltab'] = self
 
         # simulated control variables
-        # IntVar set to 0 by default
-        self.count = IntVar()
-        self.tourneyDate = StringVar()
-        self.tourneyNumber = IntVar()
-        self.plusSpread = IntVar()
-        self.minusSpread = IntVar()
-        self.diffSpread = IntVar()
-        self.givenSkunks = IntVar()
-        self.takenSkunks = IntVar()
-        self.diffSkunks = IntVar()
+        self.countVar = StringVar()
+        self.tourneyDateVar = StringVar()
+        self.tourneyNumberVar = StringVar()
+        self.plusSpreadVar = StringVar()
+        self.minusSpreadVar = StringVar()
+        self.diffSpreadVar = StringVar()
+        self.givenSkunksVar = StringVar()
+        self.takenSkunksVar = StringVar()
+        self.diffSkunksVar = StringVar()
 
-        # connect control variables to their ui fields
-        # int must be converted to/from string for ui
+        # self.countVar.strValueChanged.connect(self.main.lb_tourneyHdrCount.setText)
+        # self.tourneyDateVar.strValueChanged.connect(self.main.lb_tourneyHdrDate.setText)
+        # self.tourneyNumberVar.strValueChanged.connect(self.main.lb_tourneyHdrNumber.setText)
+        # self.plusSpreadVar.strValueChanged.connect(self.main.lb_spreadPlusValue.setText)
+        # self.minusSpreadVar.strValueChanged.connect(self.main.lb_spreadMinusValue.setText)
+        # self.givenSkunksVar.strValueChanged.connect(self.main.lb_skunkPlusValue.setText)
+        # self.takenSkunksVar.strValueChanged.connect(self.main.lb_skunkMinusValue.setText)
+        # self.diffSpreadVar.strValueChanged.connect(self.main.lb_spreadDiffValue.setText)
+        # self.diffSkunksVar.strValueChanged.connect(self.main.lb_skunkDiffValue.setText)
+        #
+        # self.main.lb_tourneyHdrCount.editingFinished.connect(self.countVar.acceptStrFromSignal)
+        # self.main.lb_tourneyHdrDate.editingFinished.connect(self.tourneyDateVar.acceptStrFromSignal)
+        # self.main.lb_tourneyHdrNumber.editingFinished.connect(self.tourneyNumberVar.acceptStrFromSignal)
+        # self.main.lb_spreadPlusValue.editingFinished.connect(self.plusSpreadVar.acceptStrFromSignal)
+        # self.main.lb_spreadMinusValue.editingFinished.connect(self.minusSpreadVar.acceptStrFromSignal)
+        # self.main.lb_skunkPlusValue.editingFinished.connect(self.givenSkunksVar.acceptStrFromSignal)
+        # self.main.lb_skunkMinusValue.editingFinished.connect(self.takenSkunksVar.acceptStrFromSignal)
+        # self.main.lb_spreadDiffValue.editingFinished.connect(self.diffSpreadVar.acceptStrFromSignal)
+        # self.main.lb_skunkDiffValue.editingFinished.connect(self.diffSkunksVar.acceptStrFromSignal)
+
+        self.connectLBCtrlVar(self.main.lb_tourneyHdrCount, self.countVar)
+        self.connectLBCtrlVar(self.main.lb_tourneyHdrDate, self.tourneyDateVar)
+        self.connectLBCtrlVar(self.main.lb_tourneyHdrNumber, self.tourneyNumberVar)
+        self.connectLBCtrlVar(self.main.lb_spreadPlusValue, self.plusSpreadVar)
+        self.connectLBCtrlVar(self.main.lb_spreadMinusValue, self.minusSpreadVar)
+        self.connectLBCtrlVar(self.main.lb_skunkPlusValue, self.givenSkunksVar)
+        self.connectLBCtrlVar(self.main.lb_skunkMinusValue, self.takenSkunksVar)
+        self.connectLBCtrlVar(self.main.lb_spreadDiffValue, self.diffSpreadVar)
+        self.connectLBCtrlVar(self.main.lb_skunkDiffValue, self.diffSkunksVar)
 
         # used for results entry line
         self.resultsNameVar = StringVar()
-        # these will require conversion for UI field
         self.resultsGpVar = StringVar()
         self.resultsGwVar = StringVar()
         self.resultsSprdVar = StringVar()
         self.resultsCashVar = StringVar()
         self.resultsTknVar = StringVar()
         self.resultsGvnVar = StringVar()
-        self.resultsOrderVar = StringVar()
+
+        # # it's up to the user to check if fields are numeric and integer.
+        # self.resultsNameVar.strValueChanged.connect(self.main.le_resultsLinePlayerName.setText)
+        # self.resultsGpVar.strValueChanged.connect(self.main.le_resultsLinePlayerGp.setText)
+        # self.resultsGwVar.strValueChanged.connect(self.main.le_resultsLinePlayerGw.setText)
+        # self.resultsSprdVar.strValueChanged.connect(self.main.le_resultsLinePlayerSprd.setText)
+        # self.resultsTknVar.strValueChanged.connect(self.main.le_resultsLinePlayerTkn.setText)
+        # self.resultsCashVar.strValueChanged.connect(self.main.le_resultsLinePlayerCash.setText)
+        # self.resultsGvnVar.strValueChanged.connect(self.main.le_resultsLinePlayerGvn.setText)
+        #
+        # self.main.le_resultsLinePlayerName.editingFinished.connect(self.resultsNameVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerGp.editingFinished.connect(self.resultsGpVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerGw.editingFinished.connect(self.resultsGwVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerSprd.editingFinished.connect (self.resultsSprdVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerTkn.editingFinished.connect(self.resultsTknVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerCash.editingFinished.connect(self.resultsCashVar.acceptStrFromSignal)
+        # self.main.le_resultsLinePlayerGvn.editingFinishe.connect(self.resultsGvnVar.acceptStrFromSignal)
+
+        self.connectLBCtrlVar(self.main.lb_resultLinePlayerName, self.resultsNameVar)
+        self.connectLECtrlVar(self.main.le_resultLinePlayerGp, self.resultsGpVar)
+        self.connectLECtrlVar(self.main.le_resultLinePlayerGw, self.resultsGwVar)
+        self.connectLECtrlVar(self.main.le_resultLinePlayerSprd, self.resultsSprdVar)
+        self.connectLECtrlVar(self.main.le_resultLinePlayerCash, self.resultsCashVar)
+        self.connectLECtrlVar(self.main.le_resultLinePlayerTkn, self.resultsTknVar)
+        self.connectLBCtrlVar(self.main.lb_resultLinePlayerGvn, self.resultsGvnVar)
+
 
         # super().__init__(parent)
         # self.grid()
@@ -432,6 +482,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # all ui elements are pre-built by CribbageQt in masterscreen3
         # createWidgets sets up the list of listboxes structure
 
+    def connectLECtrlVar(self,ui, var):
+        # mutually connect UI object and property Var
+        ui.editingFinished.connect(var.acceptStrFromSignal)
+        var.strValueChanged.connect(ui.setText)
+
+    def connectLBCtrlVar(self,ui,var):
+        var.strValueChanged.connect(ui.setText)
 
     # ************************************************************
     #   check to see if our tab was selected.
@@ -469,6 +526,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #     self.showWidget(self.resultsNewTourney)
         # else:
         #     self.showWidget(self.resultsExistingTourney)
+    def initializeTourneyResults(self):
+        # fill dynamic fields on tab change
+
+
     def buildActivityPanel(self):
         # make teh appropriate stacked widget current
         self.widgetIndex = cfg.stackedActivityDict['resultsactivitypanel']
@@ -641,17 +702,17 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.pListOfListboxes.append(self.main.lw_listOfPlayersPoints)
         self.pListOfListboxes.append(self.main.lw_listOfResultPlayers)
 
-        self.rListOfListboxes.append(self.main.lw_listOfResultsName)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsNames)
         self.rListOfListboxes.append(self.main.lw_listOfResultsGp)
         self.rListOfListboxes.append(self.main.lw_listOfResultsGw)
-        self.rListOfListboxes.append(self.main.listOfResultsSprd)
-        self.rListOfListboxes.append(self.main.listOfResultsTkn)
-        self.rListOfListboxes.append(self.main.listOfResultsCash)
-        self.rListOfListboxes.append(self.main.listOfResultsGvn)
-        self.rListOfListboxes.append(self.main.istOfResultsOrder)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsSprd)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsTkn)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsCash)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsGvn)
+        self.rListOfListboxes.append(self.main.lw_listOfResultsOrder)
 
-        self.plistOfListboxes[0].currentRowChanged.connect(self.pListOfListboxes[1].setCurrentRow)
-        self.pListOfListboxes[1].currentRowChanges.connect(self.pListOflistboxes[0].setCurrentRow)
+        self.pListOfListboxes[0].currentRowChanged.connect(self.pListOfListboxes[1].setCurrentRow)
+        self.pListOfListboxes[1].currentRowChanged.connect(self.pListOfListboxes[0].setCurrentRow)
 
         for rlb in self.rListOfListboxes:
             for lb in self.rListOfListboxes:

@@ -1,5 +1,5 @@
 
-from PySide6.QtCore import QObject, Property, Signal
+from PySide6.QtCore import QObject, Property, Signal, Slot
 from PySide6 import QtCore as qtc
 
 class StringVar(QObject):
@@ -11,6 +11,11 @@ class StringVar(QObject):
     def __init__(self):
         super().__init__()
         self._my_value = ''
+
+    # need separate slot as cannot apply @Slot to setter
+    @Slot(str)
+    def acceptStrFromSignal(self,value):
+        self.myValue(value)
 
     @Property(str)
     def myValue(self):
@@ -44,7 +49,6 @@ class IntVar(QObject):
         if value != self._my_value:
             self._my_value = value
             self.intValueChanged.emit(value)
-
 
 class DoubleVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals
