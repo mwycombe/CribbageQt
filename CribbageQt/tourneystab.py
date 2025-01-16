@@ -563,10 +563,10 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # cfg.tourneyDate = self.existingDates.get(self.existingDates.curselection())
         # cfg.tourneyNumber = int(self.existingNumbers.get(self.existingDates.curselection()))
 
-        if cfg.debug and cfg.tourneysdebug:
-            print ('Selected tourney for results: ', cfg.tourneyRecord)
-            print ('Tourney id:', cfg.tourneyRecordId)
-            print ('Switch to results tab')
+        # if cfg.debug and cfg.tourneysdebug:
+        #     print ('Selected tourney for results: ', cfg.tourneyRecord)
+        #     print ('Tourney id:', cfg.tourneyRecordId)
+        #     print ('Switch to results tab')
         self.main.tabWidget.setCurrentIndex(2)       # select tab 2 which is for results
 
     def cancelEdit(self):

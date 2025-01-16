@@ -528,6 +528,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #     self.showWidget(self.resultsExistingTourney)
     def initializeTourneyResults(self):
         # fill dynamic fields on tab change
+        self.tourneyResultsCount = cfg.ar.countTourneyResults(cfg.tourneyRecord)
+        self.populatePframe()
+        self.populateRframe()
 
 
     def buildActivityPanel(self):
@@ -1035,67 +1038,106 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #     # cheap way - just re-display everything like we had entered
     #     self.buildScoringPanels()
     #     to change active status, go back to playerstab
-    # def populatePframe(self):
-    #     # self.textIndex = 2      # index of name text in pframe child
-    #     self.allPlayerObjects = cfg.ap.allActivePlayers(cfg.clubRecord)
-    #     self.listOfPlayerNames = [pn.LastName + ', ' + pn.FirstName for pn in self.allPlayerObjects]
-    #     # get all results for this one tourney
-    #     self.allTourneyResultObjects = cfg.ar.allTourneyResults(cfg.tourneyRecord)
-    #     self.tourneyPointsList = [sc.GamePoints for sc in self.allTourneyResultObjects]
-    #     self.tourneyIdList =[sc.Player.id for sc in self.allTourneyResultObjects]
-    #     self.idPointsDict = {k:v for (k,v) in zip(self.tourneyIdList, self.tourneyPointsList)}
-    #     self.namePointsDict = {}
-    #     for name in self.listOfPlayerNames:
-    #         self.namePointsDict[name] =  self.idPointsDict.get(cfg.playerRefx[name], -1)
-    #     # namePointDict is now a dictionary in name order with points for the
-    #     # current tournament score card or-1. Cannot use 0 as 0 is a valid game
-    #     # points total when a player has a string of pearls
-    #     self.refreshPframe()
-    #     for lb in self.pListOfListboxes:
-    #         lb.selection_set(0)
-    #         lb.activate(0)
-    #         lb.focus_force()
+    def populatePframe(self):
+        # self.textIndex = 2      # index of name text in pframe child
 
-    # def refreshPframe(self):
-    #     # flush both player list boxes
-    #     for lb in self.pListOfListboxes:
-    #         lb.delete(0, tk.END)
-    #     for key in self.namePointsDict:
-    #         print ('Key:Value: ',key, ' ',type(key), ' ',self.namePointsDict[key], ' ',type(self.namePointsDict[key]))
-    #         if int(self.namePointsDict[key]) >=0:
-    #             self.playerPointsListBox.insert('end', self.namePointsDict[key])
-    #         else:
-    #             self.playerPointsListBox.insert('end', ' ')
-    #         self.playerNameListBox.insert('end', key)
-    #     self.goToTopOfPlayers()
+        # allActivePlayers is pre-sorted by last name
+        self.allPlayerObjects = cfg.ap.allActivePlayers(cfg.clubRecord)
+
+        # make compound name entries
+        self.listOfPlayerNames = [pn.LastName + ', ' + pn.FirstName for pn in self.allPlayerObjects]
+
+        # get all results for this one tourney - tourneyRecorde saved by F6 from tourneystab
+        # order of result list is not defined
+        self.allTourneyResultObjects = cfg.ar.allTourneyResults(cfg.tourneyRecord)
+
+        # following actions rely on allTourneyResultsOjbects - always in the same order
+        # firet a list of points
+        self.tourneyPointsList = [sc.GamePoints for sc in self.allTourneyResultObjects]
+
+        # now a list of player ids that correspond to the points
+        self.tourneyIdList =[sc.Player.id for sc in self.allTourneyResultObjects]
+
+        # marry points to the playerId - order not known
+        self.idPointsDict = {k:v for (k,v) in zip(self.tourneyIdList, self.tourneyPointsList)}
+
+        # convert playerid:points into playernames:points
+        self.namePointsDict = {}
+
+        # use the playername reverse xref to retrieve the playerId and then the points from the idPoints dictionary
+        for name in self.listOfPlayerNames:
+            self.namePointsDict[name] =  self.idPointsDict.get(cfg.playerRefx[name], -1)
+
+        # namePointDict is now a dictionary in name order with points for the
+        # current tournament score card or-1. Cannot use 0 as 0 is a valid game
+        # points total when a player has a string of pearls
+
+        self.refreshPframe()
+
+        for lb in self.pListOfListboxes:
+            lb.setCurrentRow(0)
+            lb.setFocus()
+            # lb.selection_set(0)
+            # lb.activate(0)
+            # lb.focus_force()
+
+    def refreshPframe(self):
+        # flush points and players  list boxes
+        for lb in self.pListOfListboxes:
+            # lb.delete(0, tk.END)
+            lb.clear()
+        for key in self.namePointsDict:
+            print ('Key:Value: ',key, ' ',type(key), ' ',self.namePointsDict[key], ' ',type(self.namePointsDict[key]))
+            if int(self.namePointsDict[key]) >=0:
+                # self.playerPointsListBox.insert('end', self.namePointsDict[key])
+                self.main.lw_listOfPlayersPoints.addItem(str(self.namePointsDict[key]))
+            else:
+                self.main.lw_listOfPlayersPoints.addItem(' ')   # blank if no points
+                # self.playerPointsListBox.insert('end', ' ')
+
+            # always add the name alongside the points
+            self.main.lw_listOfResultPlayers.addItem(key)
+            # self.playerNameListBox.insert('end', key)
+
+        self.goToTopOfPlayers()
        #
-    # def populateRframe(self):
+    def populateRframe(self):
     #     # if len(self.listOfResults) > 0:
     #     #     for lor in self.listOfResults:
     #     #         lor.destroy()
     #     # self.resultFrameIndex = 0
-    #     self.listOfResults = []     # and clear out the list
-    #     if self.tourneyResultsCount > 0:
-    #         self.tourneyResults = cfg.ar.tourneyResultsInEntryOrder(cfg.tourneyRecord)
-    #     for p in self.tourneyResults:
-    #         rLine = resultsLine()
-    #         rLine.playerId = p.PlayerID
-    #         rLine.tourneyId = cfg.tourneyRecordId
-    #         rLine.playerName = cfg.playerXref[p.PlayerID]
-    #         rLine.playerGamePoints = p.GamePoints
-    #         rLine.playerGamesWon = p.GamesWon
-    #         rLine.playerSpread = p.Spread
-    #         rLine.playerTaken = p.SkunksTaken
-    #         rLine.playerCash = p.Cash
-    #         rLine.playerGiven = p.SkunksGiven
-    #         rLine.playerEntryOrder = p.EntryOrder
-    #         self.listOfResults.append(rLine)
-    #     self.populateRframeLBs(self.listOfResults)
-    # def populateRframeLBs (self, rLineList):
+        self.listOfResults = []     # and clear out the list
+        if self.tourneyResultsCount > 0:
+            self.tourneyResults = cfg.ar.tourneyResultsInEntryOrder(cfg.tourneyRecord)
+        for p in self.tourneyResults:
+            rLine = resultsLine()
+            rLine.playerId = p.PlayerID
+            rLine.tourneyId = cfg.tourneyRecordId
+            rLine.playerName = cfg.playerXref[p.PlayerID]
+            rLine.playerGamePoints = p.GamePoints
+            rLine.playerGamesWon = p.GamesWon
+            rLine.playerSpread = p.Spread
+            rLine.playerTaken = p.SkunksTaken
+            rLine.playerCash = p.Cash
+            rLine.playerGiven = p.SkunksGiven
+            rLine.playerEntryOrder = p.EntryOrder
+            self.listOfResults.append(rLine)
+        self.populateRframeLBs(self.listOfResults)
+
+    def populateRframeLBs (self, rLineList):
     #     # refactored to allow for refreshing after add or edit line
     #     # need to empty any existing content
-    #     self.emptyRframeLBs()
-    #     for r in rLineList:
+    #   Updated to use PyQt widgets - all additions as str
+        self.emptyRframeLBs()
+        for r in rLineList:
+            self.main.lw_listOfResultsName.addItem(cfg.playerXref[r.playerId])
+            self.main.lw_listOfResultsGp.addItem(str(r.playerGamePoints))
+            self.main.lw_listOfResultsGw.addItem(str(r.playerGamesWon))
+            self.main.lw_listOfResultsSprd.addItem(str(r.playerSpread))
+            self.main.lw_listOfResultsTkn.addItem(str(r.playerTaken))
+            self.main.lw_listOfResultsCash.addItem(str(r.playerCash))
+            self.main.lw_listOfResultsOrder.addItem(str(r.playerEntryOrder))
+
     #         self.resultsNamesLB.insert(tk.END, cfg.playerXref[r.playerId])  # get name from xref
     #         self.resultsGpLB.insert(tk.END, r.playerGamePoints)
     #         self.resultsGwLB.insert(tk.END, r.playerGamesWon)
@@ -1241,11 +1283,22 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # user pressed F3 on a player entry - doesn't make sense on a result line
         # get player record for curselection player then create and append resultLine
         # if already result line, then convert to edit
-        print ('F3 on player: ',self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
-        if self.resultExists(self.playerNameListBox.get(self.playerNameListBox.curselection()[0])):
-            self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+
+        # PyQt equivalent
+        currentrow = self.main.lw_listOfResultPlayers.currentRow()
+        print ('F3 on player: ', self.main.lw_listOfResultPlayers.item(currentrow).text())
+        # print ('F3 on player: ',self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+
+        if self.resultExists(self.main.lw_listOfResultPlayers.item(currentrow).text()):
+            self.buildEditLine(self.main.lw_listOfResultPlayers.item(currentrow).text())
         else:
-            self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+            self.buildNewLine(self.main.lw_listOfResultPlayers.item(currentrow).text())
+
+        # if self.resultExists(self.playerNameListBox.get(self.playerNameListBox.curselection()[0])):
+        #     self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+        # else:
+        #     self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+
     def pResultLineDelete(self, event):
         # find result line for name then go to resultLine delete process
         # if player has points in the playerPointsListBox or
@@ -1308,17 +1361,18 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # check that there is anything in results - else revert to players
         if self.resultsNamesLB.size() > 0:
             for rlb in self.rListOfListboxes:
-                rlb.selection_set(0)
+                rlb.setCurrentRow(0)
         else:
             self.goToTopOfPlayers()
 
     def goToTopOfPlayers(self):
         for plb in self.pListOfListboxes:
-            plb.selection_clear(0,tk.END)
-            plb.selection_set(0)
-            plb.activate(0)
-        self.pListOfListboxes[0].see(0)
-        self.pListOfListboxes[0].activate(0)
+            plb.setCurrentRow(0)
+            # plb.selection_set(0)
+            # plb.activate(0)
+        self.pListOfListboxes[1].setFocus()
+        # self.pListOfListboxes[1].see(0)
+        # self.pListOfListboxes[0].activate(0)
 
     @qtc.Slot()
     def handleResultLine(self):
