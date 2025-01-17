@@ -1527,7 +1527,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # cfg.tourneyEdit = False
         cfg.newResultLine = True
         print ('buildNewLine: ', cfg.newTourney, ' ', cfg.tourneyEdit, ' ', cfg.newResultLine)
-        # self.clearEditLine()
+        self.clearEditLine()
         # self.resultsNameVar.set(pname)
         # self.resultsTknVar.set(0)           # in case the user skips it
         # self.resultsCashVar.set(0)           # default winnings!
