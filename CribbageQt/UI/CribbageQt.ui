@@ -38,7 +38,7 @@
     <property name="lineWidth">
      <number>3</number>
     </property>
-    <widget class="QFrame" name="clubPanel">
+    <widget class="QFrame" name="fr_clubPanel">
      <property name="geometry">
       <rect>
        <x>20</x>
@@ -258,7 +258,7 @@ background-color: rgb(255, 255, 255);</string>
       </property>
      </widget>
     </widget>
-    <widget class="QFrame" name="activityPanel">
+    <widget class="QFrame" name="fr_activityPanel">
      <property name="geometry">
       <rect>
        <x>340</x>
@@ -1085,7 +1085,7 @@ color: rgb(65, 161, 5);</string>
       <property name="frameShadow">
        <enum>QFrame::Shadow::Raised</enum>
       </property>
-      <widget class="QFrame" name="resultsPanel">
+      <widget class="QFrame" name="fr_resultsPanel">
        <property name="geometry">
         <rect>
          <x>0</x>
@@ -1106,7 +1106,7 @@ color: rgb(65, 161, 5);</string>
        <property name="lineWidth">
         <number>2</number>
        </property>
-       <widget class="QFrame" name="resultsHdrPanel">
+       <widget class="QFrame" name="fr_resultsHdrPanel">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -1215,7 +1215,7 @@ color: rgb(65, 161, 5);</string>
          </property>
         </widget>
        </widget>
-       <widget class="QFrame" name="frame_2">
+       <widget class="QFrame" name="fr_resultsTracking">
         <property name="geometry">
          <rect>
           <x>300</x>
@@ -1484,7 +1484,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </widget>
-       <widget class="QFrame" name="ftourneyResultsPanel">
+       <widget class="QFrame" name="fR_tourneyResultsPanel">
         <property name="geometry">
          <rect>
           <x>300</x>
