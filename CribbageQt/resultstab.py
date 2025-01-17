@@ -9,9 +9,7 @@
 #   Will self-register in notebook found in screenDict of cfg
 #
 #####################################################################
-#   TODO:   Make sure top player is selected in listbox after Enter of results
 #   TODO:   *** Check that results are saved before exiting results tab
-#   TODO:   Replace in situ entry/edit with pull out line above results
 #   TODO:   Results edit changed entry order; duplicates entry in dbms on Enter accept
 #   TODO:   Allow new entry, old edit, old delete
 #   TODO:   Show cash totals
@@ -1130,7 +1128,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #   Updated to use PyQt widgets - all additions as str
         self.emptyRframeLBs()
         for r in rLineList:
-            self.main.lw_listOfResultsName.addItem(cfg.playerXref[r.playerId])
+            self.main.lw_listOfResultsNames.addItem(cfg.playerXref[r.playerId])
             self.main.lw_listOfResultsGp.addItem(str(r.playerGamePoints))
             self.main.lw_listOfResultsGw.addItem(str(r.playerGamesWon))
             self.main.lw_listOfResultsSprd.addItem(str(r.playerSpread))
@@ -1271,14 +1269,19 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # check that player has entry in listOfResults
         # if none found then convert to new Result entry
         cfg.tourneyEdit = True
-        if self.resultExists(self.playerNameListBox.get(self.playerNameListBox.curselection()[0])):
-            self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+        currentrow = self.main.lw_listOfResultPlayers.currentRow()
+        currentplayer = self.main.lw_listOfResultPlayers.item(currentrow).text()
+        if self.resultExists(currentplayer):
+            self.buildEditLine(currentplayer)
         else:
-            self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
+            self.buildNewLine(currentplayer)
     def editResultsFromResults(self):
         # user pressed F2 at a result line
         # set up edit for player on result line
-        self.buildEditLine(self.resultsNamesLB.get(self.resultsNamesLB.curselection()[0]))
+        currentresultsrow = self.main.lw_listOfResultsNames.currentRow()
+        currentresultsplayer = self.main.lw_listOfResultsNames.item(currentrow).text()
+        self.buildEditLine(currentresultsname)
+
     def newResult(self):
         # user pressed F3 on a player entry - doesn't make sense on a result line
         # get player record for curselection player then create and append resultLine
@@ -1484,8 +1487,15 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         print ('maxEO. ', maxEO)
         return maxEO
     def clearEditLine(self):
-        return
         # reset all edit line fields for a new results or editing an existing result
+        # PyQt line reset
+        self.main.lb_resultLinePlayerName.setText('')
+        self.main.le_resultLinePlayerGp.setText('')
+        self.main.le_resultLinePlayerGw.setText('')
+        self.main.le_resultLinePlayerSprd.setText('')
+        self.main.le_resultLinePlayerCash.setText('')
+        self.main.le_resultLinePlayerTkn.setText('')
+        self.main.lb_resultLinePlayerGvn.setText('')
         # self.resultsNameVar.set('')
         # self.resultsGpVar.set('')
         # self.resultsGwVar.set('')
@@ -1572,7 +1582,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def backToPlayers(self):
         # user pressed F7 to return to list of Players
         # just leave the listOfResults as they are
-        self.playerNameListBox.selection_set(0)     # back to first player list bax entry
+        # self.playerNameListBox.selection_set(0)     # back to first player list bax entry
+        self.goToTopOfPlayers()
 
     @qtc.Slot()
     def quitResults(self):
@@ -1613,13 +1624,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # only digits allowed in by validationcommand
         # validate permissible range of gp
         # always start by resetting errorlite
-        self.resetScoringErrorHiLite(self.resultsGpEntry)
-        gp = self.resultsGpVar.get()       # get the gp for the line
-        # if not gp.isnumeric():
-        #     self.errorHiLite(self.resultsGpEntry)
-        #     return False
-        if int(gp) > 35:
+        self.resetScoringErrorHiLite(self.main.lw_resultsLinePlayerGp.text())
+        gp = strip(self.main.lw_resultLinePlayerGp.text())      # get the gp for the line
+        if not gp.isnumeric():
             self.errorHiLite(self.resultsGpEntry)
+            return False
+        if int(gp) > 35:
+            self.errorHiLite(self.main.lw_resultLinePlayerGp)
             print ('GP value ', gp, ' too big')
             return False
         # defer this cross-check until the GW has been input
@@ -1633,72 +1644,72 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def gwValidation(self):
         # only digits allowed in by validation command
         # validate permissible games won
-        self.resetScoringErrorHiLite(self.resultsGwEntry)
-        gw = self.resultsGwVar.get()       # get the gw for the line
-        # if not gw.isnumeric():
-        #     self.errorHiLite(self.resultsGwEntry)
-        #     return False
-        if int(gw) > 18:
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGw)
+        gw = strip(self.main.lw_resultLinePlayerGw.text())       # get the gw for the line
+        if not gw.isnumeric():
+            self.errorHiLite(self.main.lw_resultLinePlayerGw)
+            return False
+        if int(gw) > 18:    # this value allows for GRRT and GRNT
             print('GW value ', gw, ' not possible')
-            self.errorHiLite(self.resultsGwEntry()                             )
+            self.errorHiLite(self.main.lw_resultLinePlayerGw)
             return False
         if not self.crossCheckGpGw():
-            self.errorHiLite(self.resultsGpEntry)
-            self.errorHiLite(self.resultsGwEntry)
+            self.errorHiLite(self.main.lw_resultLinePlayerGp)
+            self.errorHiLite(self.main.lw_resultLinePlayerGw)
             return False
         self.resultsGvnVar.set(str(self.computeSkunksGiven()))
         return True
     def crossCheckGpGw(self ):
         # we are checking the resultsline input area
-        gp = int(self.resultsGpEntry.get())
-        gw = int(self.resultsGwEntry.get())
+        gp = int(strip(self.main.lw_resultLinePlayerGp.text()))
+        gw = int(strip(self.main.lw_resultLinePlayerGw.text()))
         print ('gp: gw: ', gp, ' ',gw)
         if gp >= (2 * gw):
             return True
         else:
-            self.errorHiLite(self.resultsGpEntry)
-            self.errorHiLite(self.resultsGwEntry)
+            self.errorHiLite(self.main.lw_resultLinePlayerGp)
+            self.errorHiLite(self.main.lw_resultLinePlayerGw)
             return False
 
     def spreadValidation(self):
         # only digits allowed in by validationcommand
         # validate total spread
         # TODO: allow user to accept a huge spread - over/under 350
-        spread = self.resultsSprdVar.get() # get the spread for the line
-        self.resetScoringErrorHiLite(self.resultsSprdEntry)
+        spread = strip(self.main.lw_resultLinePlayerSprd.text()) # get the spread for the line
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerSprd)
         if abs(int(spread)) > 350:
             print ('Check Huge Spread value ', spread)
-            self.errorHiLite(self.resultsSprdEntry)
+            self.errorHiLite(self.main.lw_resultLinePlayerSprd)
             return False
         return True
     def cashValidation(self):
         # only digits allowed in by validationcommand
         # validate amount of cash
-        cash = self.resultsCashVar.get()   # get the cash awarded
-        self.resetScoringErrorHiLite(self.resultsCashEntry)
+        cash = strip(self.main.lw_resultLinePlayerCash.text())   # get the cash awarded
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerCash)
         # try:
         #     int(cash)
         # except ValueError:
         #     self.errorHiLite(self.resultsCashEntry)
         #     return False
         if int(cash) < 0 or int(cash) > 150:
-            self.errorHiLite(self.resultsCashEntry)
+            self.errorHiLite(self.main.lw_resultLinePlayerCash)
             return False
         return True
     def takenValidation(self):
         # only digits allowed in by validationcommand
         # validate number of taken skunks
-        self.resetScoringErrorHiLite(self.resultsTknEntry)
-        taken = self.resultsTknVar.get() # get the skunks taken for the line
-        # if not taken.isnumeric():
-        #     self.errorHiLite(self.resultsTknEntry)
-        #     return False
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerTkn)
+        taken = strip(self.main.lw_resultLinePlayerTkn.text())# get the skunks taken for the line
+        if not taken.isnumeric():
+            self.errorHiLite(self.main.lw_resultLinePlayerTkn)
+            return False
         if int(taken) > 9:
             print('Taken value ', taken,' not possible')
-            self.errorHiLite(self.resultsTknEntry)
+            self.errorHiLite(self.main.lw_resultLinePlayerTkn)
             return False
         return True
-    # TODO: after we leave a line, and no errors, then update the dmbs entry using SQLObject
+    # TODO: after we leave a line, and no errors, then update the dbms entry using SQLObject
     def updateDBMSforEdit(self, r):
         # just update the single line that was changes
         # r is the resultLine object
@@ -1809,7 +1820,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #       Have to count the number of records in listOfResults.
         self.count.set(cfg.ar.countTourneyResults(cfg.tourneyRecord))
     def resetEditEntry(self):
-        pass
+        self.clearEditLine()
         # clear out the control variables
         # self.resultsNameField = None
         # self.resultsGpField = None
@@ -1818,9 +1829,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.resultsCashField = None
         # self.resultsTknField = None
         # self.resultsGvnField = None
-    def hiLiteNextName(self, idx):
-        self.resetHilite(self.pFrame.interior.winfo_children()[idx].winfo_children()[self.textIndex])
-        self.hiLiteActiveName(idx + 1)
+    # def hiLiteNextName(self, idx):
+    #     self.resetHilite(self.pFrame.interior.winfo_children()[idx].winfo_children()[self.textIndex])
+    #     self.hiLiteActiveName(idx + 1)
 
     # def hiLitePriorName(self, idx):
     #     self.resetHilite(self.pFrame.interior.winfo_children()[idx].winfo_children()[self.textIndex])
@@ -1830,22 +1841,31 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #     for w in self.pFrame.interior.winfo_children():
     #         self.resetHilite(w.winfo_children()[self.textIndex])
     def resetResultLineHiLites(self):
-        self.resetScoringErrorHiLite(self.resultsGpEntry)
-        self.resetScoringErrorHiLite(self.resultsGwEntry)
-        self.resetScoringErrorHiLite(self.resultsSprdEntry)
-        self.resetScoringErrorHiLite(self.resultsTknEntry)
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGp)
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGW)
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerSprd)
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerTkn)
+        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerCash)
+        # self.resetScoringErrorHiLite(self.resultsGpEntry)
+        # self.resetScoringErrorHiLite(self.resultsGwEntry)
+        # self.resetScoringErrorHiLite(self.resultsSprdEntry)
+        # self.resetScoringErrorHiLite(self.resultsTknEntry)
     def hiLiteGamePoints(self,w):
         self.hilite(w)
     def hilite(self, w):
-        w.config(background='blue', foreground='yellow')
+        w.setStyleSheet('background-color: blue; color: yellow')
+        # w.config(background='blue', foreground='yellow')
     def resetHilite(self, w):
-        w.config(background='whitesmoke', foreground='black')
+        w.setStyleSheet('background-color: whitesmoke; color: black')
+        # w.config(background='whitesmoke', foreground='black')
     def errorHiLite(self, w):
-        w.config(background='red', foreground='white')
+        w.setStyleSheet('background-color: red; color: white')
+        # w.config(background='red', foreground='white')
     def resetScoringErrorHiLite(self, w):
         self.resetEntryHiLite(w)
     def resetEntryHiLite(self, w):
-        w.config(background='white', foreground='black')
+        w.setStyleShee('background-color: white; color: black')
+        # w.config(background='white', foreground='black')
     def hideResultLineErrorMessages(self):
         self.hideWidget(self.gpError)
         self.hideWidget(self.gwError)
@@ -1853,18 +1873,23 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.hideWidget(self.cashError)
         self.hideWidget(self.tknError)
     def hideResultsInputPanel(self):
+
         self.hideWidget(self.resultsInputPanel)
     def hideResultsInstructionsPanel(self):
+
         self.hideWidget(self.resultsEntryInstructionsPanel)
     def showResultsInputPanel(self):
+
         self.showWidget(self.resultsInputPanel)
     def showResultsInstructionsPanel(self):
+
         self.showWidget(self.resultsEntryInstructionsPanel)
     def hideWidget(self, w):
-        w.grid_remove()
+        w.hide()
+        # w.hide()
     def showWidget(self, w):
-        w.grid()
-
+        w.show()
+        # w.grid()
     def installResultsActivity(self):
         print ('install results activity panel')
         self.widx = cfg.screenDict['activitystack'].addWidget(self)
