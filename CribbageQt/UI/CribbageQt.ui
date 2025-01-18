@@ -1484,7 +1484,7 @@ background-color: rgb(255, 255, 255);</string>
          </property>
         </widget>
        </widget>
-       <widget class="QFrame" name="fR_tourneyResultsPanel">
+       <widget class="QFrame" name="fr_tourneyResultsPanel">
         <property name="geometry">
          <rect>
           <x>300</x>

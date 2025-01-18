@@ -40,6 +40,7 @@ from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
 from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
+from PySide6.QtWidgets import QMessageBox
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
 
@@ -1388,6 +1389,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         return
         resultPlayerName = ''
         resultPoints = ''
+        # reset any previous error HiLites
         goodEntry = True
         goodEntry = goodEntry and self.gpValidation()
         goodEntry = goodEntry and self.gwValidation()
@@ -1400,7 +1402,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             # go back to start of entry to retry - or escape
             # must now show this as a line edit rather than line new
             # recycle to user display
-            self.resultsGpEntry.focus_force()
+            self.main.le_resultLinePlayerGp.setFocus()
+            # self.resultsGpEntry.focus_force()
             return
         # always recompute the skunks given
         # for a new line added, have to compute Order of Entry
@@ -1422,6 +1425,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             else:
                 for r in self.listOfResults:
                     if self.resultsNameVar.get() == r.playerName:
+                        r.playerId = cfg.playerXref(r.playerName)
+                        r.playerGamePints = int(self.main.le_resultLinePlayerGp)
+                        r.playerGamesWon = int(self.main.le_resultLinePlayerGw)
+                        r.playerSpread = int(self.main.le_resultLinePlayerSprd)
+                        r.playerCash = int(self.main.le_resultLinePlayerCash)
+                        r.playerTaken = int(self.main.le_resultLinePlayerTkn)
+                        r.playerGiven = int(self.main.lb_resultLinePlayerGvn)
+
                         # r.playerId = cfg.playerRefx[r.playerName]
                         # r.playerGamePoints = int(self.resultsGpVar.get())
                         # r.playerGamesWon = int(self.resultsGwVar.get())
@@ -1558,8 +1569,22 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def commitResults(self):
         # user pressed F10 to commit results to dbms
         if self.outOfBalance():
-            mbx.showinfo('Tourney out of balance.', 'Use F11 to force results save.')
-            return              # quite without saving out-of-balance tourney
+            # result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setText('Use F11 to save out-of-balance Tourney')
+            msgBox.setWindowTitle('Out of Balance)
+            msgBox.setStandardButtons(QMessageBox.Ok )
+
+            result = msgBox.exec()
+            # we don't care about the result
+            # if result != QMessageBox.Ok:
+            #     sys.exit('Wrong data base in use')
+            # else:
+            #     print('QMessageBox dropped thru')
+            #
+            # mbx.showinfo('Tourney out of balance.', 'Use F11 to force results save.')
+            return              # quitewithout saving out-of-balance tourney
         self.updateDBMS()
         self.clearResultLines()
         cfg.screenDict['notebook'].select(1)       # return to tourneys tab
@@ -1569,16 +1594,32 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #     print('Save newly entered Tourney in dbms and update results display')
     def forceResultsCommit(self):
         # user pressed F11 to commit an unbalanced tourney to dbms or just save for now - leave memory intact
-        if mbx.askyesno('Force out-of-balance save', 'Force save of tourney results?')  == True:
-            print ('Force updatedmbs')
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText('Ok to save out-of-balance Tourney')
+        msgBox.setWindowTitle('Force Tourney Save')
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.Cancel )
+
+        result = msgBox.exec()
+
+        if result == QMessageBox.Yes:
             self.updateDBMS()
             self.clearResultLines()
-            # self.cleanEverything()
         else:
-            pass        # don't force save and leave memory intact
+            pass        # don't do anything. just leave everything as is
+
+    #     if mbx.askyesno('Force out-of-balance save', 'Force save of tourney results?')  == True:
+    #         print ('Force updatedmbs')
+    #         self.updateDBMS()
+    #         self.clearResultLines()
+    #         # self.cleanEverything()
+    #     else:
+    #         pass        # don't force save and leave memory intact
+
     def outOfBalance(self):
         # false if everything balances, else True
-        return self.diffSpread.get() != 0 or self.diffSkunks.get() != 0
+        return int(self.main.lb_spreadDiffValue.text()) != 0 or \
+               int(self.main.lb_skunkDiffValue.text()) != 0
     def backToPlayers(self):
         # user pressed F7 to return to list of Players
         # just leave the listOfResults as they are
@@ -1685,8 +1726,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def cashValidation(self):
         # only digits allowed in by validationcommand
         # validate amount of cash
-        cash = strip(self.main.lw_resultLinePlayerCash.text())   # get the cash awarded
         self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerCash)
+        cash = strip(self.main.lw_resultLinePlayerCash.text())
+        if not cash.isnumeric():
+            self.errorHiLite(self.main.lw_resultLinePlayerCash)
+            return False
+        # get the cash awarded
+
         # try:
         #     int(cash)
         # except ValueError:
@@ -1719,7 +1765,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         playerRecord = Player.get(r.playerId)
         tourneyRecord = cfg.tourneyRecord
         # TODO: Why do we come here when adding another line to a partial tourney?
-        if mbx.askokcancel('Ok to Save?', 'Do you want to save the edit?') == True:
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Queston)
+        msgBox.setText('Ok to save the edit?')
+        msgBox.setWindowTitle('Save the Edit')
+        msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+        result = msgBox.exec()
+        if results == QMessageBox.Ok""
+        # if mbx.askokcancel('Ok to Save?', 'Do you want to save the edit?') == True:
             changeScoreCard = cfg.ar.getSpecificScoreCard(tourneyRecord, playerRecord)[0]
             # update all of the fields linearly - slow but works
             changeScoreCard.GamePoints = r.playerGamePoints
@@ -1743,13 +1796,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.goToTopOfPlayers()
         else:
             # leave everything where is is
-            self.resultsGpEntry.focus_force()
+            # self.resultsGpEntry.focus_force()
+            self.main.le_resultLinePlayerGp.setFocus()
     def updateDBMS(self):
-        # take all of the resultLine objects in listOfResults and add them to the dbms
+        # take all of the resultLine objects in fr_tourneyResultsPanel and add them to the dbms
         # replace them or add new
         # tourney record is already in cfg.tourneyRecord
-        print ('updateDBMS, listOfResults: ', self.listOfResults)
-        for r in self.listOfResults:
+        print ('updateDBMS, tourneyResultsPanel: ', self.listOfResults)
+        for r in self.listOfResults:    # each r is an rLine object
             playerRecord = Player.get(r.playerId)
             scoreCard = cfg.ar.getSpecificScoreCard(cfg.tourneyRecord, playerRecord)
             if len(scoreCard) < 1:
@@ -1801,6 +1855,9 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
     def updateTotals(self):
         pass
+        self.main.lb_tourneHdrCount = str(len(self.listOfResults))
+        self.main.lb_spreadPlusValue = str((sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0])))
+        
         # step through all results and refresh totals
         # use listOfResults - new Tourney has no dbms entries yet!
         # print ('self.tourneyResults ', self.tourneyResults)
