@@ -33,7 +33,7 @@ import os as os
 
 # Personal imports
 import cribbageconfig as cfg
-from CribbageQt import Ui_MainCribbageWindow
+from ui_CribbageQt import Ui_MainCribbageWindow
 from cribbagestartup import CribbageStartup
 from playerstab import PlayersTab
 from reportstab import ReportsTab

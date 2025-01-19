@@ -1991,25 +1991,6 @@ background-color: rgb(255, 255, 255);</string>
           <bool>true</bool>
          </property>
         </widget>
-        <widget class="QLineEdit" name="le_resultLinePlayerGp">
-         <property name="geometry">
-          <rect>
-           <x>147</x>
-           <y>10</y>
-           <width>41</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="mouseTracking">
-          <bool>false</bool>
-         </property>
-         <property name="acceptDrops">
-          <bool>false</bool>
-         </property>
-         <property name="autoFillBackground">
-          <bool>true</bool>
-         </property>
-        </widget>
         <widget class="QLineEdit" name="le_resultLinePlayerCash">
          <property name="geometry">
           <rect>
@@ -2406,7 +2387,6 @@ background-color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <tabstops>
-  <tabstop>le_resultLinePlayerGp</tabstop>
   <tabstop>le_resultLinePlayerGw</tabstop>
   <tabstop>le_resultLinePlayerSprd</tabstop>
   <tabstop>le_resultLinePlayerTkn</tabstop>

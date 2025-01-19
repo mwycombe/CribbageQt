@@ -1426,12 +1426,12 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
                 for r in self.listOfResults:
                     if self.resultsNameVar.get() == r.playerName:
                         r.playerId = cfg.playerXref(r.playerName)
-                        r.playerGamePints = int(self.main.le_resultLinePlayerGp)
-                        r.playerGamesWon = int(self.main.le_resultLinePlayerGw)
-                        r.playerSpread = int(self.main.le_resultLinePlayerSprd)
-                        r.playerCash = int(self.main.le_resultLinePlayerCash)
-                        r.playerTaken = int(self.main.le_resultLinePlayerTkn)
-                        r.playerGiven = int(self.main.lb_resultLinePlayerGvn)
+                        r.playerGamePints = int(self.main.le_resultLinePlayerGp.text())
+                        r.playerGamesWon = int(self.main.le_resultLinePlayerGw.text())
+                        r.playerSpread = int(self.main.le_resultLinePlayerSprd.text())
+                        r.playerCash = int(self.main.le_resultLinePlayerCash.text())
+                        r.playerTaken = int(self.main.le_resultLinePlayerTkn.text())
+                        r.playerGiven = int(self.main.lb_resultLinePlayerGvn.text())
 
                         # r.playerId = cfg.playerRefx[r.playerName]
                         # r.playerGamePoints = int(self.resultsGpVar.get())
@@ -1573,7 +1573,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             msgBox = QMessageBox()
             msgBox.setIcon(QMessageBox.Information)
             msgBox.setText('Use F11 to save out-of-balance Tourney')
-            msgBox.setWindowTitle('Out of Balance)
+            msgBox.setWindowTitle('Out of Balance')
             msgBox.setStandardButtons(QMessageBox.Ok )
 
             result = msgBox.exec()
@@ -1771,7 +1771,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         msgBox.setWindowTitle('Save the Edit')
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         result = msgBox.exec()
-        if results == QMessageBox.Ok""
+        if results == QMessageBox.Ok:
         # if mbx.askokcancel('Ok to Save?', 'Do you want to save the edit?') == True:
             changeScoreCard = cfg.ar.getSpecificScoreCard(tourneyRecord, playerRecord)[0]
             # update all of the fields linearly - slow but works
@@ -1855,9 +1855,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
     def updateTotals(self):
         pass
-        self.main.lb_tourneHdrCount = str(len(self.listOfResults))
-        self.main.lb_spreadPlusValue = str((sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0])))
-        
+        self.main.lb_tourneyHdrCount.setText( str(len(self.listOfResults)))
+        self.main.lb_spreadPlusValue.setText( str((sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0]))))
+        self.main.lb_spreadMinusValue.setText(str((sum([m.playerSpread for m in self.listOfResults if m.playerSpread < 0]))))
+        self.main.lb_skunkPlusValue.setText( str(sum([g.playerGiven for g in self.listOfResults])))
+        self.main.lb_skunksMinusValue.setText(str(sum([t.playerTaken for t in self.listOfResults])))
+        self.main.lb_spreadDiffValue.setText(str(int(self.main.lb_spreadPlusValue.text()) + int(self.main.lb_spreadMinusValue.text())))
+        self.main.lb_skunkDiffValue.setTest(str(int(self.main.lb_skunkPlusValue.text())+ int(self.main.lb_skunkMinusValue.text())))
+
         # step through all results and refresh totals
         # use listOfResults - new Tourney has no dbms entries yet!
         # print ('self.tourneyResults ', self.tourneyResults)

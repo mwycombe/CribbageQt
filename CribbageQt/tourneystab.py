@@ -34,8 +34,8 @@
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
 ########################################
-from PyQt5.QtGui import QKeySequence
-from PyQt5.QtWidgets import QWidget, QMessageBox
+from PySide6.QtGui import QKeySequence
+from PySide6.QtWidgets import QWidget, QMessageBox
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
