@@ -1,5 +1,8 @@
-__pycache__
+_pycache__
 *.pyc
 cribbage.cfg
+
 *.iml
+
+
 *.xml

@@ -115,8 +115,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.tourneyNumberEntry = StringVar()
         self.tourneyDateEntry = StringVar()
 
-        self.main.lb_tourneyNumberEntry.textEdited.connect(self.setTourneyNumberEntry)
-        self.main.lb_tourneyDateEntry.textEdited.connect(self.setTourneyDateEntry)
+        self.main.le_tourneyNumberEntry.textEdited.connect(self.setTourneyNumberEntry)
+        self.main.le_tourneyDateEntry.textEdited.connect(self.setTourneyDateEntry)
 
         # this does not create a loop because textEdited signal is not raised
         # by programmatic changes to the lineEdit field
