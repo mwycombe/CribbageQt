@@ -1,5 +1,6 @@
 # masterscreen.py
 #
+#   1/20/2025 add validaators and ctrl variables for all entry fields.
 #   11/4/2024 conversion to Qt from tkinter
 #   7/20/2020 cloned from masterscreen.v2.py
 #
@@ -23,7 +24,7 @@ from PySide6.QtCore import Slot
 
 # imports for handling PyQt versions of events
 from PySide6.QtCore import QObject, Property, Signal
-from PySide6.QtGui import QShortcut, QKeySequence
+from PySide6.QtGui import QShortcut, QKeySequence, QIntValidator
 
 
 from sqlobject import *
@@ -46,7 +47,101 @@ from ctrlVariables import StringVar, IntVar, DoubleVar
 class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
     def __init__(self):
         super().__init__()
+        # this setup call defines all of the fields in the UI from the cribbageQt.ui designer file.
         self.setupUi(self)
+
+        # setup all validators and signals.
+
+        # [Club Hdr]
+        self.clubNumber = IntVar()
+        self.clubName = StringVar()
+        self.activePlayers = IntVar()
+        self.clubSeason = StringVar()
+
+        # [Club Hdr signals]
+        self.clubNumber.intValueAsStringChange.connect(self.hdrClubNumber)
+        self.clubName.strValueChanged.connect(self.hdrClubName)
+        self.clubSeason.strValueChanged.connect(self.hdrSeason)
+
+        # [Tourney Hdr]
+        self.tourneyHdrDate = StringVar()
+        self.tourneyHdrNumber = IntVar()
+        self.tourneyHdrCount = IntVar()
+
+        # [Tourney Hdr Signals]
+        self.tourneyHdrDate.strValueChanged.connect(self.lb_tourneyHdrDate)
+        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.lb_tourneyHdrCount)
+        self.tourneyHdrCount.intValueAsStringChanged.connect(self.lb_tourneHdrCount)
+
+        # [Players]
+        self.pl_firstName = StringVar()
+        self.pl_lastName = StringVar()
+        self.pl_street = StringVar()
+        self.pl_city = StringVar()
+        self.pl_state = StringVar()
+        self.pl_zip = StringVar()
+        self.pl_phone = StringVar()
+        self.pl_email = StringVar()
+        self.pl_ACCNumber = StringVar()
+        self.pl_joined = StringVar()
+        self.pl_expires = StringVar()
+        self.pl_active = IntVar()
+
+        self.le_firstNameEntry.editingFinished.connect(self.pl_firstName.myValue)
+        self.le_lastNameEntry.editingFinished.connect(self.pl_lastName.myValue)
+        self.le_streetEntry.editingFinished.connect(self.pl_street.myValue)
+        self.le_cityEntry.editingFinished.connect(self.pl_city.myValue)
+        self.le_stateEntry.editingFinished.connect(self.pl_state.myValue)
+        self.le_zipEntry.editingFinished.connect(self.pl_zip.myValue)
+        self.le_phoneEntry.editingFinished.connect(self.pl_phone.myValue)
+        self.le_emailEntry.editingFinished.connect(self.pl_email.myValue)
+        self.le_accNumberEntry.editingFinished.connect(self.pl_ACCNumber.myValue)
+        self.le_joinedEntry.editingFinished.connect(self.pl_joined.myValue)
+        self.le_expiresEntry.editingFinished.connect(self.pl_expires.myValue)
+        self.le_activeEntry.editingFinished.connect(self.pl_active.myValue)
+
+        # [Tourneys]
+        self.ty_number = IntVar()
+        self.ty_date = StringVar()
+
+        # [Tourney signals]
+        self.le_tourneyNumberEntry.editingFinished.connect(self.ty_number.acceptIntAsStr)
+        self.le_tourneyDateEntry.editingFinished.connect(self.ty_date.myValue)
+
+        # [Tourney validators]
+        self.ty_number_validator = QIntValidator(1,50,self)
+        self.le_tourneyNumberEntry.setValidator(self.ty_number_validator)
+
+        # [Results Line]
+        self.rslt_gp = IntVar()
+        self.rslt_gw = IntVar()
+        self.rslt_sprd = IntVar()
+        self.rslt_tkn = IntVar()
+        self.rslt_cash = IntVar()
+        self.rslt_gvn = IntVar()
+        self.rslt_order = IntVar()
+
+        self.rslt_spread_plus = IntVar()
+        self.rslt_spread_minus = IntVar()
+        self.rslt_skunks_plus = IntVar()
+        self.rslt_skunks_minus = IntVar()
+        self.rslt_spread_diff = IntVar()
+        self.rslt_skunks_diff = IntVar()
+
+        # [Results Line Signals]
+        self.le_resultLinePlayerGp.editingFinished.connect(self.rslt_gp.acceptIntAsStr)
+        self.le_resultLinePlayerGw.editingFinished.connect(self.rslt_gw.acceptIntAsStr)
+        self.le_resultLinePlayerSprd.editingFinished.connect(self.rslt_sprd.acceptIntAsStr)
+        self.le_resultLinePlayerTkn.editingFinished.connect(self.rslt_tkn.acceptIntAsStr)
+        self.le_resultLinePlayerCash.editFinished.connect(self.rslt_cash.acceptIntAsStr)
+
+
+        # [Result Line validators]
+        self.rslt_gp_validator = QIntValidator(0,36,self)
+        self.rslt_gw_validator = QIntValidator(0,22,self)
+        self.rslt_sprd_validator = QIntValidator(-250, 250, self)
+        self.rslt_tkn_validator = QIntValidator(0,22,self)
+        self.rslt_cash_validator = QIntValidator(0,150,self)
 
         # set initial conditions
         # make error messages red then hide them
@@ -60,6 +155,9 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.lb_badDateFormat.hide()
         self.lb_duplicateTourneyDate.setStyleSheet('background-color: white; color: red')
         self.lb_duplicateTourneyDate.hide()
+
+
+
 
         # set up database to use
         CribbageStartup.initDbms()

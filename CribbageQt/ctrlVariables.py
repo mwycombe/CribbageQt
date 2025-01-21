@@ -14,7 +14,7 @@ class StringVar(QObject):
 
     # need separate slot as cannot apply @Slot to setter
     @Slot(str)
-    def acceptStrFromSignal(self,value):
+    def acceptStr(self,value):
         self.myValue(value)
 
     @Property(str)
@@ -32,12 +32,17 @@ class StringVar(QObject):
 class IntVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals
         to emulate tkinter IntVar()'''
-    intValueChange = Signal(int)    # must be defined inside a QObject class type
+    intValueChanged = Signal(int)
+    intValueAsStringChanged = Signal(str)   # must be defined inside a QObject class type
     intValueRead   = Signal(int)    # optional signal on read
 
     def __init__(self):
         super().__init__()
         self._my_value = 0
+
+    @Slot(str)
+    def acceptIntAsStr(self,value):
+        self.myValue(int(value))
 
     @Property(int)
     def myValue(self):
@@ -49,16 +54,22 @@ class IntVar(QObject):
         if value != self._my_value:
             self._my_value = value
             self.intValueChanged.emit(value)
+            self.intValueAsStringChanged.emit(str(value))
 
 class DoubleVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals
         to emulate tkinter DoubleVar()'''
     dblValueChanged = Signal(float)  # must be defined inside a QObject class type
-    dblValueRead = Signal(float)  # optional signal on read
+    dblValueRead = Signal(float)
+    dblValueAsStrChanged = Signal(str)# optional signal on read
 
     def __init__(self):
         super().__init__()
         self._my_value = 0
+
+    @Slot(str)
+    def acceptDblAsStr(self,value):
+        self.myValue = float(value)
 
     @Property(float)
     def myValue(self):
@@ -70,3 +81,4 @@ class DoubleVar(QObject):
         if value != self._my_value:
             self._my_value = value
             self.dblValueChanged.emit(value)
+            self.dblValueAsStrChanged.emit(str(value))

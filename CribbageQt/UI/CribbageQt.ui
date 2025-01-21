@@ -286,7 +286,7 @@ background-color: rgb(255, 255, 255);</string>
        </rect>
       </property>
       <property name="currentIndex">
-       <number>2</number>
+       <number>3</number>
       </property>
       <widget class="QWidget" name="playersActivityPage"/>
       <widget class="QWidget" name="tourneysActivityPage"/>
@@ -647,40 +647,40 @@ background-color: rgb(255, 255, 255);</string>
          <enum>QLayout::SizeConstraint::SetNoConstraint</enum>
         </property>
         <item>
-         <widget class="QLineEdit" name="firstNameEntry"/>
+         <widget class="QLineEdit" name="le_firstNameEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="lastNameEntry"/>
+         <widget class="QLineEdit" name="le_lastNameEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="streetEntry"/>
+         <widget class="QLineEdit" name="le_streetEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="cityEntry"/>
+         <widget class="QLineEdit" name="le_cityEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="stateEntry"/>
+         <widget class="QLineEdit" name="le_stateEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="zipEntry"/>
+         <widget class="QLineEdit" name="le_zipEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="phoneEntry"/>
+         <widget class="QLineEdit" name="le_phoneEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="emailEntry"/>
+         <widget class="QLineEdit" name="le_emailEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="accNumberEntry"/>
+         <widget class="QLineEdit" name="le_accNumberEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="expiresEntry"/>
+         <widget class="QLineEdit" name="le_expiresEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="joinedEntry"/>
+         <widget class="QLineEdit" name="le_joinedEntry"/>
         </item>
         <item>
-         <widget class="QLineEdit" name="activeEntry"/>
+         <widget class="QLineEdit" name="le_activeEntry"/>
         </item>
        </layout>
       </widget>
@@ -915,7 +915,7 @@ color: rgb(65, 161, 5);</string>
         <property name="lineWidth">
          <number>2</number>
         </property>
-        <widget class="QLabel" name="tourneyNumberLabel">
+        <widget class="QLabel" name="lb_tourneyNumberLabel">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -928,7 +928,7 @@ color: rgb(65, 161, 5);</string>
           <string>Tourney Number</string>
          </property>
         </widget>
-        <widget class="QLabel" name="tourneyDateLabel">
+        <widget class="QLabel" name="lb_tourneyDateLabel">
          <property name="geometry">
           <rect>
            <x>10</x>
@@ -941,7 +941,7 @@ color: rgb(65, 161, 5);</string>
           <string>Tourney Date</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lb_tourneyNumberEntry">
+        <widget class="QLineEdit" name="le_tourneyNumberEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -951,7 +951,7 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
         </widget>
-        <widget class="QLineEdit" name="lb_tourneyDateEntry">
+        <widget class="QLineEdit" name="le_tourneyDateEntry">
          <property name="geometry">
           <rect>
            <x>180</x>
@@ -2007,9 +2007,9 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QLineEdit" name="le_resultLinePlayerSprd">
          <property name="geometry">
           <rect>
-           <x>240</x>
+           <x>243</x>
            <y>10</y>
-           <width>61</width>
+           <width>60</width>
            <height>21</height>
           </rect>
          </property>
@@ -2045,7 +2045,7 @@ background-color: rgb(255, 255, 255);</string>
         <widget class="QLineEdit" name="le_resultLinePlayerGw">
          <property name="geometry">
           <rect>
-           <x>193</x>
+           <x>195</x>
            <y>10</y>
            <width>41</width>
            <height>21</height>
@@ -2078,6 +2078,16 @@ background-color: rgb(255, 255, 255);</string>
          </property>
          <property name="text">
           <string/>
+         </property>
+        </widget>
+        <widget class="QLineEdit" name="le_resultLinePlayerGp">
+         <property name="geometry">
+          <rect>
+           <x>148</x>
+           <y>10</y>
+           <width>41</width>
+           <height>21</height>
+          </rect>
          </property>
         </widget>
        </widget>
@@ -2391,24 +2401,24 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>le_resultLinePlayerSprd</tabstop>
   <tabstop>le_resultLinePlayerTkn</tabstop>
   <tabstop>le_resultLinePlayerCash</tabstop>
-  <tabstop>streetEntry</tabstop>
-  <tabstop>cityEntry</tabstop>
-  <tabstop>stateEntry</tabstop>
-  <tabstop>zipEntry</tabstop>
-  <tabstop>phoneEntry</tabstop>
-  <tabstop>emailEntry</tabstop>
-  <tabstop>accNumberEntry</tabstop>
-  <tabstop>expiresEntry</tabstop>
-  <tabstop>joinedEntry</tabstop>
-  <tabstop>activeEntry</tabstop>
-  <tabstop>lb_tourneyNumberEntry</tabstop>
-  <tabstop>lb_tourneyDateEntry</tabstop>
+  <tabstop>le_streetEntry</tabstop>
+  <tabstop>le_cityEntry</tabstop>
+  <tabstop>le_stateEntry</tabstop>
+  <tabstop>le_zipEntry</tabstop>
+  <tabstop>le_phoneEntry</tabstop>
+  <tabstop>le_emailEntry</tabstop>
+  <tabstop>le_accNumberEntry</tabstop>
+  <tabstop>le_expiresEntry</tabstop>
+  <tabstop>le_joinedEntry</tabstop>
+  <tabstop>le_activeEntry</tabstop>
+  <tabstop>le_tourneyNumberEntry</tabstop>
+  <tabstop>le_tourneyDateEntry</tabstop>
   <tabstop>lw_listOfTourneys</tabstop>
   <tabstop>lw_listOfResultPlayers</tabstop>
   <tabstop>showAllPlayers</tabstop>
   <tabstop>listOfPlayers</tabstop>
-  <tabstop>firstNameEntry</tabstop>
-  <tabstop>lastNameEntry</tabstop>
+  <tabstop>le_firstNameEntry</tabstop>
+  <tabstop>le_lastNameEntry</tabstop>
   <tabstop>lw_listOfResultsNames</tabstop>
   <tabstop>allReportsCKB</tabstop>
   <tabstop>ckd_alpha</tabstop>

@@ -32,6 +32,12 @@ class StringVar(QObject):
             self._my_value = value
             self.strValueChanged.emit(value)
 ---
+In addition to using the QtProperties, one should use the QIntValidator with any LineEdit field that should
+deliver integer input.
+
+In tkinter the textvariable is defined within the tkinter entry field so it performs the necessary validation 
+and str/int conversion from intrinsic knowledge of what kind of field it is. This is not possible using PyQt
+without subclassing the PyQt fields as the ui is generated from QtDesigner.
 
 **Things to observe**
 1. The two signals must be defined inside a QObject derived class.
@@ -55,6 +61,9 @@ This is why @Properties and signals were investigated in the first place.
 tkinter control variables are the 'magic' where tkinter gui widgets interact with python variables.
 When the gui widget changes value the python variable is updated and when the python variable is change the gui widget is updated.
 If it a bidirectional synchronous relationship.
+
+The IntVar ctrlVariable was update to accept str input and translate it to int internally.
+This requires that LineEdit entry fiels that expect integer in put have a QIntValidator attached to them
 
 1. self.EntryField = QtWidgets.QLineEdit(parent=self.centralwidget)
 2. self.entryInput = StringVar()
@@ -115,6 +124,12 @@ from PySide6.QtWidgets import QListWidget--
 9. If installed on a more base class, all it's subclasses' events are filtered
 10. If installed on a base class will be necessary to test widget.type() for relevance
 
+## PyQt Validators
+There is a quirk using the QIntValidator for Line Edit input.
+When the validation is complete or the length runs out, pressing return doesn't emit returnPressed.
+Rather, editingFinished is emitted. Test by experiment in PyQtTraining ValidationTest.
+
+The editingFinished signal is also emitted when you tab out of a validated field.
 
 ## tkinter events vs. PyQt Signals
 
