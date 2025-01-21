@@ -59,9 +59,9 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.clubSeason = StringVar()
 
         # [Club Hdr signals]
-        self.clubNumber.intValueAsStringChange.connect(self.hdrClubNumber)
-        self.clubName.strValueChanged.connect(self.hdrClubName)
-        self.clubSeason.strValueChanged.connect(self.hdrSeason)
+        self.clubNumber.intValueAsStringChanged.connect(self.hdrClubNumber.setText)
+        self.clubName.strValueChanged.connect(self.hdrClubName.setText)
+        self.clubSeason.strValueChanged.connect(self.hdrSeason.setText)
 
         # [Tourney Hdr]
         self.tourneyHdrDate = StringVar()
@@ -69,9 +69,9 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.tourneyHdrCount = IntVar()
 
         # [Tourney Hdr Signals]
-        self.tourneyHdrDate.strValueChanged.connect(self.lb_tourneyHdrDate)
-        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.lb_tourneyHdrCount)
-        self.tourneyHdrCount.intValueAsStringChanged.connect(self.lb_tourneHdrCount)
+        self.tourneyHdrDate.strValueChanged.connect(self.lb_tourneyHdrDate.setText)
+        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.lb_tourneyHdrCount.setText)
+        self.tourneyHdrCount.intValueAsStringChanged.connect(self.lb_tourneyHdrCount.setText)
 
         # [Players]
         self.pl_firstName = StringVar()
@@ -87,18 +87,18 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.pl_expires = StringVar()
         self.pl_active = IntVar()
 
-        self.le_firstNameEntry.editingFinished.connect(self.pl_firstName.myValue)
-        self.le_lastNameEntry.editingFinished.connect(self.pl_lastName.myValue)
-        self.le_streetEntry.editingFinished.connect(self.pl_street.myValue)
-        self.le_cityEntry.editingFinished.connect(self.pl_city.myValue)
-        self.le_stateEntry.editingFinished.connect(self.pl_state.myValue)
-        self.le_zipEntry.editingFinished.connect(self.pl_zip.myValue)
-        self.le_phoneEntry.editingFinished.connect(self.pl_phone.myValue)
-        self.le_emailEntry.editingFinished.connect(self.pl_email.myValue)
-        self.le_accNumberEntry.editingFinished.connect(self.pl_ACCNumber.myValue)
-        self.le_joinedEntry.editingFinished.connect(self.pl_joined.myValue)
-        self.le_expiresEntry.editingFinished.connect(self.pl_expires.myValue)
-        self.le_activeEntry.editingFinished.connect(self.pl_active.myValue)
+        self.le_firstNameEntry.editingFinished.connect(self.pl_firstName.acceptStr)
+        self.le_lastNameEntry.editingFinished.connect(self.pl_lastName.acceptStr)
+        self.le_streetEntry.editingFinished.connect(self.pl_street.acceptStr)
+        self.le_cityEntry.editingFinished.connect(self.pl_city.acceptStr)
+        self.le_stateEntry.editingFinished.connect(self.pl_state.acceptStr)
+        self.le_zipEntry.editingFinished.connect(self.pl_zip.acceptStr)
+        self.le_phoneEntry.editingFinished.connect(self.pl_phone.acceptStr)
+        self.le_emailEntry.editingFinished.connect(self.pl_email.acceptStr)
+        self.le_accNumberEntry.editingFinished.connect(self.pl_ACCNumber.acceptStr)
+        self.le_joinedEntry.editingFinished.connect(self.pl_joined.acceptStr)
+        self.le_expiresEntry.editingFinished.connect(self.pl_expires.acceptStr)
+        self.le_activeEntry.editingFinished.connect(self.pl_active.acceptIntAsStr)
 
         # [Tourneys]
         self.ty_number = IntVar()
@@ -106,7 +106,7 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
 
         # [Tourney signals]
         self.le_tourneyNumberEntry.editingFinished.connect(self.ty_number.acceptIntAsStr)
-        self.le_tourneyDateEntry.editingFinished.connect(self.ty_date.myValue)
+        self.le_tourneyDateEntry.editingFinished.connect(self.ty_date.acceptStr)
 
         # [Tourney validators]
         self.ty_number_validator = QIntValidator(1,50,self)
@@ -133,7 +133,7 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.le_resultLinePlayerGw.editingFinished.connect(self.rslt_gw.acceptIntAsStr)
         self.le_resultLinePlayerSprd.editingFinished.connect(self.rslt_sprd.acceptIntAsStr)
         self.le_resultLinePlayerTkn.editingFinished.connect(self.rslt_tkn.acceptIntAsStr)
-        self.le_resultLinePlayerCash.editFinished.connect(self.rslt_cash.acceptIntAsStr)
+        self.le_resultLinePlayerCash.editingFinished.connect(self.rslt_cash.acceptIntAsStr)
 
 
         # [Result Line validators]
