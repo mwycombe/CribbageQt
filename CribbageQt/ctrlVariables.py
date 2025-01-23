@@ -15,7 +15,7 @@ class StringVar(QObject):
     # need separate slot as cannot apply @Slot to setter
     @Slot(str)
     def acceptStr(self,value):
-        self.myValue(value)
+        self.myValue = value
 
     @Property(str)
     def myValue(self):
@@ -42,8 +42,13 @@ class IntVar(QObject):
 
     @Slot(str)
     def acceptIntAsStr(self,value):
-        self.myValue(int(value))
+        if value == '' or value == None:
+            value = 0
+        self.myValue = int(value)
 
+    @Slot(int)
+    def acceptInt(self,value):
+        self.myValue = value
     @Property(int)
     def myValue(self):
         self.intValueRead.emit(self._my_value)
@@ -69,6 +74,8 @@ class DoubleVar(QObject):
 
     @Slot(str)
     def acceptDblAsStr(self,value):
+        if value == '' or value == None:
+            value = 0.0
         self.myValue = float(value)
 
     @Property(float)

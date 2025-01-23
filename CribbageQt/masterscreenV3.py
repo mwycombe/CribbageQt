@@ -63,85 +63,9 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.clubName.strValueChanged.connect(self.hdrClubName.setText)
         self.clubSeason.strValueChanged.connect(self.hdrSeason.setText)
 
-        # [Tourney Hdr]
-        self.tourneyHdrDate = StringVar()
-        self.tourneyHdrNumber = IntVar()
-        self.tourneyHdrCount = IntVar()
-
-        # [Tourney Hdr Signals]
-        self.tourneyHdrDate.strValueChanged.connect(self.lb_tourneyHdrDate.setText)
-        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.lb_tourneyHdrCount.setText)
-        self.tourneyHdrCount.intValueAsStringChanged.connect(self.lb_tourneyHdrCount.setText)
-
-        # [Players]
-        self.pl_firstName = StringVar()
-        self.pl_lastName = StringVar()
-        self.pl_street = StringVar()
-        self.pl_city = StringVar()
-        self.pl_state = StringVar()
-        self.pl_zip = StringVar()
-        self.pl_phone = StringVar()
-        self.pl_email = StringVar()
-        self.pl_ACCNumber = StringVar()
-        self.pl_joined = StringVar()
-        self.pl_expires = StringVar()
-        self.pl_active = IntVar()
-
-        self.le_firstNameEntry.editingFinished.connect(self.pl_firstName.acceptStr)
-        self.le_lastNameEntry.editingFinished.connect(self.pl_lastName.acceptStr)
-        self.le_streetEntry.editingFinished.connect(self.pl_street.acceptStr)
-        self.le_cityEntry.editingFinished.connect(self.pl_city.acceptStr)
-        self.le_stateEntry.editingFinished.connect(self.pl_state.acceptStr)
-        self.le_zipEntry.editingFinished.connect(self.pl_zip.acceptStr)
-        self.le_phoneEntry.editingFinished.connect(self.pl_phone.acceptStr)
-        self.le_emailEntry.editingFinished.connect(self.pl_email.acceptStr)
-        self.le_accNumberEntry.editingFinished.connect(self.pl_ACCNumber.acceptStr)
-        self.le_joinedEntry.editingFinished.connect(self.pl_joined.acceptStr)
-        self.le_expiresEntry.editingFinished.connect(self.pl_expires.acceptStr)
-        self.le_activeEntry.editingFinished.connect(self.pl_active.acceptIntAsStr)
-
-        # [Tourneys]
-        self.ty_number = IntVar()
-        self.ty_date = StringVar()
-
-        # [Tourney signals]
-        self.le_tourneyNumberEntry.editingFinished.connect(self.ty_number.acceptIntAsStr)
-        self.le_tourneyDateEntry.editingFinished.connect(self.ty_date.acceptStr)
-
-        # [Tourney validators]
-        self.ty_number_validator = QIntValidator(1,50,self)
-        self.le_tourneyNumberEntry.setValidator(self.ty_number_validator)
-
-        # [Results Line]
-        self.rslt_gp = IntVar()
-        self.rslt_gw = IntVar()
-        self.rslt_sprd = IntVar()
-        self.rslt_tkn = IntVar()
-        self.rslt_cash = IntVar()
-        self.rslt_gvn = IntVar()
-        self.rslt_order = IntVar()
-
-        self.rslt_spread_plus = IntVar()
-        self.rslt_spread_minus = IntVar()
-        self.rslt_skunks_plus = IntVar()
-        self.rslt_skunks_minus = IntVar()
-        self.rslt_spread_diff = IntVar()
-        self.rslt_skunks_diff = IntVar()
-
-        # [Results Line Signals]
-        self.le_resultLinePlayerGp.editingFinished.connect(self.rslt_gp.acceptIntAsStr)
-        self.le_resultLinePlayerGw.editingFinished.connect(self.rslt_gw.acceptIntAsStr)
-        self.le_resultLinePlayerSprd.editingFinished.connect(self.rslt_sprd.acceptIntAsStr)
-        self.le_resultLinePlayerTkn.editingFinished.connect(self.rslt_tkn.acceptIntAsStr)
-        self.le_resultLinePlayerCash.editingFinished.connect(self.rslt_cash.acceptIntAsStr)
 
 
-        # [Result Line validators]
-        self.rslt_gp_validator = QIntValidator(0,36,self)
-        self.rslt_gw_validator = QIntValidator(0,22,self)
-        self.rslt_sprd_validator = QIntValidator(-250, 250, self)
-        self.rslt_tkn_validator = QIntValidator(0,22,self)
-        self.rslt_cash_validator = QIntValidator(0,150,self)
+
 
         # set initial conditions
         # make error messages red then hide them

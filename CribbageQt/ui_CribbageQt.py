@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtstUFDq.ui'
+## Form generated from reading UI file 'CribbageQtgYdEIQ.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -233,6 +233,10 @@ class Ui_MainCribbageWindow(object):
 
         self.verticalLayout.addWidget(self.activeLabel)
 
+        self.label = QLabel(self.newPlayerFrame)
+        self.label.setObjectName(u"label")
+        self.label.setGeometry(QRect(330, 479, 71, 21))
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.existingPlayersPanel = QFrame(self.playerTabPanel)
         self.existingPlayersPanel.setObjectName(u"existingPlayersPanel")
         self.existingPlayersPanel.setGeometry(QRect(30, 10, 341, 631))
@@ -911,6 +915,7 @@ class Ui_MainCribbageWindow(object):
         self.expiresLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Expires", None))
         self.joinedLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Joined", None))
         self.activeLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Active", None))
+        self.label.setText(QCoreApplication.translate("MainCribbageWindow", u"(0 or 1)", None))
         self.existingPlayersLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Existing Players", None))
         self.activePlayerLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"* = Active", None))
         self.showAllPlayers.setText(QCoreApplication.translate("MainCribbageWindow", u"Show All", None))

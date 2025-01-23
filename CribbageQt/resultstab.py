@@ -34,7 +34,7 @@
 # from tkinter import messagebox as mbx
 # from tkinter import filedialog as fdg
 
-from PySide6.QtGui import QKeySequence, QShortcut
+from PySide6.QtGui import QKeySequence, QShortcut, QIntValidator
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
@@ -85,87 +85,95 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         super().__init__()
         self.setupUi(self)
 
-        # all of the fields should already be in the widget inside the QTqbWidget
+        # all of the fields should already be in the widget inside the QTabWidget
 
         self.main=cfg.screenDict['masterwindow']
         self.installResultsActivity()
 
         cfg.screenDict['rsltab'] = self
 
-        # simulated control variables
-        self.countVar = StringVar()
-        self.tourneyDateVar = StringVar()
-        self.tourneyNumberVar = StringVar()
-        self.plusSpreadVar = StringVar()
-        self.minusSpreadVar = StringVar()
-        self.diffSpreadVar = StringVar()
-        self.givenSkunksVar = StringVar()
-        self.takenSkunksVar = StringVar()
-        self.diffSkunksVar = StringVar()
+        # [SECTION Tourney Hdr fields]
+        # [Tourney Hdr ctrlvars]
+        self.tourneyHdrDate = StringVar()
+        self.tourneyHdrNumber = IntVar()
+        self.tourneyHdrCount = IntVar()
 
-        # self.countVar.strValueChanged.connect(self.main.lb_tourneyHdrCount.setText)
-        # self.tourneyDateVar.strValueChanged.connect(self.main.lb_tourneyHdrDate.setText)
-        # self.tourneyNumberVar.strValueChanged.connect(self.main.lb_tourneyHdrNumber.setText)
-        # self.plusSpreadVar.strValueChanged.connect(self.main.lb_spreadPlusValue.setText)
-        # self.minusSpreadVar.strValueChanged.connect(self.main.lb_spreadMinusValue.setText)
-        # self.givenSkunksVar.strValueChanged.connect(self.main.lb_skunkPlusValue.setText)
-        # self.takenSkunksVar.strValueChanged.connect(self.main.lb_skunkMinusValue.setText)
-        # self.diffSpreadVar.strValueChanged.connect(self.main.lb_spreadDiffValue.setText)
-        # self.diffSkunksVar.strValueChanged.connect(self.main.lb_skunkDiffValue.setText)
-        #
-        # self.main.lb_tourneyHdrCount.editingFinished.connect(self.countVar.acceptStrFromSignal)
-        # self.main.lb_tourneyHdrDate.editingFinished.connect(self.tourneyDateVar.acceptStrFromSignal)
-        # self.main.lb_tourneyHdrNumber.editingFinished.connect(self.tourneyNumberVar.acceptStrFromSignal)
-        # self.main.lb_spreadPlusValue.editingFinished.connect(self.plusSpreadVar.acceptStrFromSignal)
-        # self.main.lb_spreadMinusValue.editingFinished.connect(self.minusSpreadVar.acceptStrFromSignal)
-        # self.main.lb_skunkPlusValue.editingFinished.connect(self.givenSkunksVar.acceptStrFromSignal)
-        # self.main.lb_skunkMinusValue.editingFinished.connect(self.takenSkunksVar.acceptStrFromSignal)
-        # self.main.lb_spreadDiffValue.editingFinished.connect(self.diffSpreadVar.acceptStrFromSignal)
-        # self.main.lb_skunkDiffValue.editingFinished.connect(self.diffSkunksVar.acceptStrFromSignal)
+        # [Tourney Hdr Signals]
+        self.tourneyHdrDate.strValueChanged.connect(self.main.lb_tourneyHdrDate.setText)
+        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.main.lb_tourneyHdrCount.setText)
+        self.tourneyHdrCount.intValueAsStringChanged.connect(self.main.lb_tourneyHdrCount.setText)
 
-        self.connectLBCtrlVar(self.main.lb_tourneyHdrCount, self.countVar)
-        self.connectLBCtrlVar(self.main.lb_tourneyHdrDate, self.tourneyDateVar)
-        self.connectLBCtrlVar(self.main.lb_tourneyHdrNumber, self.tourneyNumberVar)
-        self.connectLBCtrlVar(self.main.lb_spreadPlusValue, self.plusSpreadVar)
-        self.connectLBCtrlVar(self.main.lb_spreadMinusValue, self.minusSpreadVar)
-        self.connectLBCtrlVar(self.main.lb_skunkPlusValue, self.givenSkunksVar)
-        self.connectLBCtrlVar(self.main.lb_skunkMinusValue, self.takenSkunksVar)
-        self.connectLBCtrlVar(self.main.lb_spreadDiffValue, self.diffSpreadVar)
-        self.connectLBCtrlVar(self.main.lb_skunkDiffValue, self.diffSkunksVar)
+        # [SECTION Results Entry Line]
+        # [Results Entry Line ctrlvars ]
+        self.rslt_name = StringVar()
+        self.rslt_gp = IntVar()
+        self.rslt_gw = IntVar()
+        self.rslt_sprd = IntVar()
+        self.rslt_tkn = IntVar()
+        self.rslt_cash = IntVar()
+        self.rslt_gvn = IntVar()
+        self.rslt_order = IntVar()
 
-        # used for results entry line
-        self.resultsNameVar = StringVar()
-        self.resultsGpVar = StringVar()
-        self.resultsGwVar = StringVar()
-        self.resultsSprdVar = StringVar()
-        self.resultsCashVar = StringVar()
-        self.resultsTknVar = StringVar()
-        self.resultsGvnVar = StringVar()
+        # [Result Entry Line validators]
+        self.rslt_gp_validator = QIntValidator(0,36,self)
+        self.rslt_gw_validator = QIntValidator(0,22,self)
+        self.rslt_sprd_validator = QIntValidator(-250, 250, self)
+        self.rslt_tkn_validator = QIntValidator(0,22,self)
+        self.rslt_cash_validator = QIntValidator(0,150,self)
 
-        # # it's up to the user to check if fields are numeric and integer.
-        # self.resultsNameVar.strValueChanged.connect(self.main.le_resultsLinePlayerName.setText)
-        # self.resultsGpVar.strValueChanged.connect(self.main.le_resultsLinePlayerGp.setText)
-        # self.resultsGwVar.strValueChanged.connect(self.main.le_resultsLinePlayerGw.setText)
-        # self.resultsSprdVar.strValueChanged.connect(self.main.le_resultsLinePlayerSprd.setText)
-        # self.resultsTknVar.strValueChanged.connect(self.main.le_resultsLinePlayerTkn.setText)
-        # self.resultsCashVar.strValueChanged.connect(self.main.le_resultsLinePlayerCash.setText)
-        # self.resultsGvnVar.strValueChanged.connect(self.main.le_resultsLinePlayerGvn.setText)
-        #
-        # self.main.le_resultsLinePlayerName.editingFinished.connect(self.resultsNameVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerGp.editingFinished.connect(self.resultsGpVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerGw.editingFinished.connect(self.resultsGwVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerSprd.editingFinished.connect (self.resultsSprdVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerTkn.editingFinished.connect(self.resultsTknVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerCash.editingFinished.connect(self.resultsCashVar.acceptStrFromSignal)
-        # self.main.le_resultsLinePlayerGvn.editingFinishe.connect(self.resultsGvnVar.acceptStrFromSignal)
+        self.main.le_resultLinePlayerGp.setValidator(self.rslt_gp_validator)
+        self.main.le_resultLinePlayerGw.setValidator(self.rslt_gw_validator)
+        self.main.le_resultLinePlayerSprd.setValidator(self.rslt_sprd_validator)
+        self.main.le_resultLinePlayerTkn.setValidator(self.rslt_tkn_validator)
+        self.main.le_resultLinePlayerCash.setValidator(self.rslt_cash_validator)
 
-        self.connectLBCtrlVar(self.main.lb_resultLinePlayerName, self.resultsNameVar)
-        self.connectLECtrlVar(self.main.le_resultLinePlayerGp, self.resultsGpVar)
-        self.connectLECtrlVar(self.main.le_resultLinePlayerGw, self.resultsGwVar)
-        self.connectLECtrlVar(self.main.le_resultLinePlayerSprd, self.resultsSprdVar)
-        self.connectLECtrlVar(self.main.le_resultLinePlayerCash, self.resultsCashVar)
-        self.connectLECtrlVar(self.main.le_resultLinePlayerTkn, self.resultsTknVar)
-        self.connectLBCtrlVar(self.main.lb_resultLinePlayerGvn, self.resultsGvnVar)
+        # [Results Entry Line Input Signals]
+        # [Result Entry Line handler processed upon Enter pressed on any field]
+        self.main.le_resultLinePlayerGp.textEdited.connect(self.rslt_gp.acceptIntAsStr)
+        self.main.le_resultLinePlayerGw.textEdited.connect(self.rslt_gw.acceptIntAsStr)
+        self.main.le_resultLinePlayerSprd.textEdited.connect(self.rslt_sprd.acceptIntAsStr)
+        self.main.le_resultLinePlayerTkn.textEdited.connect(self.rslt_tkn.acceptIntAsStr)
+        self.main.le_resultLinePlayerCash.textEdited.connect(self.rslt_cash.acceptIntAsStr)
+
+        # [Result Entry Line Output Signals]
+        self.connectLBCtrlVar(self.main.lb_resultLinePlayerName, self.rslt_name)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerGp, self.rslt_gp)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerGw, self.rslt_gw)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerSprd, self.rslt_sprd)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerCash, self.rslt_tkn)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerTkn, self.rslt_cash)
+        self.connectIntLBCtrlVar(self.main.lb_resultLinePlayerGvn, self.rslt_gvn)
+
+        # [SECTION Results Display Fields]
+
+        # used for results display line
+        self.resultsDisplayNameVar = StringVar()
+        self.resultsDisplayGpVar = IntVar()
+        self.resultsDisplayGwVar = IntVar()
+        self.resultsDisplaySprdVar = IntVar()
+        self.resultsDisplayCashVar = IntVar()
+        self.resultsDisplayTknVar = IntVar()
+        self.resultsDisplayGvnVar = IntVar()
+        self.resultsDisplayOrderVar = IntVar()
+
+        # [SECTION Results Panel Totals Display]
+        # [ Results Panel Ctrl vars]
+        self.plusSpreadVar = IntVar()
+        self.minusSpreadVar = IntVar()
+        self.givenSkunksVar = IntVar()
+        self.takenSkunksVar = IntVar()
+        self.diffSpreadVar = IntVar()
+        self.diffSkunksVar = IntVar()
+
+        # [ Results Panel output signals]
+        self.connectIntLBCtrlVar(self.main.lb_spreadPlusValue, self.plusSpreadVar)
+        self.connectIntLBCtrlVar(self.main.lb_spreadMinusValue, self.minusSpreadVar)
+        self.connectIntLBCtrlVar(self.main.lb_skunkPlusValue, self.givenSkunksVar)
+        self.connectIntLBCtrlVar(self.main.lb_skunkMinusValue, self.takenSkunksVar)
+        self.connectIntLBCtrlVar(self.main.lb_spreadDiffValue, self.diffSpreadVar)
+        self.connectIntLBCtrlVar(self.main.lb_skunkDiffValue, self.diffSkunksVar)
+
+
 
 
         # super().__init__(parent)
@@ -481,10 +489,16 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # all ui elements are pre-built by CribbageQt in masterscreen3
         # createWidgets sets up the list of listboxes structure
 
-    def connectLECtrlVar(self,ui, var):
+    def connectIntLECtrlVar(self,ui,var):
         # mutually connect UI object and property Var
-        ui.editingFinished.connect(var.acceptStrFromSignal)
+        ui.returnPressed.connect(var.acceptIntAsStr)
+        var.intValueAsStringChanged.connect(ui.setText)
+
+    def connectLBCtrlVar(self,ui,var):
         var.strValueChanged.connect(ui.setText)
+
+    def connectIntLBCtrlVar(self,ui,var):
+        var.intValueAsStringChanged.connect(ui.setText)
 
     def connectLBCtrlVar(self,ui,var):
         var.strValueChanged.connect(ui.setText)
@@ -527,6 +541,21 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #     self.showWidget(self.resultsExistingTourney)
     def initializeTourneyResults(self):
         # fill dynamic fields on tab change
+
+        # here's where we check to make sure user selected a tourney for results entry
+        if not isinstance(cfg.tourneyRecord, Tourney):
+            # msgbox then return use to tournyresuts tab
+            # result = QMessageBox.question(None, 'Use this database?', cfg.dbmsName)
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setText('First select a tourney then F6 for results')
+            msgBox.setWindowTitle('Missing tourney selection')
+            msgBox.setStandardButtons(QMessageBox.Ok)
+
+            result = msgBox.exec()
+            self.main.tabWidget.setCurrentIndex(1)
+            return
+
         self.tourneyResultsCount = cfg.ar.countTourneyResults(cfg.tourneyRecord)
         self.populatePframe()
         self.populateRframe()
@@ -1963,11 +1992,11 @@ if __name__ == "__main__":
     # hardwire cfg for testing                  #
     cfg.appTitle = 'Results Testing'  #
     cfg.clubNumber = 100  #
-    cfg.season = '2019-20'  #
+    cfg.season = '2024-25'  #
     cfg.clubName = 'Peggers}'  #
-    cfg.tourneyDate = '2019-05-02'  #
-    cfg.tourneyRecordId = 11  #
-    cfg.tourneyNumber = 8  #
+    cfg.tourneyDate = '2024-10-08'  #
+    cfg.tourneyRecordId = 181  #
+    cfg.tourneyNumber = 7  #
     # defer getting club record until connection made
     # cfg.clubRecord = Club.get(1)                #
     # cfg.clubId = cfg.clubRecord.id              #

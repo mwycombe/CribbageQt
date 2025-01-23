@@ -543,6 +543,22 @@ background-color: rgb(255, 255, 255);</string>
          </item>
         </layout>
        </widget>
+       <widget class="QLabel" name="label">
+        <property name="geometry">
+         <rect>
+          <x>330</x>
+          <y>479</y>
+          <width>71</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>(0 or 1)</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
       </widget>
       <widget class="QFrame" name="existingPlayersPanel">
        <property name="geometry">

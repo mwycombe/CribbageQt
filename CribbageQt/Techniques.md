@@ -52,6 +52,24 @@ without subclassing the PyQt fields as the ui is generated from QtDesigner.
 2. Create local named instances of the required kind of property Var
 3. Connect the <type>ValueRead|Changed signal to target function
 
+**Usage of ctrlvariables**
+***Incoming ctrlvariable text***
+The IntVar and DoubleVar both store numeric values internally and upon request or signal return their appropriate numeric values. 
+However, then interacting with UI entry fields, they must be prepared to deal with character data rather than numeric data.
+Further, the ctrlvariable properties are not set up as Slots so cannot be directly reference by a .connect(<slotname>) from signals.
+To allow UI signals to transfer their changed text data to the ctrlvariables, @Slots() are defined in the ctrlvariable properties.
+The slots are names to acceptIntAsStr and acceptDblAsStr. The incoming text is checked for numeric content before conversion to the
+appropriate kind of number.
+None of this replaces the normal construct of <varname>.myValue = [value] for natively assigning value to ctrlvairable. It is solely there
+for the purpose of handling connections from signals, most often signals from UI entry fields.
+***Outgoing ctrlvariable data***
+All ctrlvariables support the normal construct of [variable] = <varname>.myValue to deliver the ctrlvariables current value.
+However, when it is required to allow a UI field to sync with the value of a ctrlvariable that might change, there are change signals that deliver str data.
+Both IntVar and DblVar provide int|dblValueAsStrChanged to support connection of ctrlvariable signals to UI or other text slots.
+
+The above discussion for StrVar is moot as there are not conversions required for their signals or slots as they only deal in text.
+
+
 Using these properties and their associated signals allows emulation of the tkinter control variables when they are attached to Gui widgets.
 
 ## Emulating tkinter control variables

@@ -44,7 +44,7 @@ from PySide6 import QtCore, QtWidgets
 from PySide6.QtCore import Qt
 
 from PySide6.QtCore import QObject, Property, Signal
-from PySide6.QtGui import QShortcut, QKeySequence
+from PySide6.QtGui import QShortcut, QKeySequence, QIntValidator
 
 from cribbageconfig import tourneysdebug
 from ctrlVariables import StringVar, IntVar, DoubleVar
@@ -83,6 +83,19 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
         cfg.screenDict['ttab'] = self
 
+        # [Tourneys]
+        self.ty_number = IntVar()
+        self.ty_date = StringVar()
+
+        # [Tourney signals]
+        self.main.le_tourneyNumberEntry.textEdited.connect(self.ty_number.acceptIntAsStr)
+        self.main.le_tourneyDateEntry.textEdited.connect(self.ty_date.acceptStr)
+
+        # [Tourney validators]
+        self.ty_number_validator = QIntValidator(1,50,self)
+        self.main.le_tourneyNumberEntry.setValidator(self.ty_number_validator)
+
+
         #   [PYQT BINDING] section
         #   Set up short cut keys then connect signals to slots
 
@@ -120,8 +133,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
         # this does not create a loop because textEdited signal is not raised
         # by programmatic changes to the lineEdit field
-        self.tourneyNumberEntry.strValueChanged.connect(self.main.lb_tourneyNumberEntry.setText)
-        self.tourneyDateEntry.strValueChanged.connect(self.main.lb_tourneyDateEntry.setText)
+        self.tourneyNumberEntry.strValueChanged.connect(self.main.le_tourneyNumberEntry.setText)
+        self.tourneyDateEntry.strValueChanged.connect(self.main.le_tourneyDateEntry.setText)
         # super().__init__(parent)
         # self.grid()
         # self.parent = parent

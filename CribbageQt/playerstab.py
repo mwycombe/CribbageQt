@@ -13,7 +13,7 @@
 from operator import truediv
 
 from PySide6.QtCore import QObject, QEvent
-from PySide6.QtGui import QKeySequence, QMouseEvent
+from PySide6.QtGui import QKeySequence, QMouseEvent, QIntValidator
 
 # TODO: When a new player is added or change need to rebuild the xref tables in cfg -
 #  use CribbageStartUp.createPlayersXref()
@@ -86,8 +86,9 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
         self.main.showAllPlayers.stateChanged.connect(self.displayExistingPlayers)
 
-
-
+        # QObject control variables
+        #
+        # These are all setup in masteracreen
 
 
     #     super().__init__(parent)
@@ -246,6 +247,36 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.Esc_shortcut = QShortcut(QKeySequence(Qt.Key_Escape),self.main.playerTabPanel)
         self.Esc_shortcut.activated.connect(self.cancelNewPlayer)
 
+        # [Players]
+        self.pl_firstName = StringVar()
+        self.pl_lastName = StringVar()
+        self.pl_street = StringVar()
+        self.pl_city = StringVar()
+        self.pl_state = StringVar()
+        self.pl_zip = StringVar()
+        self.pl_phone = StringVar()
+        self.pl_email = StringVar()
+        self.pl_ACCNumber = StringVar()
+        self.pl_joined = StringVar()
+        self.pl_expires = StringVar()
+        self.pl_active = IntVar()
+
+        self.main.le_firstNameEntry.textEdited.connect(self.pl_firstName.acceptStr)
+        self.main.le_lastNameEntry.textEdited.connect(self.pl_lastName.acceptStr)
+        self.main.le_streetEntry.textEdited.connect(self.pl_street.acceptStr)
+        self.main.le_cityEntry.textEdited.connect(self.pl_city.acceptStr)
+        self.main.le_stateEntry.textEdited.connect(self.pl_state.acceptStr)
+        self.main.le_zipEntry.textEdited.connect(self.pl_zip.acceptStr)
+        self.main.le_phoneEntry.textEdited.connect(self.pl_phone.acceptStr)
+        self.main.le_emailEntry.textEdited.connect(self.pl_email.acceptStr)
+        self.main.le_accNumberEntry.textEdited.connect(self.pl_ACCNumber.acceptStr)
+        self.main.le_joinedEntry.textEdited.connect(self.pl_joined.acceptStr)
+        self.main.le_expiresEntry.textEdited.connect(self.pl_expires.acceptStr)
+        self.main.le_activeEntry.textEdited.connect(self.pl_active.acceptIntAsStr)
+
+        # [Player validators]
+        self.pl_active_validator = QIntValidator(0,1,self)
+        self.main.le_activeEntry.setValidator(self.pl_active_validator)
 
     # ************************************************************
     #   build out activity panel entries
@@ -389,11 +420,14 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #
     def submitNewPlayer(self):
         print('Validate and add new player stub')
-        return
-        #validate the required fields
-        print ('len(fname): ' + str(len(self.fname.get())))
-        print ('len(lname): ' + str(len(self.lname.get())))
 
+        #validate the required fields
+        print ('len(fname): ' , len(self.pl_firstName.myValue))
+        print ('len(lname): ' , len(self.pl_lastName.myValue))
+        print ('fname: ' , self.pl_firstName.myValue)
+        print ('lname: ' , self. pl_lastName.myValue)
+        print ('active: ', str(self.pl_active.myValue))
+        return
         #
         # at a minimum must have first and last name
         #
@@ -554,7 +588,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #
     def createPlayer(self):
         print ('create player stub')
-        return
+        self.main.le_firstNameEntry.setFocus()
         # self.hideWidget(self.editPlayerPanel)
         # self.showWidget(self.newPlayerPanel)
         # self.resetAllErrorHiLites()
