@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -2055,7 +2055,7 @@ background-color: rgb(255, 255, 255);</string>
           <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="text">
-          <string>TextLabel</string>
+          <string/>
          </property>
         </widget>
         <widget class="QLineEdit" name="le_resultLinePlayerGw">
@@ -2210,7 +2210,7 @@ background-color: rgb(255, 255, 255);</string>
        <property name="lineWidth">
         <number>3</number>
        </property>
-       <widget class="QCheckBox" name="allReportsCKB">
+       <widget class="QCheckBox" name="ckb_allReports">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2226,7 +2226,7 @@ background-color: rgb(255, 255, 255);</string>
          <bool>false</bool>
         </property>
        </widget>
-       <widget class="QCheckBox" name="ckd_alpha">
+       <widget class="QCheckBox" name="ckb_alpha">
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -2343,7 +2343,7 @@ background-color: rgb(255, 255, 255);</string>
          <string>Tourney Report</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="runReportsButton">
+       <widget class="QPushButton" name="pb_runReportsButton">
         <property name="geometry">
          <rect>
           <x>20</x>
@@ -2436,8 +2436,8 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>le_firstNameEntry</tabstop>
   <tabstop>le_lastNameEntry</tabstop>
   <tabstop>lw_listOfResultsNames</tabstop>
-  <tabstop>allReportsCKB</tabstop>
-  <tabstop>ckd_alpha</tabstop>
+  <tabstop>ckb_allReports</tabstop>
+  <tabstop>ckb_alpha</tabstop>
   <tabstop>ckb_battingAverage</tabstop>
   <tabstop>ckb_cash</tabstop>
   <tabstop>ckb_individStats</tabstop>
@@ -2445,7 +2445,7 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>ckb_qtrDrop</tabstop>
   <tabstop>ckb_skunk</tabstop>
   <tabstop>ckb_tourney</tabstop>
-  <tabstop>runReportsButton</tabstop>
+  <tabstop>pb_runReportsButton</tabstop>
   <tabstop>lw_listOfResultsGw</tabstop>
   <tabstop>lw_listOfResultsSprd</tabstop>
   <tabstop>tabWidget</tabstop>

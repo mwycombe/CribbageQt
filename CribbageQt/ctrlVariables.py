@@ -1,5 +1,18 @@
+# ctrlVariables.py
+#
+# Update  with bool 1/25/2025 mwycombe
+#
+# To provide equivalnt of tkinter UI control variable
+#
+# QObject properties only support direct assegnment and reading of the Property
+#
+# Each ctrlVariable has slots for allowing connection from UI fields and signals to
+# notify of changes.
+#
+# In addition, for interfacing with UI fields, ctrlVariables support receiving strings
+#
 
-from PySide6.QtCore import QObject, Property, Signal, Slot
+from PySide6.QtCore import QObject, Property, Signal, Slot, Qt
 from PySide6 import QtCore as qtc
 
 class StringVar(QObject):
@@ -49,6 +62,7 @@ class IntVar(QObject):
     @Slot(int)
     def acceptInt(self,value):
         self.myValue = value
+
     @Property(int)
     def myValue(self):
         self.intValueRead.emit(self._my_value)
@@ -89,3 +103,49 @@ class DoubleVar(QObject):
             self._my_value = value
             self.dblValueChanged.emit(value)
             self.dblValueAsStrChanged.emit(str(value))
+
+class BoolVar(QObject):
+    ''' Provides a for holding state of checkboxes and
+        radio buttons among other things'''
+    boolValueChanged = Signal(bool)
+    boolValueRead    = Signal(bool)     # optional signal on read
+    boolValueAsIntChanged = Signal(int)  # for those that prefer 1/0
+
+    def __init__(self):
+        super().__init__()
+        self._my_value = False
+
+    @Slot(int)
+    def acceptBoolAsInt(self,value):
+        if value == 0 or value == None:
+            self.myValue = False
+        else:
+            self.myValue = True
+
+    @Slot(bool)
+    def acceptBool(self, value):
+        self.myValue = value
+
+    @Slot(Qt.CheckState)
+    def acceptCheckState(self, value):
+        if value == Qt.Checked:
+            myValue = True
+        else:
+            myValue = False
+
+    @Property(bool)
+    def myValue(self):
+        self.boolValueRead.emit(self.my_value)
+        if self._my_value == True:
+            self.boolValueASIntChanged.emit(1)
+        else:
+            self.boolValueAsIntChagned.emit()
+    @myValue.setter
+    def myValue(self, value):
+        if value != self._my_value:
+            self._my_value = value
+            self.boolValueChanged.emit(value)
+            if value == True:
+                self.boolValueAsIntChanged.emit(1)
+            else:
+                self.boolValueAsIntChanged.emit(0)

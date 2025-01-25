@@ -34,9 +34,10 @@
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
-from PySide6.QtCore import Slot
+from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
 
+from ctrlVariables import BoolVar, IntVar, StringVar
 from ctrlVariables import StringVar, IntVar, DoubleVar
 
 from reportsActivityPanel import Ui_reportsactivitypanel
@@ -75,6 +76,37 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
 
         cfg.screenDict['rtab'] = self
 
+        #provide shortcut for addressing UI definitions in masterscreen
+        self.main = cfg.screenDict['masterwindow']
+
+        # PyQt control variables for report selecton
+        self.allReportsVar = BoolVar()
+        self.alphaVar = BoolVar()
+        self.battingAvgVar = BoolVar()
+        self.cashVar = BoolVar()
+        self.individStatsVar = BoolVar()
+        self.natallVar = BoolVar()
+        self.qtrDropVar = BoolVar()
+        self.qtrFullVar = BoolVar()
+        self.skunksVar = BoolVar()
+        self.tourneyVar = BoolVar()
+
+        # connect UI entities to ctrlvariables
+        self.main.ckb_alpha.checkStateChange.connect(self.alphaVar.acceptCheckState)
+        self.main.ckb_battingAverage.checkStateChange.connect(self.battingAvgVar.acceptCheckState)
+        self.main.ckb_cash.checkStateChange.connect(self.cashVar.acceptCheckState)
+        self.main.ckb_individStats.checkStateChange.connect(self.individStatsVar.acceptCheckState)
+        self.main.ckb_nationalAvges.checkStateChange.connect(self.natallVar.acceptCheckState)
+        self.main.ckb_qtrDrop.checkStateChange.connect(self.qtrDropVar.acceptCheckState)
+        self.main.ckb_qtrFull.checkStateChange.connect(self.qtrFullVar.acceptCheckState)
+        self.main.ckb_skunk.checktStateChange.connect(self.skunksVar.acceptCheckState)
+        self.main.ckb_tourney.checkStateChange.connect(self.tourneyVar.acceptCheckState)
+
+        # select all reports is special
+        self.main.ckb_allReports.checkStateChange.connect(self.allReportsVar.acceptCheckState)
+
+
+
         # control variables for report selection
         # self.allReportsVar = tk.IntVar()
         # self.alphaVar = tk.IntVar()
@@ -88,16 +120,21 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # self.tourneyVar = tk.IntVar()
 
         # build stack of selections
-        # rpt.reportStack = {}
-        # rpt.reportStack['alphareport'] = (self.alphaVar, alphareport.AlphaReport)
-        # rpt.reportStack['battingavgreport'] = (self.battingAvgVar, battingavgreport.BattingAvgReport)
-        # rpt.reportStack['cashreport'] = (self.cashVar, cashreport.CashReport)
-        # rpt.reportStack['individstatsreport'] = (self.individStatsVar, individualstatsReport.IndividualStatsReport)
-        # rpt.reportStack['natallreport'] = (self.natallVar, natallreport.NatAllReport)
-        # rpt.reportStack['qtrdropreport'] = (self.qtrDropVar, qtrdropreport.QtrDropReport)
-        # rpt.reportStack['qtrfullreport'] = (self.qtrFullVar, qtrfullreport.QtrFullReport)
-        # rpt.reportStack['skunkreport'] = (self.skunksVar, skunkreport.SkunkReport)
-        # rpt.reportStack['tourneyreport'] = (self.tourneyVar, tourneyreport.TourneyReport)
+        rpt.reportStack = {}
+        rpt.reportStack['alphareport'] = (self.alphaVar, alphareport.AlphaReport)
+        rpt.reportStack['battingavgreport'] = (self.battingAvgVar, battingavgreport.BattingAvgReport)
+        rpt.reportStack['cashreport'] = (self.cashVar, cashreport.CashReport)
+        rpt.reportStack['individstatsreport'] = (self.individStatsVar, individualstatsReport.IndividualStatsReport)
+        rpt.reportStack['natallreport'] = (self.natallVar, natallreport.NatAllReport)
+        rpt.reportStack['qtrdropreport'] = (self.qtrDropVar, qtrdropreport.QtrDropReport)
+        rpt.reportStack['qtrfullreport'] = (self.qtrFullVar, qtrfullreport.QtrFullReport)
+        rpt.reportStack['skunkreport'] = (self.skunksVar, skunkreport.SkunkReport)
+        rpt.reportStack['tourneyreport'] = (self.tourneyVar, tourneyreport.TourneyReport)
+
+        # capture run reports button pressed
+        self.main.runReportsButton.clicked.connect(self.reportHandler)
+
+
 
         # build out tab and register with notebook
         # self.config(padx = '5', pady = '5')
@@ -263,6 +300,14 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # self.tourneyChoice.grid(column = 0, sticky='w')
         # self.buildActivityPanel()
 
+    @Slot():
+    def allReports(self):
+        self.selectAllReports()
+
+    @Slot():
+    def resetAllReports(self):
+        self.resetSelections()
+
     def buildActivityPanel(self):
         # make the appropriate stacked widget current
         self.widgetIndex = cfg.stackedActivityDict['reportsactivitypanel']
@@ -288,41 +333,62 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # reports will be run from the database
         # which has been updated with the latest tournament
         self.buildActivityPanel()
-        # print ('Tourney List', cfg.at.getTourneysWithResults(cfg.season))
+        print ('Tourney List', cfg.at.getTourneysWithResults(cfg.season))
+        self.main.lw_listOfReportTourneys.clear()
         self.trnyList = cfg.at.getTourneysWithResults(cfg.season)
         # print('rpt', dir(rpt))
         # self.tourneysWithResults.delete(0, tk.END)
         for trny in self.trnyList:
             print(trny)
             tDate = date.fromisoformat(trny[2]).strftime('%m/%d/%Y')
-            self.tourneysWithResults.insert(tk.END,'  ' + str(trny[1]) + '.  ' + tDate)
+            self.main.lw_listOfReportTourneys.addItem(' ' + str(trny[1]) + '. ' + tDate)
+            # self.tourneysWithResults.insert(tk.END,'  ' + str(trny[1]) + '.  ' + tDate)
+        # set focus to first entry
+        self.main.lw_listOfReportTourneys.setCurrentRow(0)
+        self.main.lw_listOfReportTourneys.setFocus()
+
     def selectAllReports(self):
-        self.alphaVar.set(self.allReportsVar.get())
-        self.battingAvgVar.set(self.allReportsVar.get())
-        self.cashVar.set(self.allReportsVar.get())
-        # skip individual stats
-        # self.individStatsVar.set(self.allReportsVar.get())
-        self.natallVar.set(self.allReportsVar.get())
-        self.qtrDropVar.set(self.allReportsVar.get())
-        # skip full quarter report
-        # self.qtrFullVar.set(self.allReportsVar.get())
-        self.skunksVar.set(self.allReportsVar.get())
-        self.tourneyVar.set(self.allReportsVar.get())
+        # these gets must be replaced by UI signals setting the ctrlVariables
+        # self.alphaVar.set(self.allReportsVar.get())
+        # self.battingAvgVar.set(self.allReportsVar.get())
+        # self.cashVar.set(self.allReportsVar.get())
+        # # skip individual stats
+        # # self.individStatsVar.set(self.allReportsVar.get())
+        # self.natallVar.set(self.allReportsVar.get())
+        # self.qtrDropVar.set(self.allReportsVar.get())
+        # # skip full quarter report
+        # # self.qtrFullVar.set(self.allReportsVar.get())
+        # self.skunksVar.set(self.allReportsVar.get())
+        # self.tourneyVar.set(self.allReportsVar.get())
+        self.alphaVar = True
+        self.battingAvgVar = True
+        self.cashVar = True
+        self.natallVar = True
+        # check for which aqr it is
+        self.qtrDrop = True
+        # self.qtrFullVar = True    # not by default
+        self.skunksVar = True
+        self.tourneyVar = True
 
     def runReports(self, tnumber, tdate):
         # Was unable to resolve rpt. variables in this method called from the tkinter event handler
         # Calling this other method allowed all rpt. variables to be resolved.
         # This was the original attempt to include default parameters into the event handler
-        self.reportRunner()
-    def reportHandler(self, event):
+        self.reportRunner()     #NB. no params passed on!
+
+    @Slot()
+    def reportHandler(self):
         print ('Initial reportHandler')
         # print ('dir(rpt)', dir(rpt))
         # get the line selected by the report requestor
         # rpt.tourneyNumber =
+        # neither rpt.tourneyNumber nor rpt.tourneyDate have yet been set
         return self.runReports( tnumber=rpt.tourneyNumber, tdate=rpt.tourneyDate)
+
     def reportRunner(self):
         print ('reportrunner')
-        self.trnyListSelection = self.tourneysWithResults.curselection()[0]
+        self.trnyListSelection = self.main.lw_listOfReportTourneys.currentRow()
+        # self.trnyListSelection = self.tourneysWithResults.curselection()[0]
         print ('trnyListSelection: ', self.trnyListSelection)
         rpt.reportSeason = cfg.season
         rpt.tourneyRecordId = self.trnyList[self.trnyListSelection][0]
@@ -330,7 +396,8 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         rpt.tourneyDate = self.trnyList[self.trnyListSelection][2]
         print ('rpt. tourneyRecordId, tourneyNumber, tourneyDate: ', rpt.tourneyRecordId, rpt.tourneyNumber, rpt.tourneyDate)
         # print ('Dir?', dir(rpt))
-        curSel = self.tourneysWithResults.curselection()
+        curSel = self.main.lw_listOfReportTourneys.currentRow()
+        # curSel = self.tourneysWithResults.curselection()
         print('cursel:', curSel)
         print('line:', self.tourneysWithResults.get(curSel[0]))
         parsedLine = self.tourneysWithResults.get(curSel).strip(' ').split(' ')
@@ -363,15 +430,33 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # after all reports have been run, show msgbox and clean up.
         self.reportsFinished()
     def reportsFinished(self):
-        pass
+        # pass
         # self.showWidget(self.finishedPanel)
         # self.showWidget(self.finishedLabel)
         # mbx.showinfo('Reports All Run', 'Press Enter to Continue')
         # self.hideWidget(self.finishedPanel)
         # self.hideWidget(self.finishedLabel)
-        # self.resetSelections()
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText('Reports all done')
+        msgBox.setWindowTitle('Reports Finished')
+        msgBox.setStandardButtons(QMessageBox.Ok )
+
+        result = msgBox.exec()
+        self.resetSelections()
+
     def resetSelections(self):
-        pass
+        # pass
+        self.allReportsVar = False
+        self.alphaVar = False
+        self.battingAvgVar = False
+        self.cashVar = False
+        self.individStatsVar = False
+        self.natallVar = False
+        self.qtrDropVar = False
+        self.qtrFullVar = False
+        self.skunksVar = False
+        self.tourneyVar = False
         # self.allReportsVar.set(0)
         # self.battingAvgVar.set(0)
         # self.cashVar.set(0)

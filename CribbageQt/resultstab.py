@@ -40,7 +40,7 @@ from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
 from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
-from PySide6.QtWidgets import QMessageBox
+from PySide6.QtWidgets import QMessageBox, QListWidget, QListWidgetItem
 
 from ctrlVariables import StringVar, IntVar, DoubleVar
 
@@ -172,8 +172,6 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.connectIntLBCtrlVar(self.main.lb_skunkMinusValue, self.takenSkunksVar)
         self.connectIntLBCtrlVar(self.main.lb_spreadDiffValue, self.diffSpreadVar)
         self.connectIntLBCtrlVar(self.main.lb_skunkDiffValue, self.diffSkunksVar)
-
-
 
 
         # super().__init__(parent)
@@ -1288,6 +1286,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         print ('Quit the result line entry with no action stub.')
 
         self.clearEditLine()
+        self.main.lw_listOfResultPlayers.setCurrentRow(0)
+
+        self.main.lw_listOfResultPlayers.setCurrentRow(0)
+        self.main.lw_listOfResultPlayers.setFocus()
         # self.hideResultsInputPanel()
         # self.hideResultsInstructionsPanel()
         # self.hideWidget(self.resultsExistingTourney)
@@ -1318,6 +1320,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # if already result line, then convert to edit
 
         # PyQt equivalent
+        print ('@ newResult')
         currentrow = self.main.lw_listOfResultPlayers.currentRow()
         print ('F3 on player: ', self.main.lw_listOfResultPlayers.item(currentrow).text())
         # print ('F3 on player: ',self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
@@ -1578,6 +1581,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.newResultLine = True
         print ('buildNewLine: ', cfg.newTourney, ' ', cfg.tourneyEdit, ' ', cfg.newResultLine)
         self.clearEditLine()
+        self.rslt_name.myValue = pname
+        self.main.le_resultLinePlayerGp.setFocus()
         # self.resultsNameVar.set(pname)
         # self.resultsTknVar.set(0)           # in case the user skips it
         # self.resultsCashVar.set(0)           # default winnings!
