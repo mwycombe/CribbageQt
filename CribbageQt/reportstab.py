@@ -92,18 +92,32 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         self.tourneyVar = BoolVar()
 
         # connect UI entities to ctrlvariables
-        self.main.ckb_alpha.checkStateChange.connect(self.alphaVar.acceptCheckState)
-        self.main.ckb_battingAverage.checkStateChange.connect(self.battingAvgVar.acceptCheckState)
-        self.main.ckb_cash.checkStateChange.connect(self.cashVar.acceptCheckState)
-        self.main.ckb_individStats.checkStateChange.connect(self.individStatsVar.acceptCheckState)
-        self.main.ckb_nationalAvges.checkStateChange.connect(self.natallVar.acceptCheckState)
-        self.main.ckb_qtrDrop.checkStateChange.connect(self.qtrDropVar.acceptCheckState)
-        self.main.ckb_qtrFull.checkStateChange.connect(self.qtrFullVar.acceptCheckState)
-        self.main.ckb_skunk.checktStateChange.connect(self.skunksVar.acceptCheckState)
-        self.main.ckb_tourney.checkStateChange.connect(self.tourneyVar.acceptCheckState)
+        self.main.ckb_alpha.checkStateChanged.connect(self.alphaVar.acceptCheckState)
+        self.main.ckb_battingAverage.checkStateChanged.connect(self.battingAvgVar.acceptCheckState)
+        self.main.ckb_cash.checkStateChanged.connect(self.cashVar.acceptCheckState)
+        self.main.ckb_individStats.checkStateChanged.connect(self.individStatsVar.acceptCheckState)
+        self.main.ckb_nationalAvges.checkStateChanged.connect(self.natallVar.acceptCheckState)
+        self.main.ckb_qtrDrop.checkStateChanged.connect(self.qtrDropVar.acceptCheckState)
+        self.main.ckb_qtrFull.checkStateChanged.connect(self.qtrFullVar.acceptCheckState)
+        self.main.ckb_skunk.checkStateChanged.connect(self.skunksVar.acceptCheckState)
+        self.main.ckb_tourney.checkStateChanged.connect(self.tourneyVar.acceptCheckState)
+
+        # connect ctrlvariables back to UI entities
+        self.allReportsVar.boolValueChanged.connect(self.main.ckb_allReports.setChecked)
+        self.alphaVar.boolValueChanged.connect(self.main.ckb_alpha.setChecked)
+        self.battingAvgVar.boolValueChanged.connect(self.main.ckb_battingAverage.setChecked)
+        self.cashVar.boolValueChanged.connect(self.main.ckb_cash.setChecked)
+        self.individStatsVar.boolValueChanged.connect(self.main.ckb_individStats.setChecked)
+        self.natallVar.boolValueChanged.connect(self.main.ckb_nationalAvges.setChecked)
+        self.qtrDropVar.boolValueChanged.connect(self.main.ckb_qtrDrop.setChecked)
+        self.qtrFullVar.boolValueChanged.connect(self.main.ckb_qtrFull.setChecked)
+        self.skunksVar.boolValueChanged.connect(self.main.ckb_skunk.setChecked)
+        self.tourneyVar.boolValueChanged.connect(self.main.ckb_tourney.setChecked)
 
         # select all reports is special
-        self.main.ckb_allReports.checkStateChange.connect(self.allReportsVar.acceptCheckState)
+        self.main.ckb_allReports.checkStateChanged.connect(self.allReportsVar.acceptCheckState)
+        # self.main.ckb_allReports.checkStateChanged.connect(self.allReportsChange)
+        self.allReportsVar.boolValueChanged.connect(self.handleAllReportsState)
 
 
 
@@ -132,8 +146,8 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         rpt.reportStack['tourneyreport'] = (self.tourneyVar, tourneyreport.TourneyReport)
 
         # capture run reports button pressed
-        self.main.runReportsButton.clicked.connect(self.reportHandler)
-
+        self.main.pb_runReportsButton.clicked.connect(self.reportHandler)
+        self.allReportsVar.boolValueChanged.connect(self.handleAllReportsState)
 
 
         # build out tab and register with notebook
@@ -300,13 +314,19 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # self.tourneyChoice.grid(column = 0, sticky='w')
         # self.buildActivityPanel()
 
-    @Slot():
-    def allReports(self):
-        self.selectAllReports()
+    @Slot(Qt.CheckState)
+    def allReportsChange(self,value):
+        print ('Got all reports signal')
+        print (value)
+        # try to set boolVar
 
-    @Slot():
-    def resetAllReports(self):
-        self.resetSelections()
+
+    @Slot(bool)
+    def handleAllReportsState(self,value):
+        if value:
+            self.selectAllReports()
+        else:
+            self.resetSelections()
 
     def buildActivityPanel(self):
         # make the appropriate stacked widget current
@@ -360,15 +380,15 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # # self.qtrFullVar.set(self.allReportsVar.get())
         # self.skunksVar.set(self.allReportsVar.get())
         # self.tourneyVar.set(self.allReportsVar.get())
-        self.alphaVar = True
-        self.battingAvgVar = True
-        self.cashVar = True
-        self.natallVar = True
+        self.alphaVar.myValue = True
+        self.battingAvgVar.myValue = True
+        self.cashVar.myValue = True
+        self.natallVar.myValue = True
         # check for which aqr it is
-        self.qtrDrop = True
-        # self.qtrFullVar = True    # not by default
-        self.skunksVar = True
-        self.tourneyVar = True
+        self.qtrDropVar.myValue = True
+        # self.qtrFullVar.myValue.myValue == True    # not by default
+        self.skunksVar.myValue = True
+        self.tourneyVar.myValue = True
 
     def runReports(self, tnumber, tdate):
         # Was unable to resolve rpt. variables in this method called from the tkinter event handler
@@ -398,6 +418,7 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # print ('Dir?', dir(rpt))
         curSel = self.main.lw_listOfReportTourneys.currentRow()
         # curSel = self.tourneysWithResults.curselection()
+        # use lw_listOfReportTourneys
         print('cursel:', curSel)
         print('line:', self.tourneysWithResults.get(curSel[0]))
         parsedLine = self.tourneysWithResults.get(curSel).strip(' ').split(' ')
@@ -420,7 +441,9 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         for (k, v) in rpt.reportStack.items():
             # k is reportname, v is (IntVar, report Class to run)
             # print ('value: ',v)
-            if v[0].get() == 1:
+            # if v[0].get() == 1:
+            # dictionary holds boolVar properties
+            if [v0].myValue == True:
                 # instantiate and run report class
                 print ('Run: ', k)
                 runReport = v[1]
@@ -447,16 +470,16 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
 
     def resetSelections(self):
         # pass
-        self.allReportsVar = False
-        self.alphaVar = False
-        self.battingAvgVar = False
-        self.cashVar = False
-        self.individStatsVar = False
-        self.natallVar = False
-        self.qtrDropVar = False
-        self.qtrFullVar = False
-        self.skunksVar = False
-        self.tourneyVar = False
+        self.allReportsVar.myValue = False
+        self.alphaVar.myValue = False
+        self.battingAvgVar.myValue = False
+        self.cashVar.myValue = False
+        self.individStatsVar.myValue = False
+        self.natallVar.myValue = False
+        self.qtrDropVar.myValue = False
+        self.qtrFullVar.myValue = False
+        self.skunksVar.myValue = False
+        self.tourneyVar.myValue = False
         # self.allReportsVar.set(0)
         # self.battingAvgVar.set(0)
         # self.cashVar.set(0)

@@ -50,7 +50,8 @@ without subclassing the PyQt fields as the ui is generated from QtDesigner.
 **How to use QtProperties**
 1. Import StringVar, IntVar, DoubleVar
 2. Create local named instances of the required kind of property Var
-3. Connect the <type>ValueRead|Changed signal to target function
+3. Connect the <type>ValueRead|Changed signal to target slot
+4. Use is <propName>.myValue to retrieve; <propname>.myValue = value to set
 
 **Usage of ctrlvariables**
 ***Incoming ctrlvariable text***
@@ -67,11 +68,27 @@ All ctrlvariables support the normal construct of [variable] = <varname>.myValue
 However, when it is required to allow a UI field to sync with the value of a ctrlvariable that might change, there are change signals that deliver str data.
 Both IntVar and DblVar provide int|dblValueAsStrChanged to support connection of ctrlvariable signals to UI or other text slots.
 
-The above discussion for StrVar is moot as there are not conversions required for their signals or slots as they only deal in text.
+The above discussion for StrVar is moot as there are no conversions required for their signals or slots as they only deal in text.
 
 
 Using these properties and their associated signals allows emulation of the tkinter control variables when they are attached to Gui widgets.
 
+**Bool ctrlvariables **
+These are used to hande the state of checkboxes and radio boxes. They have additional special capabilities.
+***Incomig bool ctrlvariable slots***
+BoolVar provides various slots
+1.  acceptBool
+2.  acceptBoolAsInt
+3.  acceptCheckState
+As with the other ctrlvariables these slots are provided as a convenience for chaining to UI entity signals as QtProperty does not provide any native slot capabilites.
+***Outgoing bool ctrlvariable signals
+BoolVar provides several convenience signals for users to connect to.
+1.  boolValueRead (bool) signal for delivers native bool state
+2.  boolValueChanged (bool) signal to show when changed, again delivers native bool state
+3.  boolValueAsIntChanged (int) signal - 1/0 - for those that wish to use integers for bool states rather than True/False
+
+boolValueChanged.connect(<ui-field>.setChecked) allows direct connection of the BoolVar to the state of a checkedbox.
+The user must set up the connect of the boolValueChanged signal to the UI field setChecked slot. Then it works just like tkinter ctrlvar
 ## Emulating tkinter control variables
 
 This is why @Properties and signals were investigated in the first place.

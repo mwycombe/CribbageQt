@@ -128,18 +128,19 @@ class BoolVar(QObject):
 
     @Slot(Qt.CheckState)
     def acceptCheckState(self, value):
+        print('Bool check state: ', value)
         if value == Qt.Checked:
-            myValue = True
+            self.myValue = True
         else:
-            myValue = False
+            self.myValue = False
 
     @Property(bool)
     def myValue(self):
-        self.boolValueRead.emit(self.my_value)
+        self.boolValueRead.emit(self._my_value)
         if self._my_value == True:
-            self.boolValueASIntChanged.emit(1)
+            self.boolValueAsIntChanged.emit(1)
         else:
-            self.boolValueAsIntChagned.emit()
+            self.boolValueAsIntChanged.emit(0)
     @myValue.setter
     def myValue(self, value):
         if value != self._my_value:
