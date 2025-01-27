@@ -420,8 +420,9 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         # curSel = self.tourneysWithResults.curselection()
         # use lw_listOfReportTourneys
         print('cursel:', curSel)
-        print('line:', self.tourneysWithResults.get(curSel[0]))
-        parsedLine = self.tourneysWithResults.get(curSel).strip(' ').split(' ')
+        # print('line:', self.tourneysWithResults.get(curSel[0]))
+        print ('line: ', self.main.lw_listOfReportTourneys.item(curSel))
+        parsedLine = self.main.lw_listOfReportTourneys.item(curSel).text().strip(' ').split(' ')
         print('Parsed line:', parsedLine)
         # rpt.tourneyNumber = int(parsedLine[0].split('.')[0])
         # rpt.reportSeason = cfg.season
