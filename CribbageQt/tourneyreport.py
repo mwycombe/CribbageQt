@@ -28,6 +28,8 @@ from fpdf import FPDF
 class TourneyReport(object):
     def __init__(self):
         # tourney passed in is the tourney object in rpt for the tourney being reported on
+        if cfg.debug and cfg.reportsdebug:
+            print ('Tourney report entered')
         rptData = BuildReportData()
         rpt.reportLineNumber = 0
         os.chdir(cfg.reportDirectory)

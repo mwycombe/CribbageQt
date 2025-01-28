@@ -130,6 +130,7 @@ class BoolVar(QObject):
     def acceptCheckState(self, value):
         print('Bool check state: ', value)
         if value == Qt.Checked:
+            print('Set as True')
             self.myValue = True
         else:
             self.myValue = False
@@ -143,7 +144,9 @@ class BoolVar(QObject):
             self.boolValueAsIntChanged.emit(0)
     @myValue.setter
     def myValue(self, value):
+        print ('value, _my_value ', value, self._my_value)
         if value != self._my_value:
+            print('set _my_value to: ', value)
             self._my_value = value
             self.boolValueChanged.emit(value)
             if value == True:

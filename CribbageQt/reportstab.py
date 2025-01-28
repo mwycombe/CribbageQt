@@ -34,6 +34,7 @@
 from PySide6 import QtCore as qtc
 from PySide6 import QtWidgets as qtw
 from PySide6 import QtGui as qtg
+from PySide6.QtWidgets import QMessageBox
 from PySide6.QtCore import Slot, Qt
 from PySide6 import QtCore, QtWidgets
 
@@ -361,7 +362,7 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
         for trny in self.trnyList:
             print(trny)
             tDate = date.fromisoformat(trny[2]).strftime('%m/%d/%Y')
-            self.main.lw_listOfReportTourneys.addItem(' ' + str(trny[1]) + '. ' + tDate)
+            self.main.lw_listOfReportTourneys.addItem(' ' + str(trny[1]) + '.  ' + tDate)
             # self.tourneysWithResults.insert(tk.END,'  ' + str(trny[1]) + '.  ' + tDate)
         # set focus to first entry
         self.main.lw_listOfReportTourneys.setCurrentRow(0)
@@ -444,7 +445,7 @@ class ReportsTab (qtw.QWidget, Ui_reportsactivitypanel):
             # print ('value: ',v)
             # if v[0].get() == 1:
             # dictionary holds boolVar properties
-            if [v0].myValue == True:
+            if v[0].myValue == True:
                 # instantiate and run report class
                 print ('Run: ', k)
                 runReport = v[1]
