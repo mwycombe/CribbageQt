@@ -646,6 +646,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.resetAllErrorHiLites()     # just in case entry form was not cleaned up
         # self.hideWidget(self.newPlayerPanel)
         # self.showWidget(self.editPlayerPanel)
+        self.main.lb_newPlayerLabel.setText('Edit Player')
         self.editPlayerForm()
         # self.setFocus(self.fnameEntry)
         # self.showSelected(self.fnameEntry)
@@ -713,6 +714,17 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         print ('listBoxIndex: ', self.listBoxIndex)
         print ('firstName: ', self.existingPlayers[self.listBoxIndex].FirstName)
         self.pl_firstName.myValue = self.existingPlayers[self.listBoxIndex].FirstName
+        self.pl_lastName.myValue = self.existingPlayers[self.listBoxIndex].LastName
+        self.pl_street.myValue = self.existingPlayers[self.listBoxIndex].Street
+        self.pl_city.myValue = self.existingPlayers[self.listBoxIndex].City
+        self.pl_zip.myValue = self.existingPlayers[self.listBoxIndex].Zip
+        self.pl_phone.myValue = self.existingPlayers[self.listBoxIndex].Phone
+        self.pl_email.myValue = self.existingPlayers[self.listBoxIndex].Email
+        self.pl_ACCNumber.myValue = self.existingPlayers[self.listBoxIndex].ACCNumber
+        self.pl_expires.myValue = self.existingPlayers[self.listBoxIndex].ACCExpiration
+        self.pl_joined.myValue = self.existingPlayers[self.listBoxIndex].Joined
+        self.pl_active.myValue = self.existingPlayers[self.listBoxIndex].Active
+
 
     def cancelPlayerEdit (self, event):
         # restore new Player panel
@@ -757,6 +769,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     @Slot(int)
     def trackSelectedPlayer(self, newRow):
         self.listBoxIndex = newRow
+
     def editSelectedPlayer(self):
         print ('Edit selected player from listbox')
         #
@@ -826,8 +839,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     def cancelNewPlayer(self):
         print('Cancel player activity stub')
         # print('Player: ' + self.main.listOfPlayers.currentItem().text())
-        return
-        # self.resetForm()
+        # return
+        self.main.lb_newPlayerLabel.setText('New Player')
+        self.resetForm()
+
         # self.hideWidget(self.newPlayerPanel)
         # self.exp.selection_clear(0, self.exp.size()-1)
         # self.exp.selection_set(0)

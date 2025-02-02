@@ -37,7 +37,7 @@ class StringVar(QObject):
 
     @myValue.setter
     def myValue(self,value):
-        print('StrVar received: ' + value)
+        print('StrVar received: ', value)
         if value != self._my_value:
             self._my_value = value
             print ('strValueChanged: ', value)
