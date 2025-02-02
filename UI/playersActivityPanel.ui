@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>playersactivitypanel</class>
+ <widget class="QWidget" name="playersactivitypanel">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>711</width>
+    <height>161</height>
+   </rect>
+  </property>
+  <property name="font">
+   <font>
+    <pointsize>12</pointsize>
+    <fontweight>Medium</fontweight>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Cribbage Grass Roots</string>
+  </property>
+  <widget class="QWidget" name="playersactivitywidget" native="true">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>711</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <widget class="QWidget" name="verticalLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>12</y>
+      <width>311</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="playersF2ActivityLabel">
+       <property name="text">
+        <string>F2    Edit player selected in listbox</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="playersF3ActivityLabel">
+       <property name="text">
+        <string>F3    Create a new player</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="playersDoubleClickActivityLabel">
+       <property name="text">
+        <string>Double Click entry to toggle active status</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget_3">
+    <property name="geometry">
+     <rect>
+      <x>390</x>
+      <y>10</y>
+      <width>311</width>
+      <height>141</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_6">
+     <item>
+      <widget class="QLabel" name="playersF9ActivityLabel">
+       <property name="text">
+        <string>F9    Toggle active status for selected player</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="playersF10ActivityLabel">
+       <property name="text">
+        <string>F10  Save all current changes</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="playersEscActivityLabel">
+       <property name="text">
+        <string>Esc   Quit current activity</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

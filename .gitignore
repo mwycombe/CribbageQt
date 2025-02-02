@@ -1,0 +1,8 @@
+_pycache__
+*.pyc
+cribbage.cfg
+
+*.iml
+
+
+*.xml
