@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQteqRfew.ui'
+## Form generated from reading UI file 'CribbageQtFLKDmn.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -155,7 +155,7 @@ class Ui_MainCribbageWindow(object):
         self.playerTabPanel.setLineWidth(2)
         self.newPlayerFrame = QFrame(self.playerTabPanel)
         self.newPlayerFrame.setObjectName(u"newPlayerFrame")
-        self.newPlayerFrame.setGeometry(QRect(420, 80, 451, 511))
+        self.newPlayerFrame.setGeometry(QRect(400, 80, 401, 511))
         self.newPlayerFrame.setAutoFillBackground(True)
         self.newPlayerFrame.setFrameShape(QFrame.Shape.Panel)
         self.newPlayerFrame.setFrameShadow(QFrame.Shadow.Sunken)
@@ -264,7 +264,7 @@ class Ui_MainCribbageWindow(object):
         self.listOfPlayers.setSortingEnabled(False)
         self.layoutWidget1 = QWidget(self.playerTabPanel)
         self.layoutWidget1.setObjectName(u"layoutWidget1")
-        self.layoutWidget1.setGeometry(QRect(570, 130, 152, 461))
+        self.layoutWidget1.setGeometry(QRect(560, 130, 152, 461))
         self.verticalLayout_2 = QVBoxLayout(self.layoutWidget1)
         self.verticalLayout_2.setObjectName(u"verticalLayout_2")
         self.verticalLayout_2.setSizeConstraint(QLayout.SizeConstraint.SetNoConstraint)
@@ -328,6 +328,33 @@ class Ui_MainCribbageWindow(object):
         self.le_activeEntry.setObjectName(u"le_activeEntry")
 
         self.verticalLayout_2.addWidget(self.le_activeEntry)
+
+        self.frame_2 = QFrame(self.playerTabPanel)
+        self.frame_2.setObjectName(u"frame_2")
+        self.frame_2.setGeometry(QRect(850, 220, 145, 191))
+        self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
+        self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_4 = QVBoxLayout(self.frame_2)
+        self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.lb_badPlayerDateError = QLabel(self.frame_2)
+        self.lb_badPlayerDateError.setObjectName(u"lb_badPlayerDateError")
+
+        self.verticalLayout_4.addWidget(self.lb_badPlayerDateError)
+
+        self.lb_duplicatePlayerNameError = QLabel(self.frame_2)
+        self.lb_duplicatePlayerNameError.setObjectName(u"lb_duplicatePlayerNameError")
+
+        self.verticalLayout_4.addWidget(self.lb_duplicatePlayerNameError)
+
+        self.lb_badPlayerEmailError = QLabel(self.frame_2)
+        self.lb_badPlayerEmailError.setObjectName(u"lb_badPlayerEmailError")
+
+        self.verticalLayout_4.addWidget(self.lb_badPlayerEmailError)
+
+        self.lb_badPlayerAccNumberError = QLabel(self.frame_2)
+        self.lb_badPlayerAccNumberError.setObjectName(u"lb_badPlayerAccNumberError")
+
+        self.verticalLayout_4.addWidget(self.lb_badPlayerAccNumberError)
 
         self.tabWidget.addTab(self.playersTab, "")
         self.tourneysTab = QWidget()
@@ -919,6 +946,10 @@ class Ui_MainCribbageWindow(object):
         self.existingPlayersLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Existing Players", None))
         self.activePlayerLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"* = Active", None))
         self.showAllPlayers.setText(QCoreApplication.translate("MainCribbageWindow", u"Show All", None))
+        self.lb_badPlayerDateError.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad Date Format:", None))
+        self.lb_duplicatePlayerNameError.setText(QCoreApplication.translate("MainCribbageWindow", u"Duplicate Name:", None))
+        self.lb_badPlayerEmailError.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad Email:", None))
+        self.lb_badPlayerAccNumberError.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad ACC Number:", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.playersTab), QCoreApplication.translate("MainCribbageWindow", u"Players", None))
         self.tourneyF6EnterResultsLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"F6 - Enter results for selected tourney", None))
         self.trnyNoHdr.setText(QCoreApplication.translate("MainCribbageWindow", u"Trny No.", None))
