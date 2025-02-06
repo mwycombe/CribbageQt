@@ -10,10 +10,10 @@
 
 # System imports
 from sqlobject import *
-import tkinter as tk
-from tkinter import ttk
-from tkinter import messagebox as mbx
-from tkinter import filedialog as fdg
+# import tkinter as tk
+# from tkinter import ttk
+# from tkinter import messagebox as mbx
+# from tkinter import filedialog as fdg
 
 import sys
 import os
@@ -23,6 +23,8 @@ from club import Club
 from tourney import Tourney
 from player import Player
 from scorecard import ScoreCard
+from ctrlVariables import StringVar, IntVar, BoolVar
+from PySide6.QtCore import Slot, Signal
 
 # these value will be filled in by various modules progress
 # a whole set of tabbed class modules will use this for inter-module comm.
@@ -42,6 +44,13 @@ reportDirectory = ''    # where all reports are produced
 newTourney = False      # asjusted when reportstab gets tabchange event for a given tourney
 tourneyEdit = False     # set to true if we are editing an existing line, else False means new result
 newResultLine = False   # could be new result for new tourney or for an existing tourney
+
+clubNameVar = StringVar()
+clubLocationVar = StringVar()
+clubIdVar = IntVar()
+clubNumbervar = IntVar()
+clubCountVar = IntVar()
+seasonVar = StringVar()
 
 # These dbms access routines are initialized by
 # peggers __init__ function

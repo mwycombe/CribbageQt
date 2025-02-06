@@ -81,6 +81,10 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         self.lb_duplicateTourneyDate.setStyleSheet('background-color: white; color: red')
         self.lb_duplicateTourneyDate.hide()
 
+        # populate cfg.screenDict
+        cfg.screenDict['masterwindow'] = self
+        cfg.screenDict['sessionpanel'] = self.sessionPanel      # container for activity panels
+        cfg.screenDict['notebook'] = self.tabWidget             # replaces old tk notebook construct
 
 
 
@@ -90,10 +94,6 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
         if cfg.debug:
             print('continue gui setup')
 
-        # populate cfg.screenDict
-        cfg.screenDict['masterwindow'] = self
-        cfg.screenDict['sessionpanel'] = self.sessionPanel      # container for activity panels
-        cfg.screenDict['notebook'] = self.tabWidget             # replaces old tk notebook construct
 
         # call wipe to see what's there
         # MasterScreen.wipeActivityPanel()

@@ -162,9 +162,18 @@ class CribbageStartup ():
         print (type(cfg.clubRecord))
         cfg.clubId = cfg.clubRecord.id
         cfg.clubName = cfg.clubRecord.clubName
+        cfg.clubNumber = cfg.clubRecord.clubNumber
         cfg.clubLocation = cfg.clubRecord.location
         cfg.reportDirectory = cfg.clubRecord.reportDirectory
         cfg.clubCount = len(cfg.ap.allActivePlayers(cfg.clubRecord))
+
+        # init screen hdr with retrieved information
+
+        cfg.main = cfg.screenDict['masterwindow']
+        cfg.main.hdrClubName = cfg.clubName
+        cfg.main.hdrClubNumber = str(cfg.clubNumber)
+        cfg.main.hdrSeason = cfg.season
+        cfg.main.hdrActivePlayerCount = cfg.clubCount
 
         if cfg.debug == True:
             print('clubId:= ' + str(cfg.clubId))
