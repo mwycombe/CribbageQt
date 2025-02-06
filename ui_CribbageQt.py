@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtFLKDmn.ui'
+## Form generated from reading UI file 'CribbageQtkBIhiH.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QFrame, QLabel,
-    QLayout, QLineEdit, QListWidget, QListWidgetItem,
-    QMainWindow, QPushButton, QSizePolicy, QStackedWidget,
-    QTabWidget, QVBoxLayout, QWidget)
+from PySide6.QtWidgets import (QAbstractItemView, QApplication, QCheckBox, QFrame,
+    QLabel, QLayout, QLineEdit, QListWidget,
+    QListWidgetItem, QMainWindow, QPushButton, QSizePolicy,
+    QStackedWidget, QTabWidget, QVBoxLayout, QWidget)
 
 class Ui_MainCribbageWindow(object):
     def setupUi(self, MainCribbageWindow):
@@ -255,11 +255,14 @@ class Ui_MainCribbageWindow(object):
         self.showAllPlayers.setGeometry(QRect(140, 50, 87, 24))
         self.listOfPlayers = QListWidget(self.existingPlayersPanel)
         self.listOfPlayers.setObjectName(u"listOfPlayers")
+        self.listOfPlayers.setEnabled(True)
         self.listOfPlayers.setGeometry(QRect(30, 80, 231, 541))
+        self.listOfPlayers.setMouseTracking(True)
         self.listOfPlayers.setFrameShape(QFrame.Shape.Box)
         self.listOfPlayers.setLineWidth(3)
         self.listOfPlayers.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.listOfPlayers.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
+        self.listOfPlayers.setEditTriggers(QAbstractItemView.EditTrigger.CurrentChanged|QAbstractItemView.EditTrigger.DoubleClicked|QAbstractItemView.EditTrigger.EditKeyPressed)
         self.listOfPlayers.setSelectionRectVisible(True)
         self.listOfPlayers.setSortingEnabled(False)
         self.layoutWidget1 = QWidget(self.playerTabPanel)
@@ -331,11 +334,16 @@ class Ui_MainCribbageWindow(object):
 
         self.frame_2 = QFrame(self.playerTabPanel)
         self.frame_2.setObjectName(u"frame_2")
-        self.frame_2.setGeometry(QRect(850, 220, 145, 191))
+        self.frame_2.setGeometry(QRect(850, 170, 145, 241))
         self.frame_2.setFrameShape(QFrame.Shape.StyledPanel)
         self.frame_2.setFrameShadow(QFrame.Shadow.Raised)
         self.verticalLayout_4 = QVBoxLayout(self.frame_2)
         self.verticalLayout_4.setObjectName(u"verticalLayout_4")
+        self.lb_missingNames = QLabel(self.frame_2)
+        self.lb_missingNames.setObjectName(u"lb_missingNames")
+
+        self.verticalLayout_4.addWidget(self.lb_missingNames)
+
         self.lb_badPlayerDateError = QLabel(self.frame_2)
         self.lb_badPlayerDateError.setObjectName(u"lb_badPlayerDateError")
 
@@ -929,7 +937,7 @@ class Ui_MainCribbageWindow(object):
         self.clubFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Club", None))
         self.activityFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Activity", None))
         self.SessionFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Session", None))
-        self.lb_newPlayerLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"New Player", None))
+        self.lb_newPlayerLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Edit F2 - New F3", None))
         self.firstNameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"First Name", None))
         self.lastNameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Last Name", None))
         self.streetLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Street", None))
@@ -946,6 +954,7 @@ class Ui_MainCribbageWindow(object):
         self.existingPlayersLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Existing Players", None))
         self.activePlayerLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"* = Active", None))
         self.showAllPlayers.setText(QCoreApplication.translate("MainCribbageWindow", u"Show All", None))
+        self.lb_missingNames.setText(QCoreApplication.translate("MainCribbageWindow", u"Missing Names", None))
         self.lb_badPlayerDateError.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad Date Format:", None))
         self.lb_duplicatePlayerNameError.setText(QCoreApplication.translate("MainCribbageWindow", u"Duplicate Name:", None))
         self.lb_badPlayerEmailError.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad Email:", None))

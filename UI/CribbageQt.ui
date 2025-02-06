@@ -432,7 +432,7 @@ background-color: rgb(255, 255, 255);</string>
          </rect>
         </property>
         <property name="text">
-         <string>New Player</string>
+         <string>Edit F2 - New F3</string>
         </property>
        </widget>
        <widget class="QWidget" name="layoutWidget">
@@ -621,6 +621,9 @@ background-color: rgb(255, 255, 255);</string>
         </property>
        </widget>
        <widget class="QListWidget" name="listOfPlayers">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
         <property name="geometry">
          <rect>
           <x>30</x>
@@ -628,6 +631,9 @@ background-color: rgb(255, 255, 255);</string>
           <width>231</width>
           <height>541</height>
          </rect>
+        </property>
+        <property name="mouseTracking">
+         <bool>true</bool>
         </property>
         <property name="frameShape">
          <enum>QFrame::Shape::Box</enum>
@@ -640,6 +646,9 @@ background-color: rgb(255, 255, 255);</string>
         </property>
         <property name="horizontalScrollBarPolicy">
          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+        </property>
+        <property name="editTriggers">
+         <set>QAbstractItemView::EditTrigger::CurrentChanged|QAbstractItemView::EditTrigger::DoubleClicked|QAbstractItemView::EditTrigger::EditKeyPressed</set>
         </property>
         <property name="selectionRectVisible">
          <bool>true</bool>
@@ -704,9 +713,9 @@ background-color: rgb(255, 255, 255);</string>
        <property name="geometry">
         <rect>
          <x>850</x>
-         <y>220</y>
+         <y>170</y>
          <width>145</width>
-         <height>191</height>
+         <height>241</height>
         </rect>
        </property>
        <property name="frameShape">
@@ -716,6 +725,13 @@ background-color: rgb(255, 255, 255);</string>
         <enum>QFrame::Shadow::Raised</enum>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_4">
+        <item>
+         <widget class="QLabel" name="lb_missingNames">
+          <property name="text">
+           <string>Missing Names</string>
+          </property>
+         </widget>
+        </item>
         <item>
          <widget class="QLabel" name="lb_badPlayerDateError">
           <property name="text">

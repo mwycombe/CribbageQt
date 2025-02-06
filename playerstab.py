@@ -48,7 +48,7 @@ from PySide6 import QtGui as qtg
 from PySide6.QtCore import Slot, QEvent
 from PySide6 import QtCore, QtWidgets
 from PySide6.QtGui import Qt, QShortcut, QKeySequence
-from PySide6.QtWidgets import QListWidgetItem
+from PySide6.QtWidgets import QListWidgetItem, QMessageBox
 
 
 # Personal imports
@@ -81,8 +81,10 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
 
         self.main.listOfPlayers.setEnabled(True)
         self.main.listOfPlayers.itemDoubleClicked.connect(self.togglePlayer)
+        # show all/active state button
         self.main.showAllPlayers.stateChanged.connect(self.displayExistingPlayers)
 
+        self.main.listOfPlayers.itemSelectionChanged.connect(self.trackSelectedPlayer)
         # QObject control variables
         #
         # Player relevant ctrlVars now here, not in masterscreen
@@ -243,7 +245,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.F10_shortcut.activated.connect(self.handlePlayer)
 
         self.Esc_shortcut = QShortcut(QKeySequence(Qt.Key_Escape),self.main.playerTabPanel)
-        self.Esc_shortcut.activated.connect(self.cancelNewPlayer)
+        self.Esc_shortcut.activated.connect(self.cancelActivity)
 
         # edit mode: 0 undef; 1 new player; 2 edit player
         self.pl_editMode = IntVar()
@@ -289,7 +291,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.pl_expires.strValueChanged.connect(self.main.le_expiresEntry.setText)
         self.pl_joined.strValueChanged.connect(self.main.le_joinedEntry.setText)
         self.pl_active.intValueAsStringChanged.connect(self.main.le_activeEntry.setText)
-        self.main.listOfPlayers.currentRowChanged.connect(self.trackSelectedPlayer)
+
 
         # [Player validators]
         self.pl_active_validator = QIntValidator(0,1,self)
@@ -327,6 +329,9 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         #
         # always refreshes the list of existing players
         self.editMode = 0   # not in any mode
+        self.main.lb_newPlayerLabel.show()
+        # start clean
+        self.resetAllErrorHiLites()
         self.resetErrorMessages()
         self.buildActivityPanel()
         # self.main.listOfPlayers.setEnabled(True)
@@ -446,81 +451,135 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         print ('fname: ' , self.pl_firstName.myValue)
         print ('lname: ' , self. pl_lastName.myValue)
         print ('active: ', str(self.pl_active.myValue))
-       return
+
         #
         # at a minimum must have first and last name
         #
-        print (self.fname.get())
-        print (self.lname.get())
+        # print (self.fname.get())
+        # print (self.lname.get())
 
-        if len(self.fname.get()) < 1 or len(self.lname.get()) < 1:
+        if (len(self.pl_firstName.myValue )< 1 or
+            len(self.pl_lastName.myValue)< 1):
             # self.redText(self.fnameLabel)
+            self.main.lb_missingNames.show()
             self.showNewPlayerError()
-            self.errorHiLite(fnameEntry)
-            self.errorHiLite(lnameEntry)
             return
-
 
         # try adding to the data base and catching any errors
 
-        if self.checkForNameDup (self.fname.get(), self.lname.get()):
-            self.redText(self.fnameLabel)
-            self.redText(self.lnameLabel)
+        # if self.checkForNameDup (self.fname.get(), self.lname.get()):
+        if self.checkForNameDup (
+            self.pl_firstName.myValue,
+            self.pl_lastName.myValue
+            ):
             self.duplicateName()
+            self.showNewPlayerError()
         else:
             # validate any date fields for new player
 
+
             try:
-                print(self.fname.get())
-                print(self.lname.get())
-                print(self.phone.get())
-                print(self.email.get())
-                print(self.accno.get())
-                print(self.joined.get())
-                print(str(cfg.clubId))
+                if cfg.debug and cfg.playersdebug:
+                    print('First Name: ',self.pl_firstName.myValue)
+                    print('Last Name: ',self.pl_lastName.myValue)
+                    print('Phone: ',self.pl_phone.myValue)
+                    print('Email: ',self.pl_email.myValue)
+                    print('ACC No: ',self.pl_ACCNumber.myValue)
+                    print('Joined Date: ',self.pl_joined.myValue)
+                    print('Club Id: ',str(cfg.clubId))
+
+                    if (not self.pl_active.myValue == 0 or
+                        self.pl_active.myValue == 1):
+                        self.pl_active.myValue = 0
+
+
                 # Create a new player - let date field default for now
                 # Handle blank active field
-                if not (self.active.get() == 0 or self.active.get() == 1):
-                    self.active.set(0)
-                self.newPlayer = Player(FirstName  =   self.fname.get(),
-                                     LastName   =   self.lname.get(),
-                                     Street     =   self.street.get(),
-                                     City       =   self.city.get(),
-                                     Zip        =   self.zip.get(),
-                                     Phone      =   self.phone.get(),
-                                     Email      =   self.email.get(),
-                                     ACCNumber  =   self.accno.get(),
-                                     # Joined     =   self.joined.get(),
-                                     # ACCExpiration = self.expiration.get(),
-                                     Active     =   self.active.get(),
-                                     Club       =   cfg.clubId
-                                     )
+                # this is taken care of inside ctrlVariable
+                # if not (self.active.get() == 0 or self.active.get() == 1):
+                #     self.active.set(0)
+                # Replace with values stored in ctrlVariables
+                # self.newPlayer = Player(FirstName  =   self.fname.get(),
+                #                      LastName   =   self.lname.get(),
+                #                      Street     =   self.street.get(),
+                #                      City       =   self.city.get(),
+                #                      Zip        =   self.zip.get(),
+                #                      Phone      =   self.phone.get(),
+                #                      Email      =   self.email.get(),
+                #                      ACCNumber  =   self.accno.get(),
+                #                      # Joined     =   self.joined.get(),
+                #                      # ACCExpiration = self.expiration.get(),
+                #                      Active     =   self.active.get(),
+                #                      Club       =   cfg.clubId
+                #                      )
+                # defer handling of missing dates
+                # if self.pl_expires.myValue == None:
+                #     self.pl_expires.myValue = ' '
+                # if self.pl_joined.myValue == None:
+                #     self.pl_joined.myValue = ' '
 
-                mbx.showinfo(('Player added successfully', 'Use F9 to make Active'))
+                # defer sorting out dates until after player added
+                self.newPlayer = Player(
+                    FirstName = self.pl_firstName.myValue,
+                    LastName = self.pl_lastName.myValue,
+                    Street = self.pl_street.myValue,
+                    City = self.pl_city.myValue,
+                    Zip = self.pl_zip.myValue,
+                    Phone = self.pl_phone.myValue,
+                    Email = self.pl_email.myValue,
+                    ACCNumber = self.pl_ACCNumber.myValue,
+                    # Joined = self.makeIsoDate(self.pl_joined.myValue),
+                    # ACCExpiration = self.makeIsoDate(self.pl_expires.myValue),
+                    Active = self.pl_active.myValue,
+                    Club = cfg.clubId
+                )
+                # mbx.showinfo(('Player added successfully', 'Use F9 to make Active'))
                 # must add any new player to the xrefs
+                msgBox = QMessageBox()
+                msgBox.setIcon(QMessageBox.Information)
+                msgBox.setText('Player '
+                                + self.pl_firstName.myValue
+                                +' ' + self.pl_lastName.myValue
+                                + ' added.'
+                               )
+                msgBox.setWindowTitle('New Player Added')
+                msgBox.setStandardButtons(QMessageBox.Ok)
+                result = msgBox.exec()
+
+                # this corrects a prior bug
                 self.reBuildXrefs()
                 # TODO: special handling required for date fields and blank active field
-                # validate each date entry and update record if appropriate
-                if self.expiration.get() != 'None':
-                    if not (self.validateADate(self.expiration.get(), self.expirationEntry)):
-                        # self.showDateErrorPanel()
-                        mbx.showinfo('Use F2 Edit to fix', 'Esc to quit New, then edit this date field')
-                        self.hideDateErrorPanel()
-                        self.hideWidget(self.newPlayerPanel)
-                        self.resetForm()
-                        self.displayExistingPlayers()
-                        return
-                if self.joined.get() != 'None':
-                    if not (self.validateADate(self.joined.get(), self.joinedEntry)):
-                        # self.showDateErrorPanel()
-                        mbx.showinfo('Use F2 Edit to fix', 'Esc to quit New, then edit this date field')
-                        self.hideDateErrorPanel()
-                        self.hideWidget(self.newPlayerPanel)
-                        self.resetForm()
-                        self.displayExistingPlayers()
-                        return
+                # now check date input and format for sqlite
+                if (
+                    self.pl_expires.myValue != ' ' or
+                    self.pl_expires.myValue != None
+                    ):
+                    if not self.validateADate(
+                                self.pl_expires.myValue,
+                                self.main.le_expiresEntry):
+                        self.showWidget(self.main.lb_badPlayerDateError)
+                if (
+                    self.pl_joined.myValue != ' ' or
+                    self.pl_joined.myValue != None
+                    ):
+                    if not self.validateADate(
+                                self.pl_joined.myValue,
+                                self.main.le_joinedEntry):
+                        self.showWidget((self.main.lb_badPlayerDateError)
+                    )
+                if self.main.lb_badPlayerDateError.isVisible():
+                    msgBox = QMessageBox()
+                    msgBox.setIcon(QMessageBox.Information)
+                    msgBox.setText('Esc to quite New then edit date field')
+                    msgBox.setWindowTitle('Invalid Dates')
+                    msgBox.setStandardButtons(QMessageBox.Ok)
+                    result = msgBox.exec()
+                    self.setFocus(self.main.le_expiresEntry)
+                    return      # leave processing
+
             except dberrors.DuplicateEntryError:
                # this will only trigger for duplicate ACC nos in the future
+               # problem is unique constraint triggers with blanks
                 if self.duplicateACCno(): # true means retry
                     # leave the labels red 
                     self.fnameEntry.focus_set()
@@ -610,18 +669,30 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     @qtc.Slot()
     # determine where to route F10
     def handlePlayer(self):
+        # reset all error fields before try/retry
+        self.resetAllErrorHiLites()
+        self.resetErrorMessages()
         if self.pl_editMode.myValue == 1:
             self.submitNewPlayer()
         elif self.pl_editMode.myValue == 2:
             self.editAPlayer()
-        else:
+        elif self.pl_editMode.myValue == 0:
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setText('Need to use F2 or F3 first')
+            msgBox.setWindowTitle('New/Edit not selected')
+            msgBox.setStandardButtons(QMessageBox.Ok )
+            result = msgBox.exec()
+            self.main.lb_newPlayerLabel.setText('Edit F2 - New F3')
             return      # do nothing
 
 
     def createPlayer(self):
         print ('create player stub')
         self.pl_editMode.myValue = 1       # show new player mode
-        self.resetForm()        # clear out the input form
+        self.resetForm()
+        self.main.lb_newPlayerLabel.setText('New Player')
+       # clear out the input form
         self.main.le_firstNameEntry.setFocus()
         # self.hideWidget(self.editPlayerPanel)
         # self.showWidget(self.newPlayerPanel)
@@ -664,6 +735,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     def setUpEditPlayerPanel (self):
         #this where we put the selected player info into the edit form
         self.resetAllErrorHiLites()     # just in case entry form was not cleaned up
+        self.resetErrorMessages()
         # self.hideWidget(self.newPlayerPanel)
         # self.showWidget(self.editPlayerPanel)
         self.main.lb_newPlayerLabel.setText('Edit Player')
@@ -750,11 +822,13 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     def cancelPlayerEdit (self):
         # restore new Player panel
         print ('back to players panel')
+        self.cancelActivity()
         # self.hideWidget(self.editPlayerPanel)
         # self.hideWidget(self.newPlayerPanel)
         # # self.editPlayerPanel.grid_remove()
         # self.resetForm()
         # self.displayExistingPlayers()
+        self.resetForm()
 
     #************************************************************
     #
@@ -787,10 +861,19 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #
     #   see editAPlayer
     #
-    @qtc.Slot(int)
-    def trackSelectedPlayer(self, newRow):
-        self.listBoxIndex = newRow
-        self.main.listOfPlayers.setFocus()
+    @qtc.Slot(QListWidgetItem)
+    def listItemEntered(self, value):
+        print ('Entered Item: ', value.text())
+        self.main.listOfPlayers.setCurrentItem(value)
+    @qtc.Slot()
+    def trackSelectedPlayer(self):
+        # print ('Row changed: ', newRow)
+        # capture selection row change
+        self.listBoxIndex = self.main.listOfPlayers.currentRow()
+        # set focus to that item
+        self.main.listOfPlayers.setCurrentItem(
+                                self.main.listOfPlayers.item(self.listBoxIndex)
+                                )
 
     def editSelectedPlayer(self):
         print ('Edit selected player from listbox')
@@ -815,18 +898,21 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # return
         # this will return a player object for the player under edit
         # self.lbText = expName.text()
-        self.changePlayer = cfg.ap.getPlayerById(str(cfg.playerRefx[self.lbText.replace('*',' ').strip()]))
+        changePlayer = cfg.ap.singlePlayerByFirstandLastNames(
+                            self.existingPlayers[self.listBoxIndex].FirstName,
+                            self.existingPlayers[self.listBoxIndex].LastName
+                            )
 
 
         # changePlayer = cfg.ap.singlePlayerByFirstandLastNames(self.existingPlayers[self.ListBoxIndex].FirstName,
         #                                               self.existingPlayers[self.ListBoxIndex].LastName)
         # changePlayer = Player.select(Player.q.FirstName == (self.exp[self.ListBoxIndex].FirstName))[0]
-        # print ('ChangePlayer ', changePlayer)
+        print ('ChangePlayer ', changePlayer)
 
         # # First we check out the date fields for any errors which need to be corrected.
         # # Turn off any prior errors
-        self.resetErrorHiLite(self.joinedEntry)
-        self.resetErrorHiLite(self.expirationEntry)
+        self.resetErrorHiLite(self.main.le_joinedEntry)
+        self.resetErrorHiLite(self.main.le_expiresEntry)
 
         if self.pl_expires.myValue != None:
         # self.hideWidget(self.dateErrorPanel)
@@ -858,12 +944,13 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # changePlayer.Joined     = '' if self.joined.get() == 'None' else self.makeIsoDate(self.joined.get())
     #************************************************************
     #
-    def cancelNewPlayer(self):
+    def cancelActivity(self):
         print('Cancel player activity stub')
         # print('Player: ' + self.main.listOfPlayers.currentItem().text())
         # return
-        self.main.lb_newPlayerLabel.setText('New Player')
         self.resetForm()
+        self.main.listOfPlayers.setCurrentItem(self.main.listOfPlayers.item(0))
+        self.setFocus(self.main.listOfPlayers)
 
         # self.hideWidget(self.newPlayerPanel)
         # self.exp.selection_clear(0, self.exp.size()-1)
@@ -874,7 +961,23 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #************************************************************
     #
     def showNewPlayerError (self):
-        print ('New Player input error')
+        if cfg.debug and cfg.playersdebug:
+            print ('New Player input error')
+        self.errorHiLite(self.main.le_firstNameEntry)
+        self.errorHiLite(self.main.le_lastNameEntry)
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText('One or more new player errors')
+        msgBox.setWindowTitle('New Player Errors')
+        msgBox.setStandardButtons(QMessageBox.Ok )
+
+        result = msgBox.exec()
+
+        self.main.le_firstNameEntry.setFocus()
+        # if result != QMessageBox.Ok:
+        #     sys.exit('Wrong data base in use')
+        # else:
+        #     print('QMessageBox dropped thru')
         # return mbx.askretrycancel('Missing Name Input',
         #                                       'Retry Input or Quit?',
         #                                       parent = self.newPlayerPanel)
@@ -895,7 +998,19 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #************************************************************
     #
     def duplicateACCno(self):
-        pass
+        if cfg.debug and cfg.playersdebug:
+            print ('Duplicate acc number error')
+        self.errorHiLite(self.main.le_firstNameEntry)
+        self.errorHiLite(self.main.le_lastNameEntry)
+        self.errorHiLite(self.main.le_accNumberEntry)
+        self.main.lb_duplicatePlayerNameError.show()
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Information)
+        msgBox.setText('Ouplicate ACC Number')
+        msgBox.setWindowTitle('Player Already Exists')
+        msgBox.setStandardButtons(QMessageBox.Ok )
+
+        result = msgBox.exec()
         # just leave things alone for now so user can overtype
         # maybe just pop a std dialog asking try again or
 
@@ -908,10 +1023,12 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
     #************************************************************
     #
     def duplicateName(self):
+        self.errorHiLite(self.main.le_firstNameEntry)
+        self.errorHiLite(self.main.le_lastNameEntry)
+        self.main.lb_duplicatePlayerNameError.show()
+        self.setFocus(self.main.le_firstNameEntry)
         # just leave things alone for now so user can overtype
         # maybe just pop a std dialog asking try again or
-
-        pass
         # retryPlayerEntry = mbx.askretrycancel('Duplicate Name',
         #                    'Retry Input or Quit?',
         #                    parent = self.newPlayerPanel)
@@ -936,8 +1053,11 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         self.main.le_joinedEntry.setText('')
         self.main.le_activeEntry.setText('')
 
-        self.main.listOfPlayers.setFocus()
-        self.main.listOfPlayers.setCurrentRow(0)
+        self.resetErrorMessages()
+        self.resetAllErrorHiLites()
+
+
+        self.main.lb_newPlayerLabel.setText('Edit F2 - New F3')
         # self.fname.set('')
         # self.lname.set('')
         # self.street.set('')
@@ -1052,6 +1172,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         if not dateparser.parse(value):
             #bad date
             self.errorHiLite(w)
+            self.main.lb_badPlayerDateError.show()
             return False
         else:
             self.resetErrorHiLite(w)
@@ -1143,6 +1264,7 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
         # w.grid()
 
     def resetErrorMessages(self):
+        self.hideWidget(self.main.lb_missingNames)
         self.hideWidget(self.main.lb_badPlayerDateError)
         self.hideWidget(self.main.lb_duplicatePlayerNameError)
         self.hideWidget(self.main.lb_badPlayerEmailError)
