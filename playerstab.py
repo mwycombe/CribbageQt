@@ -17,6 +17,8 @@ from PySide6.QtGui import  QIntValidator
 
 # TODO: When a new player is added or change need to rebuild the xref tables in cfg -
 #  use CribbageStartUp.createPlayersXref()
+# TODO: Set active player count in cfg and link to hdr field
+# TODO: Update cfg active count after every player action
 # TODO: When a new player is added, refresh the in-memory list of players
 # TODO: Add new player confirms that add but does not clear the screen
 # TODO: Edit player does not clear screen on F10 - have to use esc to quit edit

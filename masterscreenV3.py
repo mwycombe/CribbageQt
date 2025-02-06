@@ -67,6 +67,7 @@ class MasterScreen(qtw.QMainWindow, Ui_MainCribbageWindow):
 
 
 
+
         # set initial conditions
         # make error messages red then hide them
         self.lb_badNumber.setStyleSheet('background-color: white; color: red')
