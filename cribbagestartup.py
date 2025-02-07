@@ -168,12 +168,12 @@ class CribbageStartup ():
         cfg.clubCount = len(cfg.ap.allActivePlayers(cfg.clubRecord))
 
         # init screen hdr with retrieved information
-
-        cfg.main = cfg.screenDict['masterwindow']
-        cfg.main.hdrClubName = cfg.clubName
-        cfg.main.hdrClubNumber = str(cfg.clubNumber)
-        cfg.main.hdrSeason = cfg.season
-        cfg.main.hdrActivePlayerCount = cfg.clubCount
+        print (cfg.screenDict)
+        main = cfg.screenDict['masterwindow']
+        main.hdrClubName.setText(cfg.clubName)
+        main.hdrClubNumber.setText(str(cfg.clubNumber))
+        main.hdrSeason.setText(cfg.season)
+        main.hdrActivePlayerCount.setText(str(cfg.clubCount))
 
         if cfg.debug == True:
             print('clubId:= ' + str(cfg.clubId))
