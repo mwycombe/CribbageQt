@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtkBIhiH.ui'
+## Form generated from reading UI file 'CribbageQtEpJUeF.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -257,12 +257,12 @@ class Ui_MainCribbageWindow(object):
         self.listOfPlayers.setObjectName(u"listOfPlayers")
         self.listOfPlayers.setEnabled(True)
         self.listOfPlayers.setGeometry(QRect(30, 80, 231, 541))
-        self.listOfPlayers.setMouseTracking(True)
+        self.listOfPlayers.setMouseTracking(False)
         self.listOfPlayers.setFrameShape(QFrame.Shape.Box)
         self.listOfPlayers.setLineWidth(3)
         self.listOfPlayers.setVerticalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAsNeeded)
         self.listOfPlayers.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOff)
-        self.listOfPlayers.setEditTriggers(QAbstractItemView.EditTrigger.CurrentChanged|QAbstractItemView.EditTrigger.DoubleClicked|QAbstractItemView.EditTrigger.EditKeyPressed)
+        self.listOfPlayers.setEditTriggers(QAbstractItemView.EditTrigger.AnyKeyPressed|QAbstractItemView.EditTrigger.CurrentChanged|QAbstractItemView.EditTrigger.DoubleClicked)
         self.listOfPlayers.setSelectionRectVisible(True)
         self.listOfPlayers.setSortingEnabled(False)
         self.layoutWidget1 = QWidget(self.playerTabPanel)
@@ -930,10 +930,10 @@ class Ui_MainCribbageWindow(object):
         self.label_17.setText(QCoreApplication.translate("MainCribbageWindow", u"Active:", None))
         self.label_18.setText(QCoreApplication.translate("MainCribbageWindow", u"Name:", None))
         self.label_19.setText(QCoreApplication.translate("MainCribbageWindow", u"Season:", None))
-        self.hdrClubNumber.setText(QCoreApplication.translate("MainCribbageWindow", u"100", None))
-        self.hdrClubName.setText(QCoreApplication.translate("MainCribbageWindow", u"Century Peggers", None))
-        self.hdrActivePlayerCount.setText(QCoreApplication.translate("MainCribbageWindow", u"30", None))
-        self.hdrSeason.setText(QCoreApplication.translate("MainCribbageWindow", u"2024-25", None))
+        self.hdrClubNumber.setText("")
+        self.hdrClubName.setText("")
+        self.hdrActivePlayerCount.setText("")
+        self.hdrSeason.setText("")
         self.clubFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Club", None))
         self.activityFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Activity", None))
         self.SessionFrameLabel.setText(QCoreApplication.translate("MainCribbageWindow", u"Session", None))

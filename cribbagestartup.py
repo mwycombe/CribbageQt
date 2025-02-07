@@ -159,21 +159,41 @@ class CribbageStartup ():
         # cfg.stackedActivityDict['reportsActivityPage', 3]
 
         cfg.clubRecord = cfg.ac.clubByNumber(cfg.clubNumber)[0]      # returns one club record in a list
+
+        # init screen hdr with retrieved information
+        # print (cfg.screenDict)
+        main = cfg.screenDict['masterwindow']
+
+        # connect UI to cfg ctrlvars
+        cfg.clubIdVar.myValue = cfg.clubRecord.id
+        cfg.clubLocationVar.myValue = cfg.clubRecord.location
+        cfg.clubNameVar.myValue = cfg.clubRecord.clubName
+        cfg.clubNumberVar.myValue = cfg.clubRecord.clubNumber
+        cfg.clubCountVar.myValue = len(cfg.ap.allActivePlayers(cfg.clubRecord))
+        cfg.seasonVar.myValue = cfg.season
+
+
+
         print (type(cfg.clubRecord))
-        cfg.clubId = cfg.clubRecord.id
+        cfg.clubIdVar.myValue = cfg.clubRecord.id
         cfg.clubName = cfg.clubRecord.clubName
         cfg.clubNumber = cfg.clubRecord.clubNumber
         cfg.clubLocation = cfg.clubRecord.location
         cfg.reportDirectory = cfg.clubRecord.reportDirectory
         cfg.clubCount = len(cfg.ap.allActivePlayers(cfg.clubRecord))
 
-        # init screen hdr with retrieved information
-        print (cfg.screenDict)
-        main = cfg.screenDict['masterwindow']
-        main.hdrClubName.setText(cfg.clubName)
-        main.hdrClubNumber.setText(str(cfg.clubNumber))
-        main.hdrSeason.setText(cfg.season)
-        main.hdrActivePlayerCount.setText(str(cfg.clubCount))
+
+
+        # set up hdr with signals
+        cfg.clubIdVar.intValueAsStringChanged.connect(main.hdrClubName.setText)
+        cfg.clubNumberVar.intValueAsStringChanged.connect(main.hdrClubNumber.setText)
+        cfg.clubCountVar.intValueAsStringChanged.connect(main.hdrActivePlayerCount.setText)
+        cfg.seasonVar.strValueChanged.connect(main.hdrSeason.setText)
+
+        # main.hdrClubName.setText(cfg.clubName)
+        # main.hdrClubNumber.setText(str(cfg.clubNumber))
+        # main.hdrSeason.setText(cfg.season)
+        # main.hdrActivePlayerCount.setText(str(cfg.clubCount))
 
         if cfg.debug == True:
             print('clubId:= ' + str(cfg.clubId))

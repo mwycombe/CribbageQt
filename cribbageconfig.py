@@ -45,10 +45,13 @@ newTourney = False      # asjusted when reportstab gets tabchange event for a gi
 tourneyEdit = False     # set to true if we are editing an existing line, else False means new result
 newResultLine = False   # could be new result for new tourney or for an existing tourney
 
+# these ctrlvars are linked to UI fields via signals
+# they can accept input directly through myValue or via slots they expose
+clubIdVar = IntVar()
 clubNameVar = StringVar()
 clubLocationVar = StringVar()
 clubIdVar = IntVar()
-clubNumbervar = IntVar()
+clubNumberVar = IntVar()
 clubCountVar = IntVar()
 seasonVar = StringVar()
 

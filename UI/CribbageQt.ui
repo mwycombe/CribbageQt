@@ -170,7 +170,7 @@ background-color: rgb(255, 255, 255);</string>
        <number>2</number>
       </property>
       <property name="text">
-       <string>100</string>
+       <string/>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -199,7 +199,7 @@ background-color: rgb(255, 255, 255);</string>
        <number>2</number>
       </property>
       <property name="text">
-       <string>Century Peggers</string>
+       <string/>
       </property>
      </widget>
      <widget class="QLabel" name="hdrActivePlayerCount">
@@ -225,7 +225,7 @@ background-color: rgb(255, 255, 255);</string>
        <number>2</number>
       </property>
       <property name="text">
-       <string>30</string>
+       <string/>
       </property>
       <property name="alignment">
        <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
@@ -254,7 +254,7 @@ background-color: rgb(255, 255, 255);</string>
        <number>2</number>
       </property>
       <property name="text">
-       <string>2024-25</string>
+       <string/>
       </property>
      </widget>
     </widget>
@@ -633,7 +633,7 @@ background-color: rgb(255, 255, 255);</string>
          </rect>
         </property>
         <property name="mouseTracking">
-         <bool>true</bool>
+         <bool>false</bool>
         </property>
         <property name="frameShape">
          <enum>QFrame::Shape::Box</enum>
@@ -648,7 +648,7 @@ background-color: rgb(255, 255, 255);</string>
          <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
         </property>
         <property name="editTriggers">
-         <set>QAbstractItemView::EditTrigger::CurrentChanged|QAbstractItemView::EditTrigger::DoubleClicked|QAbstractItemView::EditTrigger::EditKeyPressed</set>
+         <set>QAbstractItemView::EditTrigger::AnyKeyPressed|QAbstractItemView::EditTrigger::CurrentChanged|QAbstractItemView::EditTrigger::DoubleClicked</set>
         </property>
         <property name="selectionRectVisible">
          <bool>true</bool>
