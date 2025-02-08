@@ -50,9 +50,10 @@ class IntVar(QObject):
     intValueAsStringChanged = Signal(str)   # must be defined inside a QObject class type
     intValueRead   = Signal(int)    # optional signal on read
 
-    def __init__(self):
+    def __init__(self, initial = 0):
         super().__init__()
-        self._my_value = 0
+        self._my_value = initial
+
 
     @Slot(str)
     def acceptIntAsStr(self,value):
@@ -71,10 +72,14 @@ class IntVar(QObject):
 
     @myValue.setter
     def myValue(self,value):
-        if value != self._my_value:
-            self._my_value = value
-            self.intValueChanged.emit(value)
-            self.intValueAsStringChanged.emit(str(value))
+        # if value != self._my_value:
+        # Avoid this optimization for integer variables.
+        # Sometimes the same value is supplied - most often 0
+        # Where var signals are connectd to UI elements we still want
+        # the signal to be emitted.
+        self._my_value = value
+        self.intValueChanged.emit(value)
+        self.intValueAsStringChanged.emit(str(value))
 
 class DoubleVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals

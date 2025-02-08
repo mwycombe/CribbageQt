@@ -388,7 +388,11 @@ class PlayersTab (qtw.QWidget, Ui_playersactivitypanel):
                     self.playersInDbms.append('   ' + p.LastName + ', ' + p.FirstName)
 
             self.main.listOfPlayers.insertItems(0,self.playersInDbms)
-            # build listbox
+
+            # update active player count everytime we display players
+            cfg.clubCountVar.myValue = len(cfg.ap.allActivePlayers(cfg.clubRecord))
+
+# build listbox
             # self.players.set(self.playersInDbms)
             # self.exp = tk.Listbox(self.oldPlayerPanel,
             #                       listvariable=self.players,

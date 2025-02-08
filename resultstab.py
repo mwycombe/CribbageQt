@@ -79,7 +79,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     # screen class is always a frame
 
     def __init__(self, parent=None):
-        if cfg.debug:
+        if cfg.debug and cfg.resultsdebug:
             print('starting resultstab')
 
         super().__init__()
@@ -94,14 +94,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
         # [SECTION Tourney Hdr fields]
         # [Tourney Hdr ctrlvars]
-        self.tourneyHdrDate = StringVar()
-        self.tourneyHdrNumber = IntVar()
-        self.tourneyHdrCount = IntVar()
+        self.tourneyHdrDateVar = StringVar()
+        self.tourneyHdrNumberVar = IntVar()
+        self.tourneyHdrCountVar = IntVar()
 
         # [Tourney Hdr Signals]
-        self.tourneyHdrDate.strValueChanged.connect(self.main.lb_tourneyHdrDate.setText)
-        self.tourneyHdrNumber.intValueAsStringChanged.connect(self.main.lb_tourneyHdrCount.setText)
-        self.tourneyHdrCount.intValueAsStringChanged.connect(self.main.lb_tourneyHdrCount.setText)
+        self.tourneyHdrDateVar.strValueChanged.connect(self.main.lb_tourneyHdrDate.setText)
+        self.tourneyHdrNumberVar.intValueAsStringChanged.connect(self.main.lb_tourneyHdrNumber.setText)
+        self.tourneyHdrCountVar.intValueAsStringChanged.connect(self.main.lb_tourneyHdrCount.setText)
 
         # [SECTION Results Entry Line]
         # [Results Entry Line ctrlvars ]
@@ -498,9 +498,6 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def connectIntLBCtrlVar(self,ui,var):
         var.intValueAsStringChanged.connect(ui.setText)
 
-    def connectLBCtrlVar(self,ui,var):
-        var.strValueChanged.connect(ui.setText)
-
     # ************************************************************
     #   check to see if our tab was selected.
     #
@@ -560,7 +557,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
 
 
     def buildActivityPanel(self):
-        # make teh appropriate stacked widget current
+        # make the appropriate stacked widget current
         self.widgetIndex = cfg.stackedActivityDict['resultsactivitypanel']
         cfg.screenDict['activitystack'].setCurrentIndex(self.widgetIndex)
         return
@@ -1078,7 +1075,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.allTourneyResultObjects = cfg.ar.allTourneyResults(cfg.tourneyRecord)
 
         # following actions rely on allTourneyResultsOjbects - always in the same order
-        # firet a list of points
+        # first a list of points
         self.tourneyPointsList = [sc.GamePoints for sc in self.allTourneyResultObjects]
 
         # now a list of player ids that correspond to the points
@@ -1135,20 +1132,21 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.listOfResults = []     # and clear out the list
         if self.tourneyResultsCount > 0:
             self.tourneyResults = cfg.ar.tourneyResultsInEntryOrder(cfg.tourneyRecord)
-        for p in self.tourneyResults:
-            rLine = resultsLine()
-            rLine.playerId = p.PlayerID
-            rLine.tourneyId = cfg.tourneyRecordId
-            rLine.playerName = cfg.playerXref[p.PlayerID]
-            rLine.playerGamePoints = p.GamePoints
-            rLine.playerGamesWon = p.GamesWon
-            rLine.playerSpread = p.Spread
-            rLine.playerTaken = p.SkunksTaken
-            rLine.playerCash = p.Cash
-            rLine.playerGiven = p.SkunksGiven
-            rLine.playerEntryOrder = p.EntryOrder
-            self.listOfResults.append(rLine)
-        self.populateRframeLBs(self.listOfResults)
+            for p in self.tourneyResults:
+                rLine = resultsLine()
+                rLine.playerId = p.PlayerID
+                rLine.tourneyId = cfg.tourneyRecordId
+                rLine.playerName = cfg.playerXref[p.PlayerID]
+                rLine.playerGamePoints = p.GamePoints
+                rLine.playerGamesWon = p.GamesWon
+                rLine.playerSpread = p.Spread
+                rLine.playerTaken = p.SkunksTaken
+                rLine.playerCash = p.Cash
+                rLine.playerGiven = p.SkunksGiven
+                rLine.playerEntryOrder = p.EntryOrder
+                self.listOfResults.append(rLine)
+            self.populateRframeLBs(self.listOfResults)
+            self.updateTotals()
 
     def populateRframeLBs (self, rLineList):
     #     # refactored to allow for refreshing after add or edit line
@@ -1185,100 +1183,100 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # position at line and field, and move keyboard focus
         self.listOfResults[rfidx].winfo_children()[fldidx].focus_force()
 
-    def initializeSortDictionary(self):
-        # set up dictionary to control sort directions
-        # would rather associate directly with widget, but no place to hang 'notes'
-        self.resultsSortDict = {'nameHdr':None,
-                               'gpHdr':None,
-                               'gwHdr':None,
-                               'sprdHdr':None,
-                               'cashHdr':None,
-                               'tknHdr':None,
-                               'gvnHdr':None,
-                               'orderHdr':'Asc'}
-    # event handlers
-    # handler area for sorting
-    def rSortHandler(self, event):
-        if event.widget == self.nameHdr:
-            self.rSortNames(event)
-        elif event.widget == self.gpHdr:
-            self.rSortGp(event)
-        elif event.widget == self.gwHdr:
-            self.rSortGw(event)
-        elif event.widget == self.sprdHdr:
-            self.rSortSprd(event)
-        elif event.widget == self.cashHdr:
-            self.rSortCash(event)
-        elif event.widget == self.tknHdr:
-            self.rSortTkn(event)
-        elif event.widget == self.gvnHdr:
-            self.rSortGvn(event)
-        else:
-            self.rSortOrder(event)
-    def rSortNames(self,event):
-        dir = self.resultsSortDict['nameHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort names asc')
-            self.resultsSortDict['nameHdr'] = 'Asc'
-        else:
-            print ('Sort names desc')
-            self.resultsSortDict['nameHdr'] = 'Desc'
-    def rSortGp(self, event):
-        dir = self.resultsSortDict['gpHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort gp asc')
-            self.resultsSortDict['gpHdr'] = 'Asc'
-        else:
-            print ('Sort gp desc')
-            self.resultsSortDict['gpHdr'] = 'Desc'
-    def rSortGw(self, event):
-        dir = self.resultsSortDict['gwHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort gw asc')
-            self.resultsSortDict['gwHdr'] = 'Asc'
-        else:
-            print ('Sort gw desc')
-            self.resultsSortDict['gwHdr'] = 'Desc'
-    def rSortSprd(self, event):
-        dir = self.resultsSortDict['sprdHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort sprd asc')
-            self.resultsSortDict['sprdHdr'] = 'Asc'
-        else:
-            print ('Sort sprd desc')
-            self.resultsSortDict['sprdHdr'] = 'Desc'
-    def rSortCash(self, event):
-        dir = self.resultsSortDict['cashHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort cash asc')
-            self.resultsSortDict['cashHdr'] = 'Asc'
-        else:
-            print ('Sort cash desc')
-            self.resultsSortDict['cashHdr'] = 'Desc'
-    def rSortTkn(self, event):
-        dir = self.resultsSortDict['tknHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort tkn asc')
-            self.resultsSortDict['tknHdr'] = 'Asc'
-        else:
-            print ('Sort tkn desc')
-            self.resultsSortDict['tknHdr'] = 'Desc'
-    def rSortGvn(self, event):
-        dir = self.resultsSortDict['gvnHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort gvn asc')
-            self.resultsSortDict['gvnHdr'] = 'Asc'
-        else:
-            print ('Sort gvn desc')
-            self.resultsSortDict['gvnHdr'] = 'Desc'
-    def rSortOrder(self, event):
-        dir = self.resultsSortDict['orderHdr']
-        if dir == None or dir == 'Desc':
-            print ('Sort order asc')
-            self.resultsSortDict['orderHdr'] = 'Asc'
-        else:
-            print ('Sort orders desc')
-            self.resultsSortDict['orderHdr'] = 'Desc'
+    # def initializeSortDictionary(self):
+    #     # set up dictionary to control sort directions
+    #     # would rather associate directly with widget, but no place to hang 'notes'
+    #     self.resultsSortDict = {'nameHdr':None,
+    #                            'gpHdr':None,
+    #                            'gwHdr':None,
+    #                            'sprdHdr':None,
+    #                            'cashHdr':None,
+    #                            'tknHdr':None,
+    #                            'gvnHdr':None,
+    #                            'orderHdr':'Asc'}
+    # # event handlers
+    # # handler area for sorting
+    # def rSortHandler(self, event):
+    #     if event.widget == self.nameHdr:
+    #         self.rSortNames(event)
+    #     elif event.widget == self.gpHdr:
+    #         self.rSortGp(event)
+    #     elif event.widget == self.gwHdr:
+    #         self.rSortGw(event)
+    #     elif event.widget == self.sprdHdr:
+    #         self.rSortSprd(event)
+    #     elif event.widget == self.cashHdr:
+    #         self.rSortCash(event)
+    #     elif event.widget == self.tknHdr:
+    #         self.rSortTkn(event)
+    #     elif event.widget == self.gvnHdr:
+    #         self.rSortGvn(event)
+    #     else:
+    #         self.rSortOrder(event)
+    # def rSortNames(self,event):
+    #     dir = self.resultsSortDict['nameHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort names asc')
+    #         self.resultsSortDict['nameHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort names desc')
+    #         self.resultsSortDict['nameHdr'] = 'Desc'
+    # def rSortGp(self, event):
+    #     dir = self.resultsSortDict['gpHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort gp asc')
+    #         self.resultsSortDict['gpHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort gp desc')
+    #         self.resultsSortDict['gpHdr'] = 'Desc'
+    # def rSortGw(self, event):
+    #     dir = self.resultsSortDict['gwHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort gw asc')
+    #         self.resultsSortDict['gwHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort gw desc')
+    #         self.resultsSortDict['gwHdr'] = 'Desc'
+    # def rSortSprd(self, event):
+    #     dir = self.resultsSortDict['sprdHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort sprd asc')
+    #         self.resultsSortDict['sprdHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort sprd desc')
+    #         self.resultsSortDict['sprdHdr'] = 'Desc'
+    # def rSortCash(self, event):
+    #     dir = self.resultsSortDict['cashHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort cash asc')
+    #         self.resultsSortDict['cashHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort cash desc')
+    #         self.resultsSortDict['cashHdr'] = 'Desc'
+    # def rSortTkn(self, event):
+    #     dir = self.resultsSortDict['tknHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort tkn asc')
+    #         self.resultsSortDict['tknHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort tkn desc')
+    #         self.resultsSortDict['tknHdr'] = 'Desc'
+    # def rSortGvn(self, event):
+    #     dir = self.resultsSortDict['gvnHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort gvn asc')
+    #         self.resultsSortDict['gvnHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort gvn desc')
+    #         self.resultsSortDict['gvnHdr'] = 'Desc'
+    # def rSortOrder(self, event):
+    #     dir = self.resultsSortDict['orderHdr']
+    #     if dir == None or dir == 'Desc':
+    #         print ('Sort order asc')
+    #         self.resultsSortDict['orderHdr'] = 'Asc'
+    #     else:
+    #         print ('Sort orders desc')
+    #         self.resultsSortDict['orderHdr'] = 'Desc'
 
     # handle add/edit/delete
     def quitResultLine(self):
@@ -1888,14 +1886,27 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.populateRframe()
 
     def updateTotals(self):
-        pass
-        self.main.lb_tourneyHdrCount.setText( str(len(self.listOfResults)))
-        self.main.lb_spreadPlusValue.setText( str((sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0]))))
-        self.main.lb_spreadMinusValue.setText(str((sum([m.playerSpread for m in self.listOfResults if m.playerSpread < 0]))))
-        self.main.lb_skunkPlusValue.setText( str(sum([g.playerGiven for g in self.listOfResults])))
-        self.main.lb_skunksMinusValue.setText(str(sum([t.playerTaken for t in self.listOfResults])))
-        self.main.lb_spreadDiffValue.setText(str(int(self.main.lb_spreadPlusValue.text()) + int(self.main.lb_spreadMinusValue.text())))
-        self.main.lb_skunkDiffValue.setTest(str(int(self.main.lb_skunkPlusValue.text())+ int(self.main.lb_skunkMinusValue.text())))
+        # pass
+        # self.main.lb_tourneyHdrCount.setText( str(len(self.listOfResults)))
+        self.tourneyHdrCountVar.myValue = len(self.listOfResults)
+
+        # self.main.lb_spreadPlusValue.setText( str((sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0]))))
+        self.plusSpreadVar.myValue = sum([p.playerSpread for p in self.listOfResults if p.playerSpread > 0])
+
+        # self.main.lb_spreadMinusValue.setText(str((sum([m.playerSpread for m in self.listOfResults if m.playerSpread < 0]))))
+        self.minusSpreadVar.myValue = sum([m.playerSpread for m in self.listOfResults if m.playerSpread < 0])
+
+        # self.main.lb_skunkPlusValue.setText( str(sum([g.playerGiven for g in self.listOfResults])))
+        self.givenSkunksVar.myValue = sum([g.playerGiven for g in self.listOfResults])
+
+        # self.main.lb_skunksMinusValue.setText(str(sum([t.playerTaken for t in self.listOfResults])))
+        self.takenSkunksVar.myValue = sum([t.playerTaken for t in self.listOfResults])
+
+        # self.main.lb_spreadDiffValue.setText(str(int(self.main.lb_spreadPlusValue.text()) + int(self.main.lb_spreadMinusValue.text())))
+        self.diffSpreadVar.myValue = self.plusSpreadVar.myValue + self.minusSpreadVar.myValue
+
+        # self.main.lb_skunkDiffValue.setTest(str(int(self.main.lb_skunkPlusValue.text())+ int(self.main.lb_skunkMinusValue.text())))
+        self.diffSkunksVar.myValue = self.givenSkunksVar.myValue - self.takenSkunksVar.myValue
 
         # step through all results and refresh totals
         # use listOfResults - new Tourney has no dbms entries yet!

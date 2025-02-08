@@ -158,11 +158,21 @@ class CribbageStartup ():
         # cfg.stackedActivityDict['resultsActivityPage', 2]
         # cfg.stackedActivityDict['reportsActivityPage', 3]
 
+
+
         cfg.clubRecord = cfg.ac.clubByNumber(cfg.clubNumber)[0]      # returns one club record in a list
+        if cfg.debug:
+            print (type(cfg.clubRecord))
 
         # init screen hdr with retrieved information
         # print (cfg.screenDict)
         main = cfg.screenDict['masterwindow']
+
+        # set up hdr with signals
+        cfg.clubNameVar.strValueChanged.connect(main.hdrClubName.setText)
+        cfg.clubNumberVar.intValueAsStringChanged.connect(main.hdrClubNumber.setText)
+        cfg.clubCountVar.intValueAsStringChanged.connect(main.hdrActivePlayerCount.setText)
+        cfg.seasonVar.strValueChanged.connect(main.hdrSeason.setText)
 
         # connect UI to cfg ctrlvars
         cfg.clubIdVar.myValue = cfg.clubRecord.id
@@ -174,28 +184,12 @@ class CribbageStartup ():
 
 
 
-        print (type(cfg.clubRecord))
-        cfg.clubIdVar.myValue = cfg.clubRecord.id
-        cfg.clubName = cfg.clubRecord.clubName
-        cfg.clubNumber = cfg.clubRecord.clubNumber
-        cfg.clubLocation = cfg.clubRecord.location
-        cfg.reportDirectory = cfg.clubRecord.reportDirectory
-        cfg.clubCount = len(cfg.ap.allActivePlayers(cfg.clubRecord))
-
-
-
-        # set up hdr with signals
-        cfg.clubIdVar.intValueAsStringChanged.connect(main.hdrClubName.setText)
-        cfg.clubNumberVar.intValueAsStringChanged.connect(main.hdrClubNumber.setText)
-        cfg.clubCountVar.intValueAsStringChanged.connect(main.hdrActivePlayerCount.setText)
-        cfg.seasonVar.strValueChanged.connect(main.hdrSeason.setText)
-
         # main.hdrClubName.setText(cfg.clubName)
         # main.hdrClubNumber.setText(str(cfg.clubNumber))
         # main.hdrSeason.setText(cfg.season)
         # main.hdrActivePlayerCount.setText(str(cfg.clubCount))
 
-        if cfg.debug == True:
+        if cfg.debug :
             print('clubId:= ' + str(cfg.clubId))
             print('clubName:= ' + cfg.clubName)
             print('clubLocation:= ' + cfg.clubLocation)
