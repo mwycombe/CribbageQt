@@ -21,9 +21,10 @@ class StringVar(QObject):
     strValueChanged = Signal(str)    # must be defined inside a QObject class type
     strValueRead    = Signal(str)    # optional signal on read
 
-    def __init__(self):
+    def __init__(self, initial='', alwaysSignal = True):
         super().__init__()
-        self._my_value = ''
+        self._my_value = initial
+        self._alwaysSignal_ = alwaysSignal
 
     # need separate slot as cannot apply @Slot to setter
     @Slot(str)
@@ -38,7 +39,7 @@ class StringVar(QObject):
     @myValue.setter
     def myValue(self,value):
         print('StrVar received: ', value)
-        if value != self._my_value:
+        if value != self._my_value or self._alwaysSignal_:
             self._my_value = value
             print ('strValueChanged: ', value)
             self.strValueChanged.emit(value)
@@ -50,9 +51,10 @@ class IntVar(QObject):
     intValueAsStringChanged = Signal(str)   # must be defined inside a QObject class type
     intValueRead   = Signal(int)    # optional signal on read
 
-    def __init__(self, initial = 0):
+    def __init__(self, initial = 0, alwaysSignal = True):
         super().__init__()
         self._my_value = initial
+        self._alwaysSignal_ = alwaysSignal
 
 
     @Slot(str)
@@ -72,14 +74,9 @@ class IntVar(QObject):
 
     @myValue.setter
     def myValue(self,value):
-        # if value != self._my_value:
-        # Avoid this optimization for integer variables.
-        # Sometimes the same value is supplied - most often 0
-        # Where var signals are connectd to UI elements we still want
-        # the signal to be emitted.
-        self._my_value = value
-        self.intValueChanged.emit(value)
-        self.intValueAsStringChanged.emit(str(value))
+        if value != self._my_value or self._alwaysSignal_:
+            self.intValueChanged.emit(value)
+            self.intValueAsStringChanged.emit(str(value))
 
 class DoubleVar(QObject):
     ''' Provides a Property function for PyQt/PySide6 that uses signals
@@ -88,9 +85,10 @@ class DoubleVar(QObject):
     dblValueRead = Signal(float)
     dblValueAsStrChanged = Signal(str)# optional signal on read
 
-    def __init__(self):
+    def __init__(self, initial = 0.0, alwaysSignal = True):
         super().__init__()
-        self._my_value = 0
+        self._my_value = initial
+        self._alwaysSignal_ = alwaysSignal
 
     @Slot(str)
     def acceptDblAsStr(self,value):
@@ -105,7 +103,7 @@ class DoubleVar(QObject):
 
     @myValue.setter
     def myValue(self, value):
-        if value != self._my_value:
+        if value != self._my_value or self._alwaysSignal_:
             self._my_value = value
             self.dblValueChanged.emit(value)
             self.dblValueAsStrChanged.emit(str(value))
