@@ -128,6 +128,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.main.le_resultLinePlayerCash.setValidator(self.rslt_cash_validator)
 
         # [Results Entry Line Input Signals]
+
         # [Result Entry Line handler processed upon Enter pressed on any field]
         self.main.le_resultLinePlayerGp.textEdited.connect(self.rslt_gp.acceptIntAsStr)
         self.main.le_resultLinePlayerGw.textEdited.connect(self.rslt_gw.acceptIntAsStr)
@@ -140,8 +141,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.connectIntLECtrlVar(self.main.le_resultLinePlayerGp, self.rslt_gp)
         self.connectIntLECtrlVar(self.main.le_resultLinePlayerGw, self.rslt_gw)
         self.connectIntLECtrlVar(self.main.le_resultLinePlayerSprd, self.rslt_sprd)
-        self.connectIntLECtrlVar(self.main.le_resultLinePlayerCash, self.rslt_tkn)
-        self.connectIntLECtrlVar(self.main.le_resultLinePlayerTkn, self.rslt_cash)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerCash, self.rslt_cash)
+        self.connectIntLECtrlVar(self.main.le_resultLinePlayerTkn, self.rslt_tkn)
         self.connectIntLBCtrlVar(self.main.lb_resultLinePlayerGvn, self.rslt_gvn)
 
         # [SECTION Results Display Fields]
@@ -1416,7 +1417,6 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # TODO: update the points list box for the player list; each location has a ' ' if no points
         #       Update the namePointsDict while still in memory.
         print('handle result line stub')
-        return
         resultPlayerName = ''
         resultPoints = ''
         # reset any previous error HiLites
@@ -1697,13 +1697,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # only digits allowed in by validationcommand
         # validate permissible range of gp
         # always start by resetting errorlite
-        self.resetScoringErrorHiLite(self.main.lw_resultsLinePlayerGp.text())
-        gp = strip(self.main.lw_resultLinePlayerGp.text())      # get the gp for the line
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerGp)
+        gp = self.main.le_resultLinePlayerGp.text().strip()      # get the gp for the lin
         if not gp.isnumeric():
             self.errorHiLite(self.resultsGpEntry)
             return False
         if int(gp) > 35:
-            self.errorHiLite(self.main.lw_resultLinePlayerGp)
+            self.errorHiLite(self.main.le_resultLinePlayerGp)
             print ('GP value ', gp, ' too big')
             return False
         # defer this cross-check until the GW has been input
@@ -1717,51 +1717,51 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def gwValidation(self):
         # only digits allowed in by validation command
         # validate permissible games won
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGw)
-        gw = strip(self.main.lw_resultLinePlayerGw.text())       # get the gw for the line
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerGw)
+        gw = self.main.le_resultLinePlayerGw.text().strip()      # get the gw for the line
         if not gw.isnumeric():
-            self.errorHiLite(self.main.lw_resultLinePlayerGw)
+            self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
         if int(gw) > 18:    # this value allows for GRRT and GRNT
             print('GW value ', gw, ' not possible')
-            self.errorHiLite(self.main.lw_resultLinePlayerGw)
+            self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
         if not self.crossCheckGpGw():
-            self.errorHiLite(self.main.lw_resultLinePlayerGp)
-            self.errorHiLite(self.main.lw_resultLinePlayerGw)
+            self.errorHiLite(self.main.le_resultLinePlayerGp)
+            self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
         self.resultsGvnVar.set(str(self.computeSkunksGiven()))
         return True
     def crossCheckGpGw(self ):
         # we are checking the resultsline input area
-        gp = int(strip(self.main.lw_resultLinePlayerGp.text()))
-        gw = int(strip(self.main.lw_resultLinePlayerGw.text()))
+        gp = int(self.main.le_resultLinePlayerGp.text().strip())
+        gw = int(self.main.le_resultLinePlayerGw.text().strip())
         print ('gp: gw: ', gp, ' ',gw)
         if gp >= (2 * gw):
             return True
         else:
-            self.errorHiLite(self.main.lw_resultLinePlayerGp)
-            self.errorHiLite(self.main.lw_resultLinePlayerGw)
+            self.errorHiLite(self.main.le_resultLinePlayerGp)
+            self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
 
     def spreadValidation(self):
         # only digits allowed in by validationcommand
         # validate total spread
         # TODO: allow user to accept a huge spread - over/under 350
-        spread = strip(self.main.lw_resultLinePlayerSprd.text()) # get the spread for the line
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerSprd)
+        spread = self.main.le_resultLinePlayerSprd.text().strip() # get the spread for the line
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerSprd)
         if abs(int(spread)) > 350:
             print ('Check Huge Spread value ', spread)
-            self.errorHiLite(self.main.lw_resultLinePlayerSprd)
+            self.errorHiLite(self.main.le_resultLinePlayerSprd)
             return False
         return True
     def cashValidation(self):
         # only digits allowed in by validationcommand
         # validate amount of cash
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerCash)
-        cash = strip(self.main.lw_resultLinePlayerCash.text())
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerCash)
+        cash = self.main.le_resultLinePlayerCash.text().strip()
         if not cash.isnumeric():
-            self.errorHiLite(self.main.lw_resultLinePlayerCash)
+            self.errorHiLite(self.main.le_resultLinePlayerCash)
             return False
         # get the cash awarded
 
@@ -1771,20 +1771,20 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         #     self.errorHiLite(self.resultsCashEntry)
         #     return False
         if int(cash) < 0 or int(cash) > 150:
-            self.errorHiLite(self.main.lw_resultLinePlayerCash)
+            self.errorHiLite(self.main.le_resultLinePlayerCash)
             return False
         return True
     def takenValidation(self):
         # only digits allowed in by validationcommand
         # validate number of taken skunks
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerTkn)
-        taken = strip(self.main.lw_resultLinePlayerTkn.text())# get the skunks taken for the line
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerTkn)
+        taken = self.main.le_resultLinePlayerTkn.text().strip()# get the skunks taken for the line
         if not taken.isnumeric():
-            self.errorHiLite(self.main.lw_resultLinePlayerTkn)
+            self.errorHiLite(self.main.le_resultLinePlayerTkn)
             return False
         if int(taken) > 9:
             print('Taken value ', taken,' not possible')
-            self.errorHiLite(self.main.lw_resultLinePlayerTkn)
+            self.errorHiLite(self.main.le_resultLinePlayerTkn)
             return False
         return True
     # TODO: after we leave a line, and no errors, then update the dbms entry using SQLObject
@@ -1948,11 +1948,11 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     #     for w in self.pFrame.interior.winfo_children():
     #         self.resetHilite(w.winfo_children()[self.textIndex])
     def resetResultLineHiLites(self):
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGp)
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerGW)
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerSprd)
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerTkn)
-        self.resetScoringErrorHiLite(self.main.lw_resultLinePlayerCash)
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerGp)
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerGW)
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerSprd)
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerTkn)
+        self.resetScoringErrorHiLite(self.main.le_resultLinePlayerCash)
         # self.resetScoringErrorHiLite(self.resultsGpEntry)
         # self.resetScoringErrorHiLite(self.resultsGwEntry)
         # self.resetScoringErrorHiLite(self.resultsSprdEntry)
@@ -1971,7 +1971,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def resetScoringErrorHiLite(self, w):
         self.resetEntryHiLite(w)
     def resetEntryHiLite(self, w):
-        w.setStyleShee('background-color: white; color: black')
+        w.setStyleSheet('background-color: white; color: black')
         # w.config(background='white', foreground='black')
     def hideResultLineErrorMessages(self):
         self.hideWidget(self.gpError)

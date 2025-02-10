@@ -1,10 +1,13 @@
 # ctrlVariables.py
 #
-# Update  with bool 1/25/2025 mwycombe
+# Update with bool 1/25/2025 mwycombe
+# Update with default initial value and default alwaysSignal = True
+# alwaysSignal guarantees a signal even if same value is provided.
+# Most frequent cases are 0 for IntVar and True/False for BoolVar instances
 #
-# To provide equivalnt of tkinter UI control variable
+# To provide equivalent of tkinter UI control variable
 #
-# QObject properties only support direct assegnment and reading of the Property
+# QObject properties only support direct assignment and reading of the Property
 #
 # Each ctrlVariable has slots for allowing connection from UI fields and signals to
 # notify of changes.

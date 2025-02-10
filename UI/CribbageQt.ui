@@ -2475,11 +2475,11 @@ background-color: rgb(255, 255, 255);</string>
   </widget>
  </widget>
  <tabstops>
+  <tabstop>le_resultLinePlayerGp</tabstop>
   <tabstop>le_resultLinePlayerGw</tabstop>
   <tabstop>le_resultLinePlayerSprd</tabstop>
   <tabstop>le_resultLinePlayerTkn</tabstop>
   <tabstop>le_resultLinePlayerCash</tabstop>
-  <tabstop>le_streetEntry</tabstop>
   <tabstop>le_cityEntry</tabstop>
   <tabstop>le_stateEntry</tabstop>
   <tabstop>le_zipEntry</tabstop>
@@ -2522,6 +2522,7 @@ background-color: rgb(255, 255, 255);</string>
   <tabstop>lw_listOfReportTourneys</tabstop>
   <tabstop>TourneysFrame</tabstop>
   <tabstop>ExistingTourneysPanel</tabstop>
+  <tabstop>le_streetEntry</tabstop>
  </tabstops>
  <resources/>
  <connections/>

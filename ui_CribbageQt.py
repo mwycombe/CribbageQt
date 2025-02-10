@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtEpJUeF.ui'
+## Form generated from reading UI file 'CribbageQtTDfNWe.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -868,11 +868,11 @@ class Ui_MainCribbageWindow(object):
         self.tabWidget.raise_()
         self.sessionPanel.raise_()
         self.SessionFrameLabel.raise_()
+        QWidget.setTabOrder(self.le_resultLinePlayerGp, self.le_resultLinePlayerGw)
         QWidget.setTabOrder(self.le_resultLinePlayerGw, self.le_resultLinePlayerSprd)
         QWidget.setTabOrder(self.le_resultLinePlayerSprd, self.le_resultLinePlayerTkn)
         QWidget.setTabOrder(self.le_resultLinePlayerTkn, self.le_resultLinePlayerCash)
-        QWidget.setTabOrder(self.le_resultLinePlayerCash, self.le_streetEntry)
-        QWidget.setTabOrder(self.le_streetEntry, self.le_cityEntry)
+        QWidget.setTabOrder(self.le_resultLinePlayerCash, self.le_cityEntry)
         QWidget.setTabOrder(self.le_cityEntry, self.le_stateEntry)
         QWidget.setTabOrder(self.le_stateEntry, self.le_zipEntry)
         QWidget.setTabOrder(self.le_zipEntry, self.le_phoneEntry)
@@ -914,11 +914,12 @@ class Ui_MainCribbageWindow(object):
         QWidget.setTabOrder(self.tourneysTabPanel, self.lw_listOfReportTourneys)
         QWidget.setTabOrder(self.lw_listOfReportTourneys, self.TourneysFrame)
         QWidget.setTabOrder(self.TourneysFrame, self.ExistingTourneysPanel)
+        QWidget.setTabOrder(self.ExistingTourneysPanel, self.le_streetEntry)
 
         self.retranslateUi(MainCribbageWindow)
 
         self.stackedActivityWidget.setCurrentIndex(3)
-        self.tabWidget.setCurrentIndex(0)
+        self.tabWidget.setCurrentIndex(2)
 
 
         QMetaObject.connectSlotsByName(MainCribbageWindow)
