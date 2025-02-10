@@ -670,10 +670,10 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # strip off extraneous characters
         self.tourneyNumberEntry.myValue = self.tourneyNumberEntry.myValue.strip()
         self.tourneyDateEntry.myValue = self.tourneyDateEntry.myValue.strip()
-        self.validNumber = (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.lb_tourneyNumberEntry))
-        self.validDate =  (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.lb_tourneyDateEntry))
-        if not ((self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.lb_tourneyNumberEntry)) and \
-            (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.lb_tourneyDateEntry))):
+        self.validNumber = (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.le_tourneyNumberEntry))
+        self.validDate =  (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.le_tourneyDateEntry))
+        if not ((self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.le_tourneyNumberEntry)) and \
+            (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.le_tourneyDateEntry))):
             # self.showWidget(self.newHelpBadFormatField)
             self.main.lb_tourneyNumberEntry.setFocus()
             return
@@ -722,8 +722,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         #     self.errorHiLite(self.newTourneyNumberEntry)
         #     self.showNewNumberError()
         #     return True;
-        if self.duplicateNumber( self.tourneyNumberEntry):
-            self.errorHiLite(self.main.lb_tourneyNumberEntry)
+        if self.duplicateNumber( self.tourneyNumberEntry.myValue):
+            self.errorHiLite(self.main.le_tourneyNumberEntry)
             self.showNewNumberError()
             return True
         return False
@@ -732,9 +732,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # exit()
         # already validated as a date
         # SQLObject datecol returns datetime.date objects, so dow makeIsoDate so then can be compared
-        newDate = self.makeIsoDate(self.tourneyDateEntry)
+        newDate = self.makeIsoDate(self.tourneyDateEntry.myValue)
         if self.duplicateDate(newDate):
-            self.errorHiLite(self.main.lb_tourneyDateEntry)
+            self.errorHiLite(self.main.le_tourneyDateEntry)
             self.showNewDateError()
             return True
         return False
