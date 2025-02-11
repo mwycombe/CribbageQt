@@ -810,10 +810,10 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def validateTourneyNumber(self, value, w):
         # incoming value is a string
         if cfg.debug and cfg.tourneysdebug:
-            print ('Number value: ', value)
+            print ('Number value: ', value.text())
         # exit()
         self.resetErrorHiLite(w)
-        if not value.isnumeric():
+        if not value.text().isnumeric():
             print ('Not numeric')
             self.errorHiLite(w)
             return False
@@ -844,9 +844,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # use new python match statement
         match field:
             case 'number':
-                return self.validateTourneyNumber(self.ty_number.myValue,w)
+                return self.validateTourneyNumber(self.main.le_tourneyNumberEntry,w)
             case 'date':
-                return self.validateTourneyDate(self.ty_date.myValue,w)
+                return self.validateTourneyDate(self.main.le_tourneyDateEntry,w)
 
         # # invokes appropriate validation field
         # switcher = {
