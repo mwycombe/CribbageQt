@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtTDfNWe.ui'
+## Form generated from reading UI file 'CribbageQtCOhnbS.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -24,7 +24,7 @@ class Ui_MainCribbageWindow(object):
     def setupUi(self, MainCribbageWindow):
         if not MainCribbageWindow.objectName():
             MainCribbageWindow.setObjectName(u"MainCribbageWindow")
-        MainCribbageWindow.resize(1156, 915)
+        MainCribbageWindow.resize(1190, 915)
         font = QFont()
         font.setPointSize(12)
         font.setWeight(QFont.Medium)
@@ -449,9 +449,9 @@ class Ui_MainCribbageWindow(object):
         self.le_tourneyDateEntry = QLineEdit(self.NewTourneyPanel)
         self.le_tourneyDateEntry.setObjectName(u"le_tourneyDateEntry")
         self.le_tourneyDateEntry.setGeometry(QRect(180, 60, 141, 26))
-        self.newTourneyFrameLabel = QLabel(self.TourneysFrame)
+        self.newTourneyFrameLabel = QLabel(self.NewTourneyPanel)
         self.newTourneyFrameLabel.setObjectName(u"newTourneyFrameLabel")
-        self.newTourneyFrameLabel.setGeometry(QRect(430, 160, 101, 20))
+        self.newTourneyFrameLabel.setGeometry(QRect(10, -7, 101, 20))
         self.newTourneyFrameLabel.setAutoFillBackground(True)
         self.newTourneyFrameLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.frame = QFrame(self.TourneysFrame)
@@ -486,12 +486,26 @@ class Ui_MainCribbageWindow(object):
 
         self.verticalLayout_3.addWidget(self.lb_duplicateTourneyDate)
 
+        self.lb_tourneyHasDataWarning = QLabel(self.frame)
+        self.lb_tourneyHasDataWarning.setObjectName(u"lb_tourneyHasDataWarning")
+
+        self.verticalLayout_3.addWidget(self.lb_tourneyHasDataWarning)
+
+        self.lb_tourneyEditErrors = QLabel(self.frame)
+        self.lb_tourneyEditErrors.setObjectName(u"lb_tourneyEditErrors")
+
+        self.verticalLayout_3.addWidget(self.lb_tourneyEditErrors)
+
+        self.lb_noDeleteTourneyFound = QLabel(self.frame)
+        self.lb_noDeleteTourneyFound.setObjectName(u"lb_noDeleteTourneyFound")
+
+        self.verticalLayout_3.addWidget(self.lb_noDeleteTourneyFound)
+
         self.F6TourneyFrame.raise_()
         self.ExistingTourneysPanel.raise_()
         self.label_4.raise_()
         self.NewTourneyPanel.raise_()
         self.lw_listOfTourneys.raise_()
-        self.newTourneyFrameLabel.raise_()
         self.frame.raise_()
         self.label_2 = QLabel(self.tourneysTabPanel)
         self.label_2.setObjectName(u"label_2")
@@ -919,7 +933,7 @@ class Ui_MainCribbageWindow(object):
         self.retranslateUi(MainCribbageWindow)
 
         self.stackedActivityWidget.setCurrentIndex(3)
-        self.tabWidget.setCurrentIndex(2)
+        self.tabWidget.setCurrentIndex(1)
 
 
         QMetaObject.connectSlotsByName(MainCribbageWindow)
@@ -974,6 +988,9 @@ class Ui_MainCribbageWindow(object):
         self.lb_duplicateTourneyNumber.setText(QCoreApplication.translate("MainCribbageWindow", u"Duplicate Tourney Number:       ", None))
         self.lb_badDateFormat.setText(QCoreApplication.translate("MainCribbageWindow", u"Bad Date Format:  ", None))
         self.lb_duplicateTourneyDate.setText(QCoreApplication.translate("MainCribbageWindow", u"Duplicate Date:", None))
+        self.lb_tourneyHasDataWarning.setText(QCoreApplication.translate("MainCribbageWindow", u"Tourney Has Data That Will Be Lost:", None))
+        self.lb_tourneyEditErrors.setText(QCoreApplication.translate("MainCribbageWindow", u"Tourney Edit Error(s):", None))
+        self.lb_noDeleteTourneyFound.setText(QCoreApplication.translate("MainCribbageWindow", u"No Record for Number & Date found to Delete:", None))
         self.label_2.setText(QCoreApplication.translate("MainCribbageWindow", u"Tourneys", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tourneysTab), QCoreApplication.translate("MainCribbageWindow", u"Tourneys", None))
         self.label_9.setText(QCoreApplication.translate("MainCribbageWindow", u"Tourney Date", None))

@@ -75,6 +75,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # set up reference to main ui
         self.main = cfg.screenDict['masterwindow']
 
+        # only show newtourney panel when needed
+        self.main.NewTourneyPanel.hide()
+
         self.tourneyToDelete = ''       # holds tourney record for deleting
         self.unsortedTourneys = []      # unstored all tourney records for club, season
         self.tourneysByNumber = []        # holds tourney records sorted by number
@@ -84,12 +87,18 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         cfg.screenDict['ttab'] = self
 
         # [Tourneys]
+        # simulated tk ctrlvariables
         self.ty_number = IntVar()
         self.ty_date = StringVar()
 
         # [Tourney signals]
+        # this does not create a loop because textEdited signal is not raised
+        # by programmatic changes to the lineEdit field
         self.main.le_tourneyNumberEntry.textEdited.connect(self.ty_number.acceptIntAsStr)
         self.main.le_tourneyDateEntry.textEdited.connect(self.ty_date.acceptStr)
+
+        self.ty_number.intValueAsStringChanged.connect(self.main.le_tourneyNumberEntry.setText)
+        self.ty_date.strValueChanged.connect(self.main.le_tourneyDateEntry.setText)
 
         # [Tourney validators]
         self.ty_number_validator = QIntValidator(1,50,self)
@@ -124,17 +133,13 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # puts activity panel into widget stack
         self.installTourneysActivity()
 
-        # simulated tk.control vars
-        self.tourneyNumberEntry = StringVar()
-        self.tourneyDateEntry = StringVar()
 
-        self.main.le_tourneyNumberEntry.textEdited.connect(self.setTourneyNumberEntry)
-        self.main.le_tourneyDateEntry.textEdited.connect(self.setTourneyDateEntry)
+        self.main.le_tourneyNumberEntry.textEdited.connect(self.ty_number.acceptIntAsStr)
+        self.main.le_tourneyDateEntry.textEdited.connect(self.ty_date.acceptStr)
 
         # this does not create a loop because textEdited signal is not raised
         # by programmatic changes to the lineEdit field
-        self.tourneyNumberEntry.strValueChanged.connect(self.main.le_tourneyNumberEntry.setText)
-        self.tourneyDateEntry.strValueChanged.connect(self.main.le_tourneyDateEntry.setText)
+
         # super().__init__(parent)
         # self.grid()
         # self.parent = parent
@@ -426,11 +431,11 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
     @qtc.Slot(str)
     def setTourneyNumberEntry(self, value):
-        self.tourneyNumberEntry.myValue = value
+        self.ty_number.myValue = int(value)
 
     @qtc.Slot(str)
     def setTourneyDateEntry(self, value):
-        self.tourneyDateEntry.myValue = value
+        self.ty_date.myValue = value
 
     def buildActivityPanel(self):
             # start by wiping any prior entries
@@ -555,11 +560,13 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # set editState
         # now receives slot call
         self.editingState = 1       # show we are creating - for context help
+        # show the panel to create a new tourney
+        self.main.NewTourneyPanel.show()
         if cfg.debug and cfg.tourneysdebug:
             print('Create new tourney')
         self.main.newTourneyFrameLabel.setText('New Tourney')
-        self.tourneyNumberEntry.myValue = ' '
-        self.tourneyDateEntry.myValue = ' '
+        self.ty_number.myValue = ''
+        self.ty_date.myValue = ' '
         self.main.le_tourneyNumberEntry.setFocus()
         # return
         # # self.hideAll()
@@ -590,25 +597,25 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.hideDeleteTourney()
         self.startOver()
 
-    def cancelCreate(self, event):
+    def cancelCreate(self):
         print ('Cancel the create - save nothing')
-        exit()
-        self.cancelEdit(event)
+        self.cancelEdit()
     def cancelDelete(self, event):
         print ('Cancel the delete - save nothing')
-        exit()
         self.clearDeleteEntryFields()
         self.hideDeleteTourney()
         self.startOver()
     def clearDeleteEntryFields(self):
-        exit()
-        self.deleteNumber.set('')
-        self.deleteDate.set('')
+        self.ty_number.myValue = None
+        self.main.le_tourneyNumberEntry.setText('')
+        self.ty_date.myValue = ''
+        self.main.le_tourneyDateEntry.setText('')
     def startOver(self):
         print('startOver')
         # exit()
         self.resetTourneyInformation()
         self.populateExistingTourneys()
+        self.main.NewTourneyPanel.hide()
         # self.existingTourneys.selection_set(0)
         # self.existingTourneys.activate((0))
         # self.existingTourneys.focus_force()
@@ -619,17 +626,16 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
 
     def resetTourneyInformation(self):
         # sets a clean slate for any tourney related work
-        self.main.lb_tourneyNumberEntry.setText(' ')
-        self.main.lb_tourneyDateEntry.setText(' ')
-        self.tourneyNumberEntry.myValue = ' '
-        self.tourneyDateEntry.myValue = ' '
-        self.resetErrorHiLite(self.main.lb_tourneyNumberEntry)
-        self.resetErrorHiLite(self.main.lb_tourneyDateEntry)
+        self.main.le_tourneyNumberEntry.setText(' ')
+        self.main.le_tourneyDateEntry.setText(' ')
+        self.ty_number.myValue = None
+        self.ty_date.myValue = ' '
+        self.resetErrorHiLite(self.main.le_tourneyNumberEntry)
+        self.resetErrorHiLite(self.main.le_tourneyDateEntry)
         self.main.lw_listOfTourneys.setCurrentRow(0)
         self.main.lw_listOfTourneys.setFocus()
     def recycleDelete(self):
         self.tourneyToDelete = ''       # clear delete record
-        exit()
         self.startOver()
         # this is an event handler - there is nothing to pass on from the event
         print ('Save new tourney')
@@ -668,14 +674,14 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # and reshow
         print('Add new tourney')
         # strip off extraneous characters
-        self.tourneyNumberEntry.myValue = self.tourneyNumberEntry.myValue.strip()
-        self.tourneyDateEntry.myValue = self.tourneyDateEntry.myValue.strip()
-        self.validNumber = (self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.le_tourneyNumberEntry))
-        self.validDate =  (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.le_tourneyDateEntry))
-        if not ((self.validateEntryField('number', self.tourneyNumberEntry.myValue, self.main.le_tourneyNumberEntry)) and \
-            (self.validateEntryField('date', self.tourneyDateEntry.myValue, self.main.le_tourneyDateEntry))):
+        self.ty_number.myValue = int(self.main.le_tourneyNumberEntry.text().strip())
+        self.ty_date.myValue = self.main.le_tourneyDateEntry.text().strip()
+        self.validNumber = (self.validateEntryField('number', self.ty_number.myValue, self.main.le_tourneyNumberEntry))
+        self.validDate =  (self.validateEntryField('date', self.ty_date.myValue, self.main.le_tourneyDateEntry))
+        if not ((self.validateEntryField('number', self.ty_number.myValue, self.main.le_tourneyNumberEntry)) and
+            (self.validateEntryField('date', self.ty_date.myValue, self.main.le_tourneyDateEntry))):
             # self.showWidget(self.newHelpBadFormatField)
-            self.main.lb_tourneyNumberEntry.setFocus()
+            self.main.le_tourneyNumberEntry.setFocus()
             return
         # check for duplicates of number or date
         if self.duplicateNewNumber() or self.duplicateNewDate():
@@ -685,14 +691,16 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             return
         try:
             print ('Try new tourney add')
-            Tourney(TourneyNumber = int(self.tourneyNumberEntry.myValue),
-                    Date = self.makeIsoDate(self.tourneyDateEntry.myValue),
+            Tourney(TourneyNumber = self.ty_number.myValue,
+                    Date = self.makeIsoDate(self.ty_date.myValue),
                     Club = cfg.clubRecord, Season = cfg.season
                     )
             # repopulate tourney on-screen list
             self.populateExistingTourneys()
-            self.tourneyNumberEntry.myValue = ' '
-            self.tourneyDateEntry.myValue = ' '
+            self.main.le_tourneyNumberEntry.setText('')
+            self.main.le_tourneyDateEntry.setText('')
+            self.main.NewTourneyPanel.hide()
+
             # self.newTourneyDate.set('')
             # self.newTourneyNumber.set('')
             # self.hideAll()
@@ -707,14 +715,37 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
                 print('Duplicate tourney date or Number')
             self.errorHiLite(self.main.lb_tourneyNumberEntry)
             self.errorHiLite(self.main.lb_tourneyDateEntry)
-            if mbx.askretrycancel('Duplicate number or date','Retry/edit or Cancel',parent = self):
-                # set focus and let user retry the date
-                self.main.lb_tourneyNumberEntry.setFocus()
-            else:
-                # clear out entry fields
-                self.resetErrorHiLite(self.newTourneyDateEntry)
-                self.resetErrorHiLite((self.newTourneyNumberEntry))
+
+            # ********************************
+            # requires from PySide6.QtWidgets import QMessageBox
+            # available buttons
+            # QMessageBox.Ok .Open .Save .Cancel .Close .Yes .No
+            # Test return with the same QMessageBox constant as used for the button
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText('Retry Creating New Tourney?')
+            msgBox.setWindowTitle('Try Again')
+            msgBox.setStandardButtons(QMessageBox.Yes| QMessageBox.No)
+            result = msgBox.exec()
+
+            if result == QMessageBox.No:
+                self.resetErrorHiLite(self.main.le_tourneyNumberEntry)
+                self.resetErrorHiLite(self.main.le_tourneyDateEntry)
                 self.startOver()
+            else:
+                self.main.le_tourneyNumberEntry.setFocus()
+            #
+            # ***********************************
+
+
+            # if mbx.askretrycancel('Duplicate number or date','Retry/edit or Cancel',parent = self):
+            #     # set focus and let user retry the date
+            #     self.main.lb_tourneyNumberEntry.setFocus()
+            # else:
+            #     # clear out entry fields
+            #     self.resetErrorHiLite(self.newTourneyDateEntry)
+            #     self.resetErrorHiLite((self.newTourneyNumberEntry))
+            #     self.startOver()
     def duplicateNewNumber(self):
         # exit()
         # already validated as a number
@@ -722,7 +753,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         #     self.errorHiLite(self.newTourneyNumberEntry)
         #     self.showNewNumberError()
         #     return True;
-        if self.duplicateNumber( self.tourneyNumberEntry.myValue):
+        if self.duplicateNumber( self.ty_number.myValue):
             self.errorHiLite(self.main.le_tourneyNumberEntry)
             self.showNewNumberError()
             return True
@@ -732,7 +763,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # exit()
         # already validated as a date
         # SQLObject datecol returns datetime.date objects, so dow makeIsoDate so then can be compared
-        newDate = self.makeIsoDate(self.tourneyDateEntry.myValue)
+        newDate = self.makeIsoDate(self.ty_date.myValue)
         if self.duplicateDate(newDate):
             self.errorHiLite(self.main.le_tourneyDateEntry)
             self.showNewDateError()
@@ -753,7 +784,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # exit()
         # receives string valued from entry field
         if int(value) in cfg.tourneyXref:
-            return True;
+            return True
         return False
     def duplicateDate(self, value):
         # exit()
@@ -813,9 +844,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # use new python match statement
         match field:
             case 'number':
-                return self.validateTourneyNumber(self.tourneyNumberEntry.myValue,w)
+                return self.validateTourneyNumber(self.ty_number.myValue,w)
             case 'date':
-                return self.validateTourneyDate(self.tourneyDateEntry.myValue,w)
+                return self.validateTourneyDate(self.ty_date.myValue,w)
 
         # # invokes appropriate validation field
         # switcher = {
@@ -876,8 +907,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.splitRow = self.main.lw_listOfTourneys.currentItem().text().split()
         if cfg.debug and cfg.tourneysdebug:
             print ('Edit split row: ' + str(self.splitRow))
-        self.tourneyNumberEntry.myValue = self.splitRow[0].strip()
-        self.tourneyDateEntry.myValue = self.splitRow[len(self.splitRow)-1].strip()
+        self.ty_number.myValue = self.splitRow[0].strip()
+        self.ty_date.myValue = self.splitRow[len(self.splitRow)-1].strip()
         #
         # test hi-lighting for pyqt
         #
@@ -929,8 +960,8 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         try:
             print ('tourneyNumber: ', self.tourneyNumberEntry.myValue)
             print ('tourneyDate: ', self.tourneyDateEntry.myValue)
-            self.tourneyUnderEdit.set(TourneyNumber = int(self.tourneyNumberEntry.myValue), \
-                                      Date = self.makeIsoDate(self.tourneyDateEntry.myValue))
+            self.tourneyUnderEdit.set(TourneyNumber = self.ty_number.myValue,
+                                      Date = self.makeIsoDate(self.ty_date.myValue))
         except (dberrors.DuplicateEntryError, dberrors.IntegrityError, dberrors.DataError):
             print ('Tourney update failed with error: ', sys.exc_info()[0])
             # TODO: highlight error fields and reposition at number entry field
@@ -941,84 +972,91 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def showContextHelp(self, event):
         print ('Check editingState for which help to show')
         exit()
-        if self.editingState == 1:
-            self.showWidget(self.newHelpPanel)
-        elif self.editingState == 2:
-            self.showWidget(self.editHelpPanel)
+        # if self.editingState == 1:
+        #     self.showWidget(self.newHelpPanel)
+        # elif self.editingState == 2:
+        #     self.showWidget(self.editHelpPanel)
 
     def updateTourney(self):
         # first validate the user's update input
         print ('In updateTourney')
         exit()
-        if not self.validateEntryField('number', self.editTourneyNumberEntry.get(),
-                                       self.editTourneyNumberEntry):
-            self.editTourneyNumberEntry.focus_force()
+        if not self.validateEntryField('number', self.main.le_tourneyNumberEntry.text(),
+                                       self.main.le_tourneyDateEntry):
+            self.main.le_tourneyNumberEntry.setFocus()
             return
-        elif not self.validateEntryField('date', self.editTourneyDateEntry.get(),
-                                          self.editTourneyDateEntry):
-            self.editTourneDateEntry.focus_force()
+        elif not self.validateEntryField('date', self.main.le_tourneyDateEntry.text(),
+                                          self.main.le_tourneyDateEntry):
+            self.main.le_tourneyDateEntry.setFocus()
             return
         # otherwise try to replace current tourney entry with new information
 
         try:
             print ('Try update')
-            self.tourneyUnderEdit.set(TourneyNumber = int(self.editTourneyNumberEntry.get()),
-                                      Date = self.makeIsoDate(self.editTourneyDateEntry.get()))
+            self.tourneyUnderEdit.set(TourneyNumber = int(self.main.le_tourneyNumberEntry.text()),
+                                      Date = self.makeIsoDate(self.main.le_tourneyDateEntry.text()))
             self.tourneyUnderEdit.syncUpdate()
         except dberrors.DuplicateEntryError:
-            self.showWidget(self.editTourneyEditError)
-            self.showEditErrors()
+            self.showWidget(self.main.lb_tourneyEditErrors)
             return
         # self.editingRecordId = self.getRecordId(self.editTourneyOriginalDate)
         # t = Tourney.get(self.editingRecordId)
         # t.set(Date=self.tourneyDate.get())
         self.populateExistingTourneys()
-        self.hideWidget(self.editTourneyPanel)
-        self.showWidget(self.manageTourneyPanel)
-        self.showCreateButtons()
-    def deleteTourney(self, event):
+        self.hideWidget(self.newTourneyPanel)
+        # self.showCreateButtons()
+    def deleteTourney(self):
         # delete the current tourney
         print ('delete selected tourney')
-        exit()
         # TODO: should check we are not deletng a tourney for
         # which there are already results...this would be a
         # serious data integrity error.
         # self.dbmsSorterTourneys corresponds to listbox entries
         print ('Request to delete a tourney')
-        self.hideAll()
+        self.hideAllErrors()
         self.showDeleteTourney()
         self.hideDeleteHelp()   # always turn off delete help for next iteration
         self.deleteNumberEntry.focus_force()    # start with the  tourney number
     def doDeleteTourney(self, event):
         print ('check & execute delete')
-        exit()
-        if not (self.validateEntryField('number', self.deleteNumber.get(), self.deleteNumberEntry))or \
-            not (self.validateEntryField('date', self.deleteDate.get(), self.deleteDateEntry)):
-            self.showWidget(self.deleteHelpPanel)
-            self.showWidget(self.deleteHelpBadFormatField)
-            self.deleteNumberEntry.focus_force()
+        if not (self.validateEntryField('number',
+                                        self.main.le_tourneyNumberEntry.text(),
+                                        self.main.le_tourneyNumberEntry)) \
+            or not \
+            (self.validateEntryField('date',
+                                     self.main.le_tourneyDateEntry.text(),
+                                     self.deleteDateEntry)):
+            self.main.le_tourneyNumberEntry.setFocus()
+            # self.showWidget(self.deleteHelpPanel)
+            # self.showWidget(self.deleteHelpBadFormatField)
+            # self.deleteNumberEntry.focus_force()
             return
         # next check that the referenced tournament exists
         if  not self.deleteTournamentExists():
-            self.showWidget(self.deleteHelpPanel)
-            self.showWidget(self.deleteHelpNoMatch)
+            self.showWidget(self.main.lb_noDeleteTourneyFound)
             return
         # good format, actual tourney found, check for data
         if self.deleteTourneyHasResults():
-            # self.showEnteredDataHelpWarning()
-            if mbx.askyesno('Tourney has entered data', 'Do  you really want to delete?'):
+            # ********************************
+            # requires from PySide6.QtWidgets import QMessageBox
+            # available buttons
+            # QMessageBox.Ok .Open .Save .Cancel .Close .Yes .No
+            # Test return with the same QMessageBox constant as used for the button
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText('Do you really want to delete this tourney?')
+            msgBox.setWindowTitle('Tourney Has Data')
+            msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+            result = msgBox.exec()
+            if result == QMessageBox.Yes:
                 self.deleteChosenTourney()
             else:
                 self.recycleDelete()  # go back to delete fields
-        else:
-            if mbx.askyesno('Empty tourney', 'Do you really want to delete?'):
-                self.deleteChosenTourney()
-            else:
-                self.recycleDelete()
+                print('QMessageBox dropped thru')
         # self.tourneyToDelete = Tourney.select(Tourney.q.TourneyNumber == int(self.deleteNumberEntry.get()))
     def deleteChosenTourney(self):
         print (self.tourneyToDelete)
-        return
         # self.tourneyToDelete holds the record for this tourney
         try:
             self.tourneyToDelete.delete(self.tourneyToDelete.id)
@@ -1032,7 +1070,6 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
             self.hideDeleteHelp()
             self.startOver()
     def deleteTournamentExists(self):
-        exit()
         if  not (self.deleteTournamentNumberExists() and self.deleteTournamentDateExists()):
             self.showWidget(self.deleteHelpPanel)
             self.showWidget(self.deleteHelpNoMatch)
@@ -1050,10 +1087,9 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
     def deleteTournamentNumberExists(self):
         exit()
         # self.duplicateNumber takes the contral variable StringVar input
-        return self.duplicateNumber( self.deleteNumber.get())
+        return self.duplicateNumber( self.ty_number.myValue)
     def deleteTournamentDateExists(self):
-        exit()
-        deleteDate = self.makeIsoDate(self.deleteDate.get())
+        deleteDate = self.makeIsoDate(self.ty_date.myValue)
         return self.duplicateDate(deleteDate)
     def deleteTourneyHasResults(self):
         exit()
@@ -1122,29 +1158,28 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.hideDeleteTourney()
         self.showEditPanels()
     def showDeleteTourney(self):
-        exit()
         self.editingState = 3       # delete state
-        self.hideCreateTourney()
-        self.hideEditTourney()
-        self.showDeletePanels()
+        self.showWidget(self.main.NewTourneyPanel)
+        self.main.newTourneyFrameLabel.setText('Delete Tourney')
+
+
     def showDeletePanels(self):
         exit()
         self.showWidget(self.deletePanel)
         self.showWidget(self.deleteTourneyPanel)
         self.showWidget(self.deleteHelpPanel)
-    def showTourneyHasDataWarning():
-        # exit()
-        self.showWidget(self.deleteHelpTourneyData)
-        self.showWidget(self.deleteReportHelpProblems)
+    def showTourneyHasDataWarning(self):        # exit()
+        self.main.lb_tourneyHasDataWarning.show()
     def showEditPanels(self, index):
-        exit()
-        print ('lb index to edit', index)
-        self.showWidget(self.tourneyMaintenance)
-        self.showWidget(self.editInstructionsPanel)
-        self.showWidget(self.editNotesPanel)
-        self.showWidget(self.existingTourneyPanel)
-        self.showWidget(self.editTourneyPanel)
-        self.showWidget(self.editHelpPanel)
+        pass
+        # no longer in use
+        # print ('lb index to edit', index)
+        # self.showWidget(self.tourneyMaintenance)
+        # self.showWidget(self.editInstructionsPanel)
+        # self.showWidget(self.editNotesPanel)
+        # self.showWidget(self.existingTourneyPanel)
+        # self.showWidget(self.editTourneyPanel)
+        # self.showWidget(self.editHelpPanel)
     def showBadEditEntry(self):
         # bad fields hilited and error messages set by validations routines
         return
@@ -1234,4 +1269,11 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # self.tourneysActivity.tourneysActivityPanel.show()
         # self.tourneysActivity.tourneysActivityPanel.activateWindow()
         # self.tourneysActivity.tourneysActivityPanel.raise_()
-
+    def hideAllErrors(self):
+        self.hideWidget(self.main.lb_badNumber)
+        self.hideWidget(self.main.lb_badDateFormat)
+        self.hideWidget(self.main.lb_duplicateTourneyNumber)
+        self.hideWidget(self.main.lb_duplicateTourneyDate)
+        self.hideWidget(self.main.lb_tourneyEditErrors)
+        self.hideWidget(self.main.lb_tourneyHasDataWarning)
+        self.hideWidget(self.main.lb_tourneyOutofRange)

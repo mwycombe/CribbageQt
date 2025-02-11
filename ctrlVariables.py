@@ -63,8 +63,9 @@ class IntVar(QObject):
     @Slot(str)
     def acceptIntAsStr(self,value):
         if value == '' or value == None or not value.isnumeric():
-            value = 0
-        self.myValue = int(value)
+            self._my_value = None
+        else:
+            self.myValue = int(value)
 
     @Slot(int)
     def acceptInt(self,value):

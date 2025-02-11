@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1156</width>
+    <width>1190</width>
     <height>915</height>
    </rect>
   </property>
@@ -371,7 +371,7 @@ background-color: rgb(255, 255, 255);</string>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="playersTab">
      <property name="autoFillBackground">
@@ -1039,25 +1039,25 @@ color: rgb(65, 161, 5);</string>
           </rect>
          </property>
         </widget>
-       </widget>
-       <widget class="QLabel" name="newTourneyFrameLabel">
-        <property name="geometry">
-         <rect>
-          <x>430</x>
-          <y>160</y>
-          <width>101</width>
-          <height>20</height>
-         </rect>
-        </property>
-        <property name="autoFillBackground">
-         <bool>true</bool>
-        </property>
-        <property name="text">
-         <string>New Tourney</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
+        <widget class="QLabel" name="newTourneyFrameLabel">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>-7</y>
+           <width>101</width>
+           <height>20</height>
+          </rect>
+         </property>
+         <property name="autoFillBackground">
+          <bool>true</bool>
+         </property>
+         <property name="text">
+          <string>New Tourney</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignCenter</set>
+         </property>
+        </widget>
        </widget>
        <widget class="QFrame" name="frame">
         <property name="geometry">
@@ -1110,6 +1110,27 @@ color: rgb(65, 161, 5);</string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLabel" name="lb_tourneyHasDataWarning">
+           <property name="text">
+            <string>Tourney Has Data That Will Be Lost:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_tourneyEditErrors">
+           <property name="text">
+            <string>Tourney Edit Error(s):</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="lb_noDeleteTourneyFound">
+           <property name="text">
+            <string>No Record for Number &amp; Date found to Delete:</string>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <zorder>F6TourneyFrame</zorder>
@@ -1117,7 +1138,6 @@ color: rgb(65, 161, 5);</string>
        <zorder>label_4</zorder>
        <zorder>NewTourneyPanel</zorder>
        <zorder>lw_listOfTourneys</zorder>
-       <zorder>newTourneyFrameLabel</zorder>
        <zorder>frame</zorder>
       </widget>
       <widget class="QLabel" name="label_2">

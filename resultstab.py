@@ -1310,8 +1310,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # user pressed F2 at a result line
         # set up edit for player on result line
         currentresultsrow = self.main.lw_listOfResultsNames.currentRow()
-        currentresultsplayer = self.main.lw_listOfResultsNames.item(currentrow).text()
-        self.buildEditLine(currentresultsname)
+        currentresultsplayer = self.main.lw_listOfResultsNames.item(currentresultsrow).text()
+        self.buildEditLine(currentresultsplayer)
 
     def newResult(self):
         # user pressed F3 on a player entry - doesn't make sense on a result line
@@ -1342,12 +1342,40 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         pId = cfg.playerRefx[self.playerNameListBox.get(self.playerNameListBox.curselection()[0])]
         matchingResultLine = self.findResultLineByPid(pId)
         if matchingResultLine >= 0:
-            # highliht resultsLine if we found and entry for the player
+            # highlight resultsLine if we found and entry for the player
             self.resultsNamesLB.selection_set(matchingResultLine)
-            if mbx.askokcancel('Confirm Delete', 'Do you really want to delete this results?') == True:
+            # ********************************
+            # requires from PySide6.QtWidgets import QMessageBox
+            # available buttons
+            # QMessageBox.Ok .Open .Save .Cancel .Close .Yes .No
+            # Test return with the same QMessageBox constant as used for the button
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Question)
+            msgBox.setText('Do you really want to delete this result?')
+            msgBox.setWindowTitle('Confirm Delete')
+            msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
+
+            result = msgBox.exec()
+            if result ==  QMessageBox.Ok:
                 self.deleteResult(pId)
+
+            # ***********************************
         else:
-            mbx.showinfo('No results for this player', 'Try another player')
+            # ********************************
+            # requires from PySide6.QtWidgets import QMessageBox
+            # available buttons
+            # QMessageBox.Ok .Open .Save .Cancel .Close .Yes .No
+            # Test return with the same QMessageBox constant as used for the button
+            msgBox = QMessageBox()
+            msgBox.setIcon(QMessageBox.Information)
+            msgBox.setText('No results for this player')
+            msgBox.setWindowTitle('Try Another Player')
+            msgBox.setStandardButtons(QMessageBox.Ok )
+
+            result = msgBox.exec()
+            #
+            # ***********************************
+            # mbx.showinfo('No results for this player', 'Try another player')
             # reposition to top of players
 
 
@@ -1364,12 +1392,33 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # user pressed F9 on a result line
         # confirm delete with msgbox then remove from listOfResults and from dbms immediately
         pId = cfg.playerRefx[self.resultsNamesLB.get(self.resultsNamesLB.curselection()[0])]
-        if mbx.askokcancel('Confirm Delete', 'Do you really want to delete this result?') == True:
-            # proceed with the delete
+
+        # ********************************
+        # requires from PySide6.QtWidgets import QMessageBox
+        # available buttons
+        # QMessageBox.Ok .Open .Save .Cancel .Close .Yes .No
+        # Test return with the same QMessageBox constant as used for the button
+        msgBox = QMessageBox()
+        msgBox.setIcon(QMessageBox.Question)
+        msgBox.setText('Do you really want to delete this result?')
+        msgBox.setWindowTitle('Confirm Delete')
+        msgBox.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+
+        result = msgBox.exec()
+        if result == QMessageBox.Yes:
             self.deleteResult(pId)
         else:
-            # not yes means leave it alone
-            pass
+            pass    # leave it alone
+
+        #
+        # ***********************************
+
+        # if mbx.askokcancel('Confirm Delete', 'Do you really want to delete this result?') == True:
+        #     # proceed with the delete
+        #     self.deleteResult(pId)
+        # else:
+        #     # not yes means leave it alone
+        #     pass
     def deleteResult(self, pId):
         # can be any LB entry on the row of results
         # check if listOfResults line is already in the dbms - so must be deleted from dbms
@@ -1803,7 +1852,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         msgBox.setWindowTitle('Save the Edit')
         msgBox.setStandardButtons(QMessageBox.Ok | QMessageBox.Cancel)
         result = msgBox.exec()
-        if results == QMessageBox.Ok:
+        if result == QMessageBox.Ok:
         # if mbx.askokcancel('Ok to Save?', 'Do you want to save the edit?') == True:
             changeScoreCard = cfg.ar.getSpecificScoreCard(tourneyRecord, playerRecord)[0]
             # update all of the fields linearly - slow but works
@@ -2009,7 +2058,7 @@ if __name__ == "__main__":
     cfg.appTitle = 'Results Testing'  #
     cfg.clubNumber = 100  #
     cfg.season = '2024-25'  #
-    cfg.clubName = 'Peggers}'  #
+    cfg.clubName = 'Peggers'  #
     cfg.tourneyDate = '2024-10-08'  #
     cfg.tourneyRecordId = 181  #
     cfg.tourneyNumber = 7  #
@@ -2041,15 +2090,15 @@ if __name__ == "__main__":
     cfg.tourneyRecordId = cfg.tourneyRecord.id
     cfg.tourneyNumber = cfg.tourneyRecord.TourneyNumber
 
-    root = tk.Tk()
-    root.rowconfigure(0,weight=1)
-    root.columnconfigure(0,weight=1)
-    # root.columnconfigure(1,weight=1)
-    # root.geometry('400x500')
-    app = ResultsTab(root)
-    app.rowconfigure(0, weight=1)
-    app.columnconfigure(0, weight=1)
-    app.columnconfigure(1, weight=1)
-    app.master.title('Result Panel 1')
-    app.mainloop()
+    # root = tk.Tk()
+    # root.rowconfigure(0,weight=1)
+    # root.columnconfigure(0,weight=1)
+    # # root.columnconfigure(1,weight=1)
+    # # root.geometry('400x500')
+    # app = ResultsTab(root)
+    # app.rowconfigure(0, weight=1)
+    # app.columnconfigure(0, weight=1)
+    # app.columnconfigure(1, weight=1)
+    # app.master.title('Result Panel 1')
+    # app.mainloop()
 
