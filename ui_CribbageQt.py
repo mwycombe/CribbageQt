@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'CribbageQtCOhnbS.ui'
+## Form generated from reading UI file 'CribbageQtnVKarv.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.8.0
 ##
@@ -451,52 +451,52 @@ class Ui_MainCribbageWindow(object):
         self.le_tourneyDateEntry.setGeometry(QRect(180, 60, 141, 26))
         self.newTourneyFrameLabel = QLabel(self.NewTourneyPanel)
         self.newTourneyFrameLabel.setObjectName(u"newTourneyFrameLabel")
-        self.newTourneyFrameLabel.setGeometry(QRect(10, -7, 101, 20))
+        self.newTourneyFrameLabel.setGeometry(QRect(10, -2, 101, 20))
         self.newTourneyFrameLabel.setAutoFillBackground(True)
         self.newTourneyFrameLabel.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.frame = QFrame(self.TourneysFrame)
-        self.frame.setObjectName(u"frame")
-        self.frame.setGeometry(QRect(415, 310, 351, 181))
-        self.frame.setFrameShape(QFrame.Shape.StyledPanel)
-        self.frame.setFrameShadow(QFrame.Shadow.Raised)
-        self.verticalLayout_3 = QVBoxLayout(self.frame)
+        self.lf_tourneyErrorFrame = QFrame(self.TourneysFrame)
+        self.lf_tourneyErrorFrame.setObjectName(u"lf_tourneyErrorFrame")
+        self.lf_tourneyErrorFrame.setGeometry(QRect(415, 310, 351, 181))
+        self.lf_tourneyErrorFrame.setFrameShape(QFrame.Shape.StyledPanel)
+        self.lf_tourneyErrorFrame.setFrameShadow(QFrame.Shadow.Raised)
+        self.verticalLayout_3 = QVBoxLayout(self.lf_tourneyErrorFrame)
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.lb_badNumber = QLabel(self.frame)
+        self.lb_badNumber = QLabel(self.lf_tourneyErrorFrame)
         self.lb_badNumber.setObjectName(u"lb_badNumber")
 
         self.verticalLayout_3.addWidget(self.lb_badNumber)
 
-        self.lb_tourneyOutofRange = QLabel(self.frame)
+        self.lb_tourneyOutofRange = QLabel(self.lf_tourneyErrorFrame)
         self.lb_tourneyOutofRange.setObjectName(u"lb_tourneyOutofRange")
 
         self.verticalLayout_3.addWidget(self.lb_tourneyOutofRange)
 
-        self.lb_duplicateTourneyNumber = QLabel(self.frame)
+        self.lb_duplicateTourneyNumber = QLabel(self.lf_tourneyErrorFrame)
         self.lb_duplicateTourneyNumber.setObjectName(u"lb_duplicateTourneyNumber")
 
         self.verticalLayout_3.addWidget(self.lb_duplicateTourneyNumber)
 
-        self.lb_badDateFormat = QLabel(self.frame)
+        self.lb_badDateFormat = QLabel(self.lf_tourneyErrorFrame)
         self.lb_badDateFormat.setObjectName(u"lb_badDateFormat")
 
         self.verticalLayout_3.addWidget(self.lb_badDateFormat)
 
-        self.lb_duplicateTourneyDate = QLabel(self.frame)
+        self.lb_duplicateTourneyDate = QLabel(self.lf_tourneyErrorFrame)
         self.lb_duplicateTourneyDate.setObjectName(u"lb_duplicateTourneyDate")
 
         self.verticalLayout_3.addWidget(self.lb_duplicateTourneyDate)
 
-        self.lb_tourneyHasDataWarning = QLabel(self.frame)
+        self.lb_tourneyHasDataWarning = QLabel(self.lf_tourneyErrorFrame)
         self.lb_tourneyHasDataWarning.setObjectName(u"lb_tourneyHasDataWarning")
 
         self.verticalLayout_3.addWidget(self.lb_tourneyHasDataWarning)
 
-        self.lb_tourneyEditErrors = QLabel(self.frame)
+        self.lb_tourneyEditErrors = QLabel(self.lf_tourneyErrorFrame)
         self.lb_tourneyEditErrors.setObjectName(u"lb_tourneyEditErrors")
 
         self.verticalLayout_3.addWidget(self.lb_tourneyEditErrors)
 
-        self.lb_noDeleteTourneyFound = QLabel(self.frame)
+        self.lb_noDeleteTourneyFound = QLabel(self.lf_tourneyErrorFrame)
         self.lb_noDeleteTourneyFound.setObjectName(u"lb_noDeleteTourneyFound")
 
         self.verticalLayout_3.addWidget(self.lb_noDeleteTourneyFound)
@@ -506,7 +506,7 @@ class Ui_MainCribbageWindow(object):
         self.label_4.raise_()
         self.NewTourneyPanel.raise_()
         self.lw_listOfTourneys.raise_()
-        self.frame.raise_()
+        self.lf_tourneyErrorFrame.raise_()
         self.label_2 = QLabel(self.tourneysTabPanel)
         self.label_2.setObjectName(u"label_2")
         self.label_2.setGeometry(QRect(20, 0, 63, 20))

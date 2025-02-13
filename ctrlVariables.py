@@ -78,6 +78,7 @@ class IntVar(QObject):
 
     @myValue.setter
     def myValue(self,value):
+        self._my_value = value
         if value != self._my_value or self._alwaysSignal_:
             self.intValueChanged.emit(value)
             self.intValueAsStringChanged.emit(str(value))

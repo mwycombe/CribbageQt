@@ -1043,7 +1043,7 @@ color: rgb(65, 161, 5);</string>
          <property name="geometry">
           <rect>
            <x>10</x>
-           <y>-7</y>
+           <y>-2</y>
            <width>101</width>
            <height>20</height>
           </rect>
@@ -1059,7 +1059,7 @@ color: rgb(65, 161, 5);</string>
          </property>
         </widget>
        </widget>
-       <widget class="QFrame" name="frame">
+       <widget class="QFrame" name="lf_tourneyErrorFrame">
         <property name="geometry">
          <rect>
           <x>415</x>
@@ -1138,7 +1138,7 @@ color: rgb(65, 161, 5);</string>
        <zorder>label_4</zorder>
        <zorder>NewTourneyPanel</zorder>
        <zorder>lw_listOfTourneys</zorder>
-       <zorder>frame</zorder>
+       <zorder>lf_tourneyErrorFrame</zorder>
       </widget>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
