@@ -54,7 +54,8 @@ without subclassing the PyQt fields as the ui is generated from QtDesigner.
 4. Use is <propName>.myValue to retrieve; <propname>.myValue = value to set
 
 **Usage of ctrlvariables**
-***Incoming ctrlvariable text***
+
+***Incoming ctrlvariable text***\
 The IntVar and DoubleVar both store numeric values internally and upon request or signal return their appropriate numeric values. 
 However, then interacting with UI entry fields, they must be prepared to deal with character data rather than numeric data.
 Further, the ctrlvariable properties are not set up as Slots so cannot be directly reference by a .connect(<slotname>) from signals.
@@ -63,7 +64,14 @@ The slots are names to acceptIntAsStr and acceptDblAsStr. The incoming text is c
 appropriate kind of number.
 None of this replaces the normal construct of <varname>.myValue = [value] for natively assigning value to ctrlvairable. It is solely there
 for the purpose of handling connections from signals, most often signals from UI entry fields.
-***Outgoing ctrlvariable data***
+
+***Quirks to be aware of***\
+Use editingFinished rather than textEdited signal for receiving incoming text from a UI field. textEdited sends a signal with new UI contents for every key press.
+editingFinished only sends a signal when return is presses of focus is lost - but - it does not deliver the UI contents. You have to go get them.
+Set up a Slot to which editingFinished is connected and inside that slot retrieve the UI contents and set the ctrlVar.myValue = [uicontents]
+
+
+***Outgoing ctrlvariable data***\
 All ctrlvariables support the normal construct of [variable] = <varname>.myValue to deliver the ctrlvariables current value.
 However, when it is required to allow a UI field to sync with the value of a ctrlvariable that might change, there are change signals that deliver str data.
 Both IntVar and DblVar provide int|dblValueAsStrChanged to support connection of ctrlvariable signals to UI or other text slots.
@@ -75,7 +83,8 @@ Using these properties and their associated signals allows emulation of the tkin
 
 **Bool ctrlvariables **
 These are used to hande the state of checkboxes and radio boxes. They have additional special capabilities.
-***Incomig bool ctrlvariable slots***
+
+***Incoming bool ctrlvariable slots***\
 BoolVar provides various slots
 1.  acceptBool
 2.  acceptBoolAsInt
@@ -97,7 +106,7 @@ tkinter control variables are the 'magic' where tkinter gui widgets interact wit
 When the gui widget changes value the python variable is updated and when the python variable is change the gui widget is updated.
 If it a bidirectional synchronous relationship.
 
-The IntVar ctrlVariable was update to accept str input and translate it to int internally.
+The IntVar ctrlVariable has update to accept str input and translate it to int internally.
 This requires that LineEdit entry fiels that expect integer in put have a QIntValidator attached to them
 
 1. self.EntryField = QtWidgets.QLineEdit(parent=self.centralwidget)
