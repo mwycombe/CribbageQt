@@ -466,6 +466,7 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         # if no tournaments, then must request at least one to be created
         #
         self.buildActivityPanel()
+        self.hideAllErrors()
         # self.main.tourneysTabPanel.setFocus()
         if cfg.at.countTourneysForSeason(cfg.season) < 1:
             self.createNewTourney()
@@ -1277,3 +1278,4 @@ class TourneysTab (qtw.QWidget, Ui_tourneysactivitypanel):
         self.hideWidget(self.main.lb_tourneyEditErrors)
         self.hideWidget(self.main.lb_tourneyHasDataWarning)
         self.hideWidget(self.main.lb_tourneyOutofRange)
+        self.hideWidget(self.main.lb_noDeleteTourneyFound)
