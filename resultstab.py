@@ -1779,7 +1779,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.errorHiLite(self.main.le_resultLinePlayerGp)
             self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
-        self.resultsGvnVar.set(str(self.computeSkunksGiven()))
+        self.resultsDisplayGvnVar.set(str(self.computeSkunksGiven()))
         return True
     def crossCheckGpGw(self ):
         # we are checking the resultsline input area
