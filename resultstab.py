@@ -1328,12 +1328,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.buildEditLine(self.main.lw_listOfResultPlayers.item(currentrow).text())
         else:
             self.buildNewLine(self.main.lw_listOfResultPlayers.item(currentrow).text())
-
         # if self.resultExists(self.playerNameListBox.get(self.playerNameListBox.curselection()[0])):
         #     self.buildEditLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
         # else:
         #     self.buildNewLine(self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
-
     def pResultLineDelete(self, event):
         # find result line for name then go to resultLine delete process
         # if player has points in the playerPointsListBox or
