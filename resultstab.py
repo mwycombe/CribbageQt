@@ -1322,8 +1322,8 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         print ('@ newResult')
         currentrow = self.main.lw_listOfResultPlayers.currentRow()
         print ('F3 on player: ', self.main.lw_listOfResultPlayers.item(currentrow).text())
-        # print ('F3 on player: ',self.playerNameListBox.get(self.playerNameListBox.curselection()[0]))
 
+        # test to make sure we should not be in edit results rather then new results
         if self.resultExists(self.main.lw_listOfResultPlayers.item(currentrow).text()):
             self.buildEditLine(self.main.lw_listOfResultPlayers.item(currentrow).text())
         else:
