@@ -148,14 +148,14 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # [SECTION Results Display Fields]
 
         # used for results display line
-        self.resultsDisplayNameVar = StringVar()
-        self.resultsDisplayGpVar = IntVar()
-        self.resultsDisplayGwVar = IntVar()
-        self.resultsDisplaySprdVar = IntVar()
-        self.resultsDisplayCashVar = IntVar()
-        self.resultsDisplayTknVar = IntVar()
-        self.resultsDisplayGvnVar = IntVar()
-        self.resultsDisplayOrderVar = IntVar()
+        # self.resultsDisplayNameVar = StringVar()
+        # self.resultsDisplayGpVar = IntVar()
+        # self.resultsDisplayGwVar = IntVar()
+        # self.resultsDisplaySprdVar = IntVar()
+        # self.resultsDisplayCashVar = IntVar()
+        # self.resultsDisplayTknVar = IntVar()
+        # self.resultsDisplayGvnVar = IntVar()
+        # self.resultsDisplayOrderVar = IntVar()
 
         # [SECTION Results Panel Totals Display]
         # [ Results Panel Ctrl vars]
@@ -1162,6 +1162,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.main.lw_listOfResultsSprd.addItem(str(r.playerSpread))
             self.main.lw_listOfResultsTkn.addItem(str(r.playerTaken))
             self.main.lw_listOfResultsCash.addItem(str(r.playerCash))
+            self.main.lw_listOfResultsGvn.addItem(str(r.playerGiven))
             self.main.lw_listOfResultsOrder.addItem(str(r.playerEntryOrder))
 
     #         self.resultsNamesLB.insert(tk.END, cfg.playerXref[r.playerId])  # get name from xref
@@ -1543,9 +1544,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # reset focus to player in playerLB
         self.goToTopOfPlayers()
     def removeResultInputLine(self):
+        # don't hide result line input panel - just empty out the line
         self.clearEditLine()
-        self.hideResultsInputPanel()
-        self.hideResultsInstructionsPanel()
+        # self.hideResultsInputPanel()
+        # self.hideResultsInstructionsPanel()
     def updatePlayerPoints(self, pName, pPoints):
         # locate player by name then insert the points in place of blank
         # redisplay will use the contents of the namePoints dictionary
@@ -1944,7 +1946,6 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.namePointsDict[r.playerId] = r.playerGamePoints
         self.namePointsDict[r.playerName] = r.playerGamePoints
         print ('Points dict: ', self.namePointsDict)
-        self.populateRframe()
 
     def updateTotals(self):
         # pass
