@@ -738,6 +738,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.rListOfListboxes.append(self.main.lw_listOfResultsGvn)
         self.rListOfListboxes.append(self.main.lw_listOfResultsOrder)
 
+        # either listbox row change makes the other one match it
         self.pListOfListboxes[0].currentRowChanged.connect(self.pListOfListboxes[1].setCurrentRow)
         self.pListOfListboxes[1].currentRowChanged.connect(self.pListOfListboxes[0].setCurrentRow)
 
@@ -1093,7 +1094,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             self.namePointsDict[name] =  self.idPointsDict.get(cfg.playerRefx[name], -1)
 
         # namePointDict is now a dictionary in name order with points for the
-        # current tournament score card or-1. Cannot use 0 as 0 is a valid game
+        # current tournament score card or -1. Cannot use 0 as 0 is a valid game
         # points total when a player has a string of pearls
 
         self.refreshPframe()
