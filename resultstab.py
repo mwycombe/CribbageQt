@@ -1463,7 +1463,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # a new result line could be an addition to new tourney or an addition to an existing tourney
         # TODO: update the points list box for the player list; each location has a ' ' if no points
         #       Update the namePointsDict while still in memory.
-        print('handle result line stub')
+        print('handle result line')
         resultPlayerName = ''
         resultPoints = ''
         # reset any previous error HiLites
@@ -1594,6 +1594,11 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.resultsOrderVar.set('')
         # self.resetResultLineHiLites()
 
+    def preFillDefaults(self):
+        # zero for taken and cash allows user to skip and enter early
+        self.rslt_tkn.myValue = 0
+        self.rslt_cash.myValue = 0
+
     def buildEditLine(self, pname):
         # fill in line with existing entry
         print ('Build edit line for: ', pname)
@@ -1626,6 +1631,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         cfg.newResultLine = True
         print ('buildNewLine: ', cfg.newTourney, ' ', cfg.tourneyEdit, ' ', cfg.newResultLine)
         self.clearEditLine()
+        self.preFillDefaults()
         self.rslt_name.myValue = pname
         self.main.le_resultLinePlayerGp.setFocus()
         # self.resultsNameVar.set(pname)
@@ -1723,9 +1729,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.listOfResults = []
         self.emptyRframeLBs()
         self.emptyPframeLBs()
+
     def computeSkunksGiven(self):
-        print ('gp: ', self.resultsGpVar.get(), 'gw: ', self.resultsGwVar.get())
-        return int(self.resultsGpVar.get()) - 2 * int(self.resultsGwVar.get())
+        if cfg.debug and cfg.resultsdebug:
+            print ('gp: ', self.rslt_gp.myValue, 'gw: ', self.rslt_gw.myValue)
+        self.rslt_gvn.myValue = self.rslt_gp.myValue - 2 * self.rslt_gw.myValue
+        return self.rslt_gvn.myValue
+
     def justNumeric(self, input):
         if input.isnumeric():
             return True
@@ -1743,23 +1753,19 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
     def gpValidation(self):
         # only digits allowed in by validationcommand
         # validate permissible range of gp
-        # always start by resetting errorlite
+        # always start by resetting errorlites
         self.resetScoringErrorHiLite(self.main.le_resultLinePlayerGp)
         gp = self.main.le_resultLinePlayerGp.text().strip()      # get the gp for the lin
         if not gp.isnumeric():
-            self.errorHiLite(self.resultsGpEntry)
+            self.errorHiLite(self.main.le_resultLinePlayerGp)
             return False
         if int(gp) > 35:
             self.errorHiLite(self.main.le_resultLinePlayerGp)
             print ('GP value ', gp, ' too big')
             return False
         # defer this cross-check until the GW has been input
-        # if not self.crossCheckGpGw(rfidx):
-        #     self.errorHiLite(self.rFrame.interior.winfo_children()[rfidx].winfo_children()[1])
-        #     self.errorHiLite(self.rFrame.interior.winfo_children()[rfidx].winfo_children()[2])
-        #     return False
-        # cannnot compute skunks given until gw for newly entered lines
-        # self.given[rfidx].set(self.computeSkunksGiven(rfidx))
+        # capture gps in ctrlvar
+        self.rslt_gp.myValue = int(gp)
         return True
     def gwValidation(self):
         # only digits allowed in by validation command
@@ -1773,18 +1779,22 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             print('GW value ', gw, ' not possible')
             self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
+        # capture gw in ctrlvar
+        self.rslt_gw.myValue = int(gw)
+
         if not self.crossCheckGpGw():
             self.errorHiLite(self.main.le_resultLinePlayerGp)
             self.errorHiLite(self.main.le_resultLinePlayerGw)
             return False
-        self.resultsDisplayGvnVar.set(str(self.computeSkunksGiven()))
+        self.main.lb_resultLinePlayerGvn.setText(str(self.computeSkunksGiven()))
         return True
     def crossCheckGpGw(self ):
         # we are checking the resultsline input area
-        gp = int(self.main.le_resultLinePlayerGp.text().strip())
-        gw = int(self.main.le_resultLinePlayerGw.text().strip())
-        print ('gp: gw: ', gp, ' ',gw)
-        if gp >= (2 * gw):
+        # use ctrlvar input
+        # gp = int(self.main.le_resultLinePlayerGp.text().strip())
+        # gw = int(self.main.le_resultLinePlayerGw.text().strip())
+        print ('gp: ', self.rslt_gp.myValue, ' gw: ',self.rslt_gw.myValue)
+        if self.rslt_gp.myValue >= (2 * self.rslt_gw.myValue):
             return True
         else:
             self.errorHiLite(self.main.le_resultLinePlayerGp)
@@ -1801,6 +1811,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             print ('Check Huge Spread value ', spread)
             self.errorHiLite(self.main.le_resultLinePlayerSprd)
             return False
+        self.rslt_sprd.myValue = int(spread)
         return True
     def cashValidation(self):
         # only digits allowed in by validationcommand
@@ -1820,6 +1831,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         if int(cash) < 0 or int(cash) > 150:
             self.errorHiLite(self.main.le_resultLinePlayerCash)
             return False
+        self.rslt_cash.myValue = int(cash)
         return True
     def takenValidation(self):
         # only digits allowed in by validationcommand
@@ -1833,6 +1845,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
             print('Taken value ', taken,' not possible')
             self.errorHiLite(self.main.le_resultLinePlayerTkn)
             return False
+        self.rslt_tkn.myValue= int(taken)
         return True
     # TODO: after we leave a line, and no errors, then update the dbms entry using SQLObject
     def updateDBMSforEdit(self, r):
@@ -1912,13 +1925,13 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # used by new tourney new line or existing tourney add new line
         r = resultsLine()
         # resultPlayerName = r.playerName
-        r.playerName = self.resultsNameVar.get()
+        r.playerName = self.main.lb_resultLinePlayerName.text()
         r.playerId = cfg.playerRefx[r.playerName]
-        r.playerGamePoints = int(self.resultsGpVar.get())
-        r.playerGamesWon = int(self.resultsGwVar.get())
-        r.playerSpread = int(self.resultsSprdVar.get())
-        r.playerCash = int(self.resultsCashVar.get())
-        r.playerTaken = int(self.resultsTknVar.get())
+        r.playerGamePoints = self.rslt_gp.myValue
+        r.playerGamesWon = self.rslt_gw.myValue
+        r.playerSpread = self.rslt_sprd.myValue
+        r.playerCash = self.rslt_cash.myValue
+        r.playerTaken = self.rslt_tkn.myValue
         r.playerGiven = self.computeSkunksGiven()
         # resultPlayerName = r.playerName
         # resultPoints = r.playerGamePoints
@@ -1930,7 +1943,7 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         # self.namePointsDict[r.playerId] = r.playerGamePoints
         self.namePointsDict[r.playerName] = r.playerGamePoints
         print ('Points dict: ', self.namePointsDict)
-        # self.populateRframe()
+        self.populateRframe()
 
     def updateTotals(self):
         # pass
@@ -2028,10 +2041,10 @@ class ResultsTab(qtw.QWidget, Ui_resultsactivitypanel):
         self.hideWidget(self.tknError)
     def hideResultsInputPanel(self):
 
-        self.hideWidget(self.resultsInputPanel)
+        self.hideWidget(self.main.fr_resultLine)
     def hideResultsInstructionsPanel(self):
-
-        self.hideWidget(self.resultsEntryInstructionsPanel)
+        pass
+        # self.hideWidget(self.resultsEntryInstructionsPanel)
     def showResultsInputPanel(self):
 
         self.showWidget(self.resultsInputPanel)
